@@ -1,0 +1,27 @@
+1) Crise des fondaments
+2) Axiomes de Peano
+3) 1ere version de Lambda calculs
+4) Theoreme de Goedel
+5) Machine de Turing et calculabilité
+6) Thèse de Church-Turing
+7) Applications
+
+À la fin de XX siècle les mathématiciens ont construit une théorie des ensemble : tout le monde est familier avec ça version naïve depuis l'ecole. Ce désir de formaliser ses fondaments a donne lieu des travaux comme les livres de Nicolas Bourbaki, spécialement connu pour sa définition de zéro. $/spoiler/$. Cépendant, on est vite tombé sur les nombreux paradoxes.  Considerons par example un paradoxe de Russel qui réclame que l'ensemble des ensembles n'appartenant pas à eux-mêmes est impossible. Effectivement, considerons $X := \{t|t\nin t\}$. Soit $X \in X$, soit $X \nin X$, mais l'un est l'autre sont contradictoire avec une définition de $X$. Evidement, l'existence de ce paradoxe relève des doutes sur les autres domains de mathématique : et si on trouve les même paradoxes en analyse, algèbre etc.? Ce période est connu comme une "Crise des fondements".
+
+La solution a été de "revisiter" les bases de mathématique est étudier l'existance eventuelle des autres paradoxes. Ce crise a été reflété sous le numéro 2 dans une liste des 23 fameux problèmes de Hilbert qui ont détérminé le développement du mathématique en XXème siècle. Plus précisement, la deuxième problème a été de déterminer la consistence de l'arithmétique. Même si l'enoncé est simple, la solution nécessite de passer par deux grands étapes :
+- formuler les axiomes de l'arithmétique - i.e., trouver les proposition "minimales" telles que on peut en déduire tout ce que l'on connait jusqu'qu présent.
+- prouver que en partant de ces axiomes, il n'existe pas d'une proposition X, tel que les axiome implique X ainsi que "non X".
+Pour justifier l'importance de ce problème, voici quelques noms des mathématiciens qui ont contribuer dans la solution: Péano, Dedekind, Gödel, Church, Rassel, Kleene, Rosser etc.
+
+Le résultat ?
+1) Aux années 1889, Peano a proposé les axiomes de l'arithmétique les plus connues : ...
+2) Vers les années 1932 Church a proposé une autre construction qui a été appelé lambda-calcul. Malheureusement, son étudiant, Kleene a prouvé que cette construction n'a pas été consistente.
+3) Le résultat le plus connu, a été prouvé par Kurt Gödel : il a prouvé que la consistence d'une système d'axiomes ne peut pas être prouvée en n'utilisent que ces axiomes. Donc pour prouver la consistence d'arithmétique il faut ajouter les axiomes supplémentaires (qui a été vite fait, en 1936). Le seul problème est que maintenant il faut prouver une autre système...
+
+Pour résumer le sujet de l'arithmétique, disons que lambda-calcul a été l'un des modèles qui pourrait formaliser les axiomes de l'arithmétique. Son version actuel a été prouvée consiétente et publiée en 1936. Cette construction devait rester un sujet purement théorique qui a intéressé les rares genies de mathématique qui a étudié ses fondaments (on rappel que beaucoup des personnages de cet article se sont finis mal...). 
+
+Cépéndant, comme il est souvent en science, il faudrait étudier le même domaine de point de vue un peu différent. Cela a été fait sur l'autre continent par un jeun étudiant Alan Turing. Il a cherché une solution pour une problème de la décision posé en 1928 par Hilbert et Ackermann : "trouver un algorithme qui détermine dans un temps fini, s'il un énoncé est vrai ou faux". La formalisation d'un terme algorithme a conduit au concept de machine de Turing connu par tout le monde. Entre outre, le théorème de Gödel a été reformuler en thermes d'une machine de Turing.
+Le résultat a été aussi négative, connu comme une théorème de Turing-Church: "il existe les énoncés pour lesquels on ne peux pas déterminer" (vérifier l'enoncé et le nom d'un théorème).
+
+Le résultat positif.
+Le problème de décision est lié avec une problème de calculabilité. Qu'est-ce que signifie qu'une fonction peut être calculée ? Souvent on se refère sur "des méthodes d'un crayon et de papier". Indépendement, chaque des deux a proposé que toute fonction calculable en thèrmes de crayon et papier peut être calculé par son méthode (lambda-calcul ou la machine de Turing). Les deux propositions - ne sont pas les théorèmes, peuvent pas être prouvées car on ne peut pas formaliser autrement calculabilité. (On doit remarquer ici qu'il y avait le troisième mechanisme de détérminer la calculabilité - les fonction récursive primitive). Relativement vite il a été prouvé que tout les 3 méchanismes sont équivalent. Donc, n'importe lequel peut être utilisé comme une définition de function effectivement calculable.
