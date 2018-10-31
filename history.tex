@@ -1,11 +1,15 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage[utf8x]{inputenc}
-%\usepackage[english,french]{babel}
 \newcommand{\lft}{\leftarrow}
 \newcommand{\rgt}{\rightarrow}
 \begin{document}
-\subsection*{Histoire de $\lambda$-calculs}
+\subsection*{Histoire de $\lambda$-calcul}
+
+Qu'est-ce que c'est un $\lambda$-calcul ?
+Les codeurs sont familiers avec une notion de $\lambda$-fonction - une fonction anonyme qui est utilisée dans les morceaux du code qui ne méritent pas d'avoir un méthode nommé : clé de trie, les petits transformation dans les requêtes à la sql etc.
+Cépendant, la notion de $\lambda$-fonction a été pris d'une système de calcul aussi puisant que la machine de Turing (est inventé dans les mêmes années 30s).
+Dans cet article on va discuter l'histoire de son invention pour mieux comprendre le concept
 
 \subsubsection*{Plan}
 \begin{enumerate}
@@ -32,8 +36,10 @@ Pour justifier l'importance de ce problème, voici quelques noms des mathématic
 Le résultat ?
 1) Aux années 1889, Peano a proposé les axiomes de l'arithmétique les plus connues : ...
 
-\subsubsection*{1ère version de Lambda calculs}
+\subsubsection*{1ère version de Lambda calcul}
 2) Vers les années 1932 Church a proposé une autre construction qui a été appelé lambda-calcul. Malheureusement, son étudiant, Kleene a prouvé que cette construction n'a pas été consistente.
+
+$\lambda$-calcul a formalisé une application d'une fonction. L'écriture envisage la compréhension d'une fonction comme une "règle". Et l'écriture classique $f(x)$ pointe plutôt sur le résultat de ce règle.
 
 \subsubsection*{Théorème de Gödel}
 3) Le résultat le plus connu, a été prouvé par Kurt Gödel : il a prouvé que la consistence d'une système d'axiomes ne peut pas être prouvée en n'utilisent que ces axiomes. Donc pour prouver la consistence d'arithmétique il faut ajouter les axiomes supplémentaires (qui a été vite fait, en 1936). Le seul problème est que maintenant il faut prouver une autre système...
@@ -46,8 +52,17 @@ Le résultat a été aussi négative, connu comme une théorème de Turing-Churc
 
 \subsubsection*{Thèse de Church-Turing}
 Le résultat positif.
+S'il existe les fonctions, qu'il peuvent pas être décidées, on se pose la question, qu'est-ce que ce sont les fonction simple, i.e. les fonctions que l'on peut effectivement calculer.
+Intuitivement, c'est dont la valeur peut être calculée avec un crayon si on a suffisament de papier et du temps.
+Mais vous comprenez déjà que les mathématiciens n'acceptent pas les solutions intuitives...
 Le problème de décision est lié avec une problème de calculabilité. Qu'est-ce que signifie qu'une fonction peut être calculée ? Souvent on se refère sur "des méthodes d'un crayon et de papier". Indépendement, chaque des deux a proposé que toute fonction calculable en thèrmes de crayon et papier peut être calculé par son méthode (lambda-calcul ou la machine de Turing). Les deux propositions - ne sont pas les théorèmes, peuvent pas être prouvées car on ne peut pas formaliser autrement calculabilité. (On doit remarquer ici qu'il y avait le troisième mechanisme de détérminer la calculabilité - les fonction récursive primitive). Relativement vite il a été prouvé que tout les 3 méchanismes sont équivalent. Donc, n'importe lequel peut être utilisé comme une définition de function effectivement calculable.
 
-\subsubsection*{Applications d'aujourd'hui}
+\subsubsection*{Impacts de $\lambda$-calculs}
+\begin{enumerate}
+	\item Formalisation d'une notion de calculabilité.
+	\item Preuves de calculabilité.
+	\item Preuves formelles.
+	\item Programmation fonctionnelle.
+\end{enumerate}
 
 \end{document}
