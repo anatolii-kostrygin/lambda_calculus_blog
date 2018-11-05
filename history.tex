@@ -3,6 +3,8 @@
 \usepackage[utf8x]{inputenc}
 \newcommand{\lft}{\leftarrow}
 \newcommand{\rgt}{\rightarrow}
+%\newtheorem{problem}{Problème}
+\newtheorem*{problem}{Problème}
 \begin{document}
 \subsection*{Histoire de $\lambda$-calcul}
 
@@ -24,12 +26,31 @@ Dans cet article on va discuter l'histoire de son invention pour mieux comprendr
 
 
 \subsubsection*{Crise des fondaments}
-À la fin de XX siècle les mathématiciens ont construit une théorie des ensemble : tout le monde est familier avec ça version naïve depuis l'ecole. Ce désir de formaliser ses fondaments a donne lieu des travaux comme les livres de Nicolas Bourbaki, spécialement connu pour sa définition de zéro. $/spoiler/$. Cépendant, on est vite tombé sur les nombreux paradoxes.  Considerons par example un paradoxe de Russel qui réclame que l'ensemble des ensembles n'appartenant pas à eux-mêmes est impossible. Effectivement, considerons $X := \{t|t\notin t\}$. Soit $X \in X$, soit $X \notin X$, mais l'un est l'autre sont contradictoire avec une définition de $X$. Evidement, l'existence de ce paradoxe relève des doutes sur les autres domains de mathématique : et si on trouve les même paradoxes en analyse, algèbre etc.? Ce période est connu comme une "Crise des fondements".
+Disons qu'un ensemble est \textbf{simple} s'il n'appartient pas à lui-même. Par exemple, l'ensemble des tout les gens est simple, car cet ensemble n'est pas une personne. Ainsi, l'ensemble des tout les ensemble n'est pas simple par son définition. \emph{L'ensemble de Russel} est un ensemble qui contient tout les ensembles simples et rien d'autre.
+Est-ce qu'un ensemble de Russel est simple ? Si c'est le cas, par construction il contient lui-même. Donc il n'est pas simple. Mais s'il n'est pas simple il doit contenir lui-même, ce que signifie qu'il est simple. \emph{Contradiction}.
 
-La solution a été de "revisiter" les bases de mathématique est étudier l'existance eventuelle des autres paradoxes. Ce crise a été reflété sous le numéro 2 dans une liste des 23 fameux problèmes de Hilbert qui ont détérminé le développement du mathématique en XXème siècle. Plus précisement, la deuxième problème a été de déterminer la consistence de l'arithmétique. Même si l'enoncé est simple, la solution nécessite de passer par deux grands étapes :
-- formuler les axiomes de l'arithmétique - i.e., trouver les proposition "minimales" telles que on peut en déduire tout ce que l'on connait jusqu'qu présent.
-- prouver que en partant de ces axiomes, il n'existe pas d'une proposition X, tel que les axiome implique X ainsi que "non X".
-Pour justifier l'importance de ce problème, voici quelques noms des mathématiciens qui ont contribuer dans la solution: Péano, Dedekind, Gödel, Church, Rassel, Kleene, Rosser etc.
+Ce paradoxe a été indépendement trouvé par Russel et Zermelo au début de XX siècle. Ce paradoxe a beaucoup d'autre formulations plutôt didactiques : \emph{paradoxe du menteur}, \emph{paradoxe du barbier}, etc. 
+% link => Martin Gardner. Aha! Gotcha. Paradoxes to puzzle and delight. 
+Cépendant dans une version de Russel ce paradoxe n'utilise que les constructions formelles de mathématique. Cela signifie que telles constructions sont contradictoires elles-mêmes : si nous avons prouvé qu'une formule propositionnelle est à la fois vrai et fausse, le même peut avoir lieu pour n'importe quel théorème.
+Si on ajoute qu'au début de XXème siècle paradoxe de Russel n'a pas été le seul paradoxe connu, on voit bien qu'est-ce que c'était le \emph{crise de fondaments} en mathématique.
+
+Ce crise a été refleté sous le numéro 2 dans une liste des 23 fameux problèmes de Hilbert détérminants le développement du mathématique en XXème siècle. 
+\begin{problem}[2ème problème de Hilbert]
+	Déterminer la consistence de l'arithmétique.
+\end{problem}
+Même si l'enoncé est simple, on peut dire que pour résoudre ce problème, il faut passer par les étapes suivants.
+\begin{itemize}
+	\item Formuler les axiomes de l'arithmétique - i.e., trouver les proposition "minimales" telles que on peut en déduire tout ce que l'on connait jusqu'qu présent.
+	\item Prouver que en partant de ces axiomes, il n'existe pas d'une proposition X, tel que les axiome implique X ainsi que "non X".
+\end{itemize}
+
+
+%À la fin de XIX siècle les mathématiciens ont construit une théorie des ensemble : tout le monde est familier avec ça version naïve depuis l'ecole. Ce désir de formaliser ses fondaments a donne lieu des travaux comme les livres de Nicolas Bourbaki, spécialement connu pour sa définition de zéro. $/spoiler/$. Cépendant, on est vite tombé sur les nombreux paradoxes.  Considerons par example un paradoxe de Russel qui réclame que l'ensemble des ensembles n'appartenant pas à eux-mêmes est impossible. Effectivement, considerons $X := \{t|t\notin t\}$. Soit $X \in X$, soit $X \notin X$, mais l'un est l'autre sont contradictoire avec une définition de $X$. Evidement, l'existence de ce paradoxe relève des doutes sur les autres domains de mathématique : et si on trouve les même paradoxes en analyse, algèbre etc.? Ce période est connu comme une "Crise des fondements".
+%
+%La solution a été de "revisiter" les bases de mathématique et étudier l'existance eventuelle des autres paradoxes. Ce crise a été reflété sous le numéro 2 dans une liste des 23 fameux problèmes de Hilbert qui ont détérminé le développement du mathématique en XXème siècle. Plus précisement, la deuxième problème a été de déterminer la consistence de l'arithmétique. Même si l'enoncé est simple, la solution nécessite de passer par deux grands étapes :
+%- formuler les axiomes de l'arithmétique - i.e., trouver les proposition "minimales" telles que on peut en déduire tout ce que l'on connait jusqu'qu présent.
+%- prouver que en partant de ces axiomes, il n'existe pas d'une proposition X, tel que les axiome implique X ainsi que "non X".
+%Pour justifier l'importance de ce problème, voici quelques noms des mathématiciens qui ont contribuer dans la solution: Péano, Dedekind, Gödel, Church, Rassel, Kleene, Rosser etc.
 
 
 \subsubsection*{Axiomes de Peano}
