@@ -26,7 +26,7 @@ Dans cet article on va discuter l'histoire de son invention pour mieux comprendr
 
 
 \subsubsection*{Crise des fondaments}
-Disons qu'un ensemble est \textbf{simple} s'il n'appartient pas à lui-même. Par exemple, l'ensemble des tout les gens est simple, car cet ensemble n'est pas une personne. Ainsi, l'ensemble des tout les ensemble n'est pas simple par son définition. \emph{L'ensemble de Russel} est un ensemble qui contient tout les ensembles simples et rien d'autre.
+Disons qu'un ensemble est \emph{simple} s'il n'appartient pas à lui-même. Par exemple, l'ensemble des tout les gens est simple, car cet ensemble n'est pas une personne. Ainsi, l'ensemble des tout les ensemble n'est pas simple par son définition. \emph{L'ensemble de Russel} est un ensemble qui contient tout les ensembles simples et rien d'autre.
 Est-ce qu'un ensemble de Russel est simple ? Si c'est le cas, par construction il contient lui-même. Donc il n'est pas simple. Mais s'il n'est pas simple il doit contenir lui-même, ce que signifie qu'il est simple. \emph{Contradiction}.
 
 Ce paradoxe a été indépendement trouvé par Russel et Zermelo au début de XX siècle. Ce paradoxe a beaucoup d'autre formulations plutôt didactiques : \emph{paradoxe du menteur}, \emph{paradoxe du barbier}, etc. 
@@ -120,7 +120,12 @@ La consistence de l'arithmétique Péano a été prouvé un an après, en utilis
 D'après le théorème de Gödel, l'ajout d'un proposition supplémentaire dans le système des axiomes a été nécessaire.
 C'était une idée qui a été manquant pendant presque 50 ans entre la publication des axiomes de Péano et la preuve de Gentzen.
 
-%Pour résumer le sujet de l'arithmétique, disons que lambda-calcul a été l'un des modèles qui pourrait formaliser les axiomes de l'arithmétique. Son version actuel a été prouvée consiétente et publiée en 1936. Cette construction devait rester un sujet purement théorique qui a intéressé les rares genies de mathématique qui a étudié ses fondaments (on rappel que beaucoup des personnages de cet article se sont finis mal...). 
+%Pour résumer le sujet de l'arithmétique, disons que lambda-calcul a été l'un des modèles qui pourrait formaliser les axiomes de l'arithmétique. 
+%Son version actuel a été prouvée consiétente et publiée en 1936. Cette construction devait rester un sujet purement théorique qui a intéressé les rares genies de mathématique qui a étudié ses fondaments. 
+
+Pour résumer le sujet de l'arithmétique, disons que dans la version moderne on construit le fondement toujours à partir des axiomes de Péano.
+Pour la consistence, au lieu de la récurrence transfinie, on rajout la théorie des ensemble de Zermelo-Fraenkel avec l'axiome de choix.
+Néanmoins, chez les mathématiciens il n y a pas de consensus si le deuxième problème de Hilbert est résolu ou non.
 
 \subsubsection*{Machine de Turing et calculabilité}
 Cépéndant, comme il est souvent en science, il faudrait étudier le même domaine de point de vue un peu différent. Cela a été fait sur l'autre continent par un jeun étudiant Alan Turing. Il a cherché une solution pour une problème de la décision posé en 1928 par Hilbert et Ackermann : "trouver un algorithme qui détermine dans un temps fini, s'il un énoncé est vrai ou faux". La formalisation d'un terme algorithme a conduit au concept de machine de Turing connu par tout le monde. Entre outre, le théorème de Gödel a été reformuler en thermes d'une machine de Turing.
