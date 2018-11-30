@@ -60,17 +60,56 @@ Cépendant, pour construire les bases de l'arithmétique, il est presque suffisa
 (Les nombres entiers est une extension pour que opération $x - y$ renvoit toujours un nombre valide, les nombres rationnels aparaissent si on étudie la division. Finalement, les nombres algébrique sont résponsable pour résoudre les équatinos polynomials et le reste - pour "fermer des trous").
 Classiquement, les nombres naturels peuvent être définis de même façon qu'on fait quand les petits enfants apprennent à compter: ce résultat est connus dépuis la find de XIXème siècle comme les axiomes de Péano:
 \begin{enumerate}
-	\item todo...
+	\item 1 est naturel;
+	\item le nombre suivant d'un nombre naturel est naturel;
+	\item rien ne suivi de 1;
+	\item si $a$ suive $b$ et $a$ suive $c$, alorc $b=c$;
+	\item axiome de recurrence (i.e., si un prédicat $A(x)$ est vrai pour $x=1$ ainsi que $A(n)$ implique $A(n+1)$, alors $A(x)$ est vrai pour tout $n$ naturel).
 \end{enumerate}
 Heureusement, la preuve d'une consistence des axiomes de Péano est un problème beaucoup plus sophistiqué que l'invention de ses axiomes, et l'histoire n'est donc que commencée.
 
 \subsubsection*{1ère version de Lambda calcul}
-Vers les années 1932 Church a proposé une autre construction qui a été appelé lambda-calcul. Malheureusement, son étudiant, Kleene a prouvé que cette construction n'a pas été consistente.
+En 1932 Church a proposé une autre construction qui est connue comme \textbf{$\lambda$-calcul non-typé}.
+Malheureusement, son étudiant, Kleene a prouvé que cette construction n'a pas été consistente.
 
 $\lambda$-calcul a formalisé une application d'une fonction. L'écriture envisage la compréhension d'une fonction comme une "règle". Et l'écriture classique $f(x)$ pointe plutôt sur le résultat de ce règle.
 
+Rappelon brièvement, qu'est ce que c'est. (Sinon, wiki et les autres articles ou "Eggs and crocodiles")
+Le brique principal est une fonction. 
+Au lieu de $f(x)$ on écrit $\lambda x.f$.
+Si on parle de la valeur de $f(x)$ quand $x=a$, on écrit $\lambda x.f a$.
+Naturelement, ion peut définir une composition...
+Pour transformer des propositions on a une règle de $\beta$-reduction.
+
+Malgré sa simplicité et abstraité, cette construction permet néanmoins rédefinir tout les opérations arithmétiques, la logique Booléen etc.
+Est-ce que $\lambda$-calcul non-typé est un bon candidat pour le rôle de fondament de mathématique ?
+La réponse est \textbf{non}: à cause de Paradoxe de Kleene-Rosser proposé en 1935 par J. B. Rosser et Stephen Kleene qui a été un étudiant de Church.
+Bien que la propre énoncé de ce paradoxe est trop compliqué pour cet article, nous pouvons décrire la raison d'un problème.
+Commençons par une phrase "si cette phrase est vrai, alors $X$", où $X$ est un énoncé qui est évidement faux, e.g., "Allemand et Chine ont une frontière commune".
+Après, par une analyse logique (\textbf{todo}), on peut déduire que n'importe quel énoncé $X$ est vrai.
+C'est une version non-formel de paradoxe basée sur l'auto-référence.
+Il peut être formulé en termes de $\lambda$-calculs.
+
+{\footnotesize
+	Considerons une fonction $r$ définie comme $r=\lambda x.((x x) \to y)$.
+	$(r r)$ $\beta$-se réduit en $(r r) \to y$.
+	Si $(r r)$ est faux, alors $(r r) \to y$ est vrai par le principe d'explosion, mais cela est contradictoire avec la $\beta$-réduction.
+	Donc $(r r)$ est vrai.
+	On en déduit que $y$ est aussi vrai.
+	Comme $y$ peut être arbitraire, on a prouvé que n'importe quel proposition est vrai.
+	Contradiction.
+}
+
 \subsubsection*{Théorème de Gödel}
-Le résultat le plus connu, a été prouvé par Kurt Gödel : il a prouvé que la consistence d'une système d'axiomes ne peut pas être prouvée en n'utilisent que ces axiomes. Donc pour prouver la consistence d'arithmétique il faut ajouter les axiomes supplémentaires (qui a été vite fait, en 1936). Le seul problème est que maintenant il faut prouver une autre système...
+Les deux paradoxes discutés ci-dessus, sont basés sur le même idée de l'autoréference : une proposition ou n'importe quel objet qui réference lui-même (e.g., ensemble des tout les ensembles).
+Faut-il intérdir l'autoréference dans les constructions mathématiques ?
+L'idée n'est pas séduisant si on comprends vite que avec les paradoxes, nous avons jeté dans la poubelle tout les construcitons récursives.
+
+Néanmoins, les réflections de mathématiciens de même époque nous ammené à un résultat le plus connu prouvé par Kurt Gödel en 1930. Une des intérpretations pretends que la consistence d'une système d'axiomes ne peut pas être prouvée en n'utilisent que ces axiomes (voici l'autoréference !). En particulier, pour prouver la consistence d'arithmétique il faut ajouter les axiomes supplémentaires (qui a été vite fait, en 1936). Le seul problème est que maintenant il faut prouver une autre système...
+{\footnotesize
+	Les idées de l'autoréference sont vraiment fondaméntales.
+	Si quelqu'un veut creuser ce sujet plus profondement, nous pouvons conseiller un livre "Gödel, Escher, Bach : Les Brins d'une Guirlande Éternelle" de Douglas Hofstadter.
+}
 
 Pour résumer le sujet de l'arithmétique, disons que lambda-calcul a été l'un des modèles qui pourrait formaliser les axiomes de l'arithmétique. Son version actuel a été prouvée consiétente et publiée en 1936. Cette construction devait rester un sujet purement théorique qui a intéressé les rares genies de mathématique qui a étudié ses fondaments (on rappel que beaucoup des personnages de cet article se sont finis mal...). 
 
