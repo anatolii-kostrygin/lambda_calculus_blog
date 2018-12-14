@@ -138,12 +138,19 @@ Intuitivement, c'est dont la valeur peut être calculée avec un crayon si on a 
 Mais vous comprenez déjà que les mathématiciens n'acceptent pas les solutions intuitives...
 Le problème de décision est lié avec une problème de calculabilité. Qu'est-ce que signifie qu'une fonction peut être calculée ? Souvent on se refère sur "des méthodes d'un crayon et de papier". Indépendement, chaque des deux a proposé que toute fonction calculable en thèrmes de crayon et papier peut être calculé par son méthode (lambda-calcul ou la machine de Turing). Les deux propositions - ne sont pas les théorèmes, peuvent pas être prouvées car on ne peut pas formaliser autrement calculabilité. (On doit remarquer ici qu'il y avait le troisième mechanisme de détérminer la calculabilité - les fonction récursive primitive). Relativement vite il a été prouvé que tout les 3 méchanismes sont équivalent. Donc, n'importe lequel peut être utilisé comme une définition de function effectivement calculable.
 
-\subsubsection*{Impacts de $\lambda$-calculs}
+\subsubsection*{Résumé. Impacts de $\lambda$-calcul}
+Le concept de $\lambda$-calcul a joué une rôle tellement importante dans l'informatique théorique que l'on peut voir ses échos en pratique : dans la plupart des langages de programmation une notion de $\lambda$-fonction représente une fonction ``anonyme''.
+Cette notion rends la terme connue par des ingénieurs mais la plupart ne connaît pas les détails cachés derrière.
+
+En réalité le concept a eu quatre impacts principaux.
 \begin{enumerate}
-	\item Formalisation d'une notion de calculabilité.
-	\item Preuves de calculabilité.
-	\item Preuves formelles.
-	\item Programmation fonctionnelle.
+	\item \emph{Formalisation d'une notion de calculabilité.} Avant les années 1930s, la définition de calculabilité pouvait être caricaturisée comme ``calculable à l'aide du papier, crayon et suffisament du temps''. En plus il y avait une intuition que les fonctions récursives doivent définir la classe des fonctions calculables.
+	L'invention de $\lambda$-calcul et machine de Turing a relancé une discussion sur la notion de calculabilité. Comme tout les trois concept ont été prouvés équivalents, les mathématiciens se sont mis d'accord a les utiliser comme une définition formelle de calculabilité.
+	\item \emph{Preuves de calculabilité.} Car les trois concept sont équivalents, n'importe lequel peut être utilisé pour prouver la calculabilité d'un nouvaux objet. Donc on peut considerer $\lambda$-calcul comme un outil de plus (en réalité outilisé plus souvant pour prouver qu'un objet est n'est pas calculable).
+	\item \emph{Preuves formelles.}
+	La version des $\lambda$-calcul typés peut être appliquée dans la théorie des preuves. Ainsi, les certains langages de preuves formelles tels que Coq ou AUTOMATH sont basés sur ce modèle.
+	
+	\item $\lambda$-calul est un \emph{langage de programmation} primitif (en nombre de constructions). Comme la machine de Turing est le fondament de tout les langages impératifs, $\lambda$-calcul est une base pour les langages fonctionnels tels que Haskell ou OCaml.
 \end{enumerate}
 
 \end{document}
