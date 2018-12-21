@@ -26,23 +26,53 @@ Dans cet article on va discuter l'histoire de son invention pour mieux comprendr
 
 
 \subsubsection*{Crise des fondaments}
+Qui n'a jamais vu cette phrase : \emph{``Cette phrase est fausse''} ?
+Probablement, personne.
+Tout le monde sait qu'elle n'est ni vrai ni fausse (effectivement, s'il on suppose qu'elle est vrai, alors elle doit être fausse et à l'invers).
+Connue depuis presque 3000 ans sous un nom d'un paradoxe du menteur, les mathématiciens ont eu une habitude de vivre avec jusqu'à la fin de XIXème siècle.
+Cépéndant, les ``invités inattandus'' ont arrivés de temps en temps :
+\begin{itemize}
+	\item \textbf{Paradoxe du barbier.}
+		Un barbier rase tous qui ne se rasent pas eux-mêmes et seulement ceux-ci; Qui rase ce barbier ?
+	\item \textbf{Paradoxe sorite.}
+		Un grain isolé ne constitue pas un tas.
+		L'ajout d'un grain ne fait pas d'un non-tas, un tas.
+		Donc on ne peut pas construire un tas par l'ajout des grains.
+	\item \textbf{Paradoxe du crocodile.}
+		Un crocodile méchant vous attrape et propose de deviner votre déstin.
+		Si votre devine est incorrecte, il vous mange.
+		La réponse ? -- ``Tu vas me dévorer'' !
+\end{itemize}
+
+Pour une liste exhaustive des paradoxes simples, on peut consulter un livre de Martin Gardner. ``Aha! Gotcha. Paradoxes to puzzle and delight''.
+Maintenant, discutons un autre saboteur de logique : \emph{Paradoxe de l'ensemble de Russel}.
 Disons qu'un ensemble est \emph{simple} s'il n'appartient pas à lui-même. Par exemple, l'ensemble des tout les gens est simple, car cet ensemble n'est pas une personne. Ainsi, l'ensemble des tout les ensemble n'est pas simple par son définition. \emph{L'ensemble de Russel} est un ensemble qui contient tout les ensembles simples et rien d'autre.
 Est-ce qu'un ensemble de Russel est simple ? Si c'est le cas, par construction il contient lui-même. Donc il n'est pas simple. Mais s'il n'est pas simple il doit contenir lui-même, ce que signifie qu'il est simple. \emph{Contradiction}.
 
-Ce paradoxe a été indépendement trouvé par Russel et Zermelo au début de XX siècle. Ce paradoxe a beaucoup d'autre formulations plutôt didactiques : \emph{paradoxe du menteur}, \emph{paradoxe du barbier}, etc. 
 % link => Martin Gardner. Aha! Gotcha. Paradoxes to puzzle and delight. 
+Les mathématiciens n'étude pas ni crocodiles, ni barbiers.
+Les questions des menteurs sont plutôt les compétences de code penal ou les philosophes.
 Cépendant dans une version de Russel ce paradoxe n'utilise que les constructions formelles de mathématique. Cela signifie que telles constructions sont contradictoires elles-mêmes : si nous avons prouvé qu'une formule propositionnelle est à la fois vrai et fausse, le même peut avoir lieu pour n'importe quel théorème.
 Si on ajoute qu'au début de XXème siècle paradoxe de Russel n'a pas été le seul paradoxe connu, on voit bien qu'est-ce que c'était le \emph{crise de fondaments} en mathématique.
 
-Ce crise a été refleté sous le numéro 2 dans une liste des 23 fameux problèmes de Hilbert détérminants le développement du mathématique en XXème siècle. 
-\begin{problem}[2ème problème de Hilbert]
-	Déterminer la consistence de l'arithmétique.
-\end{problem}
-Même si l'enoncé est simple, on peut dire que pour résoudre ce problème, il faut passer par les étapes suivants.
-\begin{itemize}
-	\item Formuler les axiomes de l'arithmétique - i.e., trouver les proposition "minimales" telles que on peut en déduire tout ce que l'on connait jusqu'qu présent.
-	\item Prouver que en partant de ces axiomes, il n'existe pas d'une proposition X, tel que les axiome implique X ainsi que "non X".
-\end{itemize}
+Ce crise a été refleté sous le numéro 2 dans une liste des 23 fameux problèmes de Hilbert détérminants le développement du mathématique en XXème siècle. \\
+\textbf{2ème problème de Hilbert}
+\textit{Déterminer la consistence de l'arithmétique.}
+%\begin{problem}[2ème problème de Hilbert]
+%	Déterminer la consistence de l'arithmétique.
+%\end{problem}
+
+Dans le sens plus formel, la consistence signifie le suivant.
+\begin{enumerate}
+	\item Il y a des axiomes dont on peut déduire tout les théorèmes de l'arithmétique.
+	\item Aucun axiomes ne peut pas être déduit des autres.
+	\item Il n'existe pas d'une proposition X, tel que les axiome implique X ainsi que "non X".
+\end{enumerate}
+L'étape 1 est plutôt constructif : en pratique, il est suffisant de produire les nombres (entiers, rationnels, réels) avec ses propertés habituels.
+Dans l'étape 2 il faut prouver que les axiomes sont indépendants l'un des autres.
+Équivalentment, si on supprime n'importe quel axiome, l'étape 1 n'est plus vrai.
+L'étape 3 est le plus compliqué.
+
 
 
 %À la fin de XIX siècle les mathématiciens ont construit une théorie des ensemble : tout le monde est familier avec ça version naïve depuis l'ecole. Ce désir de formaliser ses fondaments a donne lieu des travaux comme les livres de Nicolas Bourbaki, spécialement connu pour sa définition de zéro. $/spoiler/$. Cépendant, on est vite tombé sur les nombreux paradoxes.  Considerons par example un paradoxe de Russel qui réclame que l'ensemble des ensembles n'appartenant pas à eux-mêmes est impossible. Effectivement, considerons $X := \{t|t\notin t\}$. Soit $X \in X$, soit $X \notin X$, mais l'un est l'autre sont contradictoire avec une définition de $X$. Evidement, l'existence de ce paradoxe relève des doutes sur les autres domains de mathématique : et si on trouve les même paradoxes en analyse, algèbre etc.? Ce période est connu comme une "Crise des fondements".
@@ -58,7 +88,7 @@ L'arithmétique est un domain de mathématique qui étude les nombres et rélati
 Elle est appliquée partout de premiers années de l'école jusqu'à les conceptes modernes d'astrophysique.
 Cépendant, pour construire les bases de l'arithmétique, il est presque suffisant de bien déterminer les nombres naturels ainsi que les action qu'on peut faire avec.
 (Les nombres entiers est une extension pour que opération $x - y$ renvoit toujours un nombre valide, les nombres rationnels aparaissent si on étudie la division. Finalement, les nombres algébrique sont résponsable pour résoudre les équatinos polynomials et le reste - pour "fermer des trous").
-Classiquement, les nombres naturels peuvent être définis de même façon qu'on fait quand les petits enfants apprennent à compter: ce résultat est connus dépuis la find de XIXème siècle comme les axiomes de Péano:
+Classiquement, les nombres naturels peuvent être définis de même façon qu'on fait quand les petits enfants apprennent à compter: ce résultat est connus dépuis la find de XIXème siècle comme les axiomes de Peano:
 \begin{enumerate}
 	\item 1 est naturel;
 	\item le nombre suivant d'un nombre naturel est naturel;
@@ -66,7 +96,7 @@ Classiquement, les nombres naturels peuvent être définis de même façon qu'on
 	\item si $a$ suive $b$ et $a$ suive $c$, alorc $b=c$;
 	\item axiome de recurrence (i.e., si un prédicat $A(x)$ est vrai pour $x=1$ ainsi que $A(n)$ implique $A(n+1)$, alors $A(x)$ est vrai pour tout $n$ naturel).
 \end{enumerate}
-Heureusement, la preuve d'une consistence des axiomes de Péano est un problème beaucoup plus sophistiqué que l'invention de ses axiomes, et l'histoire n'est donc que commencée.
+Heureusement, la preuve d'une consistence des axiomes de Peano est un problème beaucoup plus sophistiqué que l'invention de ses axiomes, et l'histoire n'est donc que commencée.
 
 \subsubsection*{1ère version de Lambda calcul}
 En 1932 Church a proposé une autre construction qui est connue comme \textbf{$\lambda$-calcul non-typé}.
@@ -141,6 +171,8 @@ Le problème de décision est lié avec une problème de calculabilité. Qu'est-
 \subsubsection*{Résumé. Impacts de $\lambda$-calcul}
 Le concept de $\lambda$-calcul a joué une rôle tellement importante dans l'informatique théorique que l'on peut voir ses échos en pratique : dans la plupart des langages de programmation une notion de $\lambda$-fonction représente une fonction ``anonyme''.
 Cette notion rends la terme connue par des ingénieurs mais la plupart ne connaît pas les détails cachés derrière.
+Cela provoque souvent les discussions dans StackOverflow similaire à celui-ci:
+\textit{``Another obvious case for combinators is obfuscation. A code translated into the SKI calculus is practically unreadable. If you really have to obfuscate an implementation of an algorithm, consider using combinators, here is an example.''}
 
 En réalité le concept a eu quatre impacts principaux.
 \begin{enumerate}
