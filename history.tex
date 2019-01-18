@@ -1,6 +1,7 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage[utf8x]{inputenc}
+\usepackage{hyperref}
 \newcommand{\lft}{\leftarrow}
 \newcommand{\rgt}{\rightarrow}
 %\newtheorem{problem}{Problème}
@@ -96,7 +97,23 @@ Classiquement, les nombres naturels peuvent être définis de même façon qu'on
 	\item si $a$ suive $b$ et $a$ suive $c$, alorc $b=c$;
 	\item axiome de recurrence (i.e., si un prédicat $A(x)$ est vrai pour $x=1$ ainsi que $A(n)$ implique $A(n+1)$, alors $A(x)$ est vrai pour tout $n$ naturel).
 \end{enumerate}
-Heureusement, la preuve d'une consistence des axiomes de Peano est un problème beaucoup plus sophistiqué que l'invention de ses axiomes, et l'histoire n'est donc que commencée.
+Montrons que avec ces axiomes sont suffisant pour construire tout les nombres.
+\begin{itemize}
+	\item \textbf{Nombres naturels} sont déjà construit. Ok, pour être honête, nous avons construit les objets ``bizzares'' et les avons appelés les nombres naturels -- prenez l'habitude que mathématique fondamental est une façon de parler des choses évidents depuil l'école avec des mots très sophistiqués. Mais la vrai avantage de cet approche est son \textbf{correctité} absolu.
+	\item \textbf{Zero} est indispensable pour compter. Rien plus simple - ajoutons un objet nouveau spéciale, qui est (i) suivi de 1. Appelons lui ``0''. Posons que pour tout $n$ naturel (ii) $n + 0 = 0 + n = n$ et aussi (iii) $n \cdot 0 = 0 \cdot n = 0$ (servira pour le futur).
+	\item On peut compter et même calculer la somme, mais les mathématiciens veulent plus de symmetrie, donc l'opération réciproque de ``+'' doit exister. D'accord: par définition, la différence $a - b$ est un nombre $c$ tel que $a = b + c$. Que vaut 2 - 5? Oups, il n'existe pas tel $c$ que $c$ + 5 = 2 - n'oubliez pas qu'on veut la strictité absolue, donc on ne peut utiliser que des nombres déjà calculés. Nous n'avons pas de choix: disons que ``2 - 5'' et un nouveau nombre. Ainsi que ``1 - 2'', ``42 - 45'' et même ``239 - 261''. Cela semble beaucoup, mais remarquons que 2 - 5 est égal au 42 - 45 et aussi au 0 - 3. Pour simplicité, omittons zero et écrivons juste -3. Félicitations ! Vous venez de construire les nombres \textbf{négatifs} et donc les nombres \textbf{entières} !
+	Cet opération s'appelle la \textbf{closure} et est très typique pour la génération des nouveaux objets.
+	\item Les \textbf{nombres rationnels} arrivent par la même logique que : si nous pouvons calculer le produit, alors nous voulons diviser. Les résultats de tout les divisions possibles (1/2, -2/3, 2/4, 37/17, 5/5, etc.) forment les nombres rationnels -- vous devez le souvenir bien depuis l'école - d'habitude ils sont appris plus tard que les nombres négatifs.
+	\item Imaginons l'axe de nombres. D'un point de vue, il est très dense -- pour n'importe quel nombre rationnel, il existe un autre nombre rationnel qui est ``autant proche de lui qu'on veut''. Il n'est pas suffisant ! Malheureusement, $\sqrt{2}$ n'est pas rationnel (à propos : 7ème problème de Hilbert s'agit de prouver que $\sqrt2^{\sqrt2}$ n'est pas rationnel).
+	Donc les \textbf{nombres réels} sont définit par une autre closure. Informellement on rempli des ``trous'' sur l'axe des nombres.
+	Pour les plus curieux qui souhaitent la construiction formelle, la page de
+	\href{
+		/wiki/Construction_des_nombres_r%C3%A9els
+		}{wikipedia} est bien explicatif.
+	Personnellement, je prefère la construiction par des coupes de Dedekind.
+\end{itemize}
+
+Heureusement, la vraie preuve d'une consistence des axiomes de Peano est un problème beaucoup plus sophistiqué que l'invention de ses axiomes, et l'histoire n'est donc que commencée.
 
 \subsubsection*{1ère version de Lambda calcul}
 En 1932 Church a proposé une autre construction qui est connue comme \textbf{$\lambda$-calcul non-typé}.
@@ -114,11 +131,17 @@ Pour transformer des propositions on a une règle de $\beta$-reduction.
 Malgré sa simplicité et abstraité, cette construction permet néanmoins rédefinir tout les opérations arithmétiques, la logique Booléen etc.
 Est-ce que $\lambda$-calcul non-typé est un bon candidat pour le rôle de fondament de mathématique ?
 La réponse est \textbf{non}: à cause de Paradoxe de Kleene-Rosser proposé en 1935 par J. B. Rosser et Stephen Kleene qui a été un étudiant de Church.
-Bien que la propre énoncé de ce paradoxe est trop compliqué pour cet article, nous pouvons décrire la raison d'un problème.
-Commençons par une phrase "si cette phrase est vrai, alors $X$", où $X$ est un énoncé qui est évidement faux, e.g., "Allemand et Chine ont une frontière commune".
-Après, par une analyse logique (\textbf{todo}), on peut déduire que n'importe quel énoncé $X$ est vrai.
-C'est une version non-formel de paradoxe basée sur l'auto-référence.
+
+Ironiquement, ce paradoxe, beaucoup plus sophistiqué dans sa version initiale, n'a pas très loin des paradoxes plus simples décrites au début de cet article.
+Commençons par une phrase "si cette phrase est vraie, alors $X$", où $X$ est un énoncé quelconq.
+\begin{itemize}
+	\item Par le propriétés d'implications ("faux => X" est toujours vrai), cette phrase ne peux pas être faux.
+	\item S'il est vrai, alors $X$ est vrai.
+	\item Nous venons de prouvé que n'importe quel enoncé est vrai, e.g. les États-Unis et la Chine ont une frontière commune (ce que peut probablement expliquer la construction de "The Great Wall").
+\end{itemize}
 Il peut être formulé en termes de $\lambda$-calculs.
+Mais la ``rootcause'' de tout les paradoxe de ce type est la même -- l'autoréférence : la phrase entière est contenu dans sa première motié.
+Remarquons qu'intérdire les autoréférences dans la logique n'est pas la solution parfaite, car la logique devient trop restrente par rapport au langage naturelle.
 
 {\footnotesize
 	Considerons une fonction $r$ définie comme $r=\lambda x.((x x) \to y)$.
