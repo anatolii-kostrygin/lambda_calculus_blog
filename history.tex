@@ -2,12 +2,18 @@
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage[utf8x]{inputenc}
 \usepackage{hyperref}
+\usepackage[mathscr]{eucal}
+\usepackage{eufrak}
+\usepackage{mathrsfs}
+%\pagestyle{empty}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 \newcommand{\lft}{\leftarrow}
 \newcommand{\rgt}{\rightarrow}
 %\newtheorem{problem}{Problème}
 \newtheorem*{problem}{Problème}
+\newtheorem*{remark}{Remarque}
 \begin{document}
-\subsection*{Histoire de $\lambda$-calcul}
+\section*{Part 1. Histoire de $\lambda$-calcul}
 
 Qu'est-ce que c'est un $\lambda$-calcul ?
 Les codeurs sont familiers avec une notion de $\lambda$-fonction - une fonction anonyme qui est utilisée dans les morceaux du code qui ne méritent pas d'avoir un méthode nommé : clé de trie, les petits transformation dans les requêtes à la sql etc.
@@ -113,6 +119,8 @@ Montrons que avec ces axiomes sont suffisant pour construire tout les nombres.
 	Personnellement, je prefère la construiction par des coupes de Dedekind.
 \end{itemize}
 
+\textbf{todo: introduce the main manipulations for the lambda, combinators, SKI}
+
 Heureusement, la vraie preuve d'une consistence des axiomes de Peano est un problème beaucoup plus sophistiqué que l'invention de ses axiomes, et l'histoire n'est donc que commencée.
 
 \subsubsection*{1ère version de Lambda calcul}
@@ -207,5 +215,101 @@ En réalité le concept a eu quatre impacts principaux.
 	
 	\item $\lambda$-calul est un \emph{langage de programmation} primitif (en nombre de constructions). Comme la machine de Turing est le fondament de tout les langages impératifs, $\lambda$-calcul est une base pour les langages fonctionnels tels que Haskell ou OCaml.
 \end{enumerate}
+
+\section*{Part 2. Les formalités.}
+
+\subsubsection*{What is $\lambda$?}\footnote{based on Selinger's lecture notes}
+En mathématique la notion d'une fonction est liée avec une application, i.e., règle qui transform paramètre dans un résultat.
+Au contraire, $\lambda$-calcul est une théorie des ``fonctions comme formules''. La différence est ce que une formule formelle n'est pas obligatoirement se traduit en règle bien précise.
+Commençons par un exemple.
+En arithmétique on peut écrire : 
+$$\text{Soit $f$ est une fonction $x \to x^2$. Considerons $A = f(5)$.}$$
+En langage de lambda, on peut écrire simplement: $$(\lambda x.x^2) (5).$$
+L'expression $\lambda x.x^2$ signifie une fonction qui mappe $x$ à $x^2$.
+Puis ce terme est succédé par une \emph{application} de cette fonction au nombre 5.
+L'un des avantage de cette notation est simplicité dans la construction des fonctions de l'ordre supérieur : si $f: X \to X$ est une fonction, alors la composition $f \circ f$ peut s'écrire comme $\lambda x.f(f(x))$.
+Ceci n'est pas simple, mais l'opération qui mappe $f$ à $f \circ f$ s'écrit méchaniquement de manière suivante :
+$$\lambda f. \lambda x.f(f(x)).$$
+(On peut le comparer avec $g: (X \to X) \to (X \to X)$ où $g(f) = f \circ f$ pour tout $f: X \to X$.)
+Le vrai avantage est visible si on considère un terme $f$ suivant: $\lambda x.x$.
+Rien inattendu, c'est une fonction d'identité.
+Mais que vaut $f(f)$?
+Par définition, si on pose $x = f$,
+$$f(f) = (\lambda x.x)(f) = f.$$
+Remarquons que $f(f)$ n'a jamais du sens dans mathématique classique car la fonction ne peut pas être inclue dans sa propre domaine de définition.
+
+\textbf{todo: $\lambda$ sans type est simplement typé}
+
+\subsubsection*{Combinateurs}
+Le cas spécial de $\lambda$-termes sans type sont les termes qui n'ont pas des variables libres. Ils s'appellent \emph{combinateurs}.
+Voici les examples des combinateurs classiques :
+\begin{itemize}
+	\item $I = \lambda x. x$
+	\item $\omega = \lambda x. xx$
+	\item $\Omega = \omega \omega = (\lambda x. xx) \lambda x. xx$
+	\item $K = \lambda x y. x$
+	\item $K_* = \lambda x y. y$
+	\item $C = \lambda fxy. fyx$
+	\item $B = \lambda fgx. f(gx)$
+	\item $S = \lambda fgx. fx(gx)$
+\end{itemize}
+
+Chaque combinateur peut être appliqué aux autre tèrmes, par exemple :
+\begin{itemize}
+	\item $I \mathpzc{x} = \mathpzc{x}$
+	\item $\omega \mathpzc{x} = \mathpzc{x}\mathpzc{x}$
+	\item $K \mathpzc{xy} = \mathpzc{x}$
+	\item $S \mathpzc{fgx} = f\mathpzc{x} (\mathpzc{gx})$
+\end{itemize}
+Les formules ci-dessus peuvent s'en servir tant que la définition des combinateurs.
+Le calcul est effectué en remplaçant les arguments formels par ses valeurs, e.g.,
+$$\omega I = I I = I$$.
+Notons, que les certains combinateurs peuvent être exprimé en termes des autres. (\textbf{todo})
+Si on choisit une base, e.g., $S$, $K$ (et $I$ tant que un élement neutre), on peut obtenir un système de calcul qui est équivalent au $\lambda$-calcul.
+
+
+\subsubsection*{Prise en main\footnote{Basé sur l'article russe \url{https://habr.com/ru/post/215991/}}}
+Dans $lambda$-calcul sans type nous n'avons qu'un seul primitif - des fonctions.
+Dons, si on veut l'utiliser pour la programmation, c'est à nous de réaliser même les objets les plus élementaires, tels que les nombres ou les constantes booléennes.
+\begin{eqnarray*}
+tru &:= \lambda t.\lambda f.t \quad \text{est une fonction qui renvoie son premier argument,} \\
+fls &:= \lambda t.\lambda f.t \quad \text{est une fonction qui renvoie son deuxième argument.}
+\end{eqnarray*}
+Les termes $tru$ et $fls$ vont jouer le rôle de \textbf{vrai} et \textbf{faux}.
+Cependant, pour l'instant ils ne sont que des formules formelles qui manquent du context.
+Comme ce contexte, définissons la fonction $if$
+$$if := \lambda b.\lambda x.\lambda y.b x y$$
+Ici, $b$ est une condition de branchement, $x$ et branche \textbf{then} et $y$ corresponds à \textbf{else}.
+Donc, pour ``montrer'' que $tru$ et $fls$ corréspondent au constantes logiques, nous avons besoin de prouver le suivant:
+\begin{eqnarray*}
+	if \; tru \; t \; e &= t, \\
+	if \; fls \; t \; e &= e
+\end{eqnarray*}
+%\begin{remark}
+Pour les formules formelles ``prouver'' signifie ``partir d'une expression à gauche, appliquer les certains règles afin d'obtenir une expression à droit''.
+%\end{remark}
+Donc c'est le moment de parles de ces règles.
+Pour $\lambda$-calcul il y en a deux :
+\begin{enumerate}
+	\item \textbf{$\alpha$-equivalence}. Informellement\footnote{la définition formelle peut être trouvée dans n'importe quel livre, mais sa complexité dépasse largement les objectifs du blog.}, on dit que deux termes sont équivalent s'il coïncident à renommage des variables abstraites près. Par exemple, $\lambda x.f(x) \equiv_\alpha \lambda y.f(y)$.
+	Par une variable abstraite on comprend une variable qui est présente à gauche et à droit du point, e.g., $x$ et $y$ eux-mêmes ne sont pas $\lambda$-equivalents car il ne sont pas abstraites.
+	\item \textbf{$\beta$-reduction}.
+\end{enumerate}
+Notons que dans $\lambda$-calcul, il n'y a rien sauf application, abstraction et $\beta$-equivalence.
+\begin{proof}[Preuve ($if \; fls \; t \; e = e$)]
+	\begin{eqnarray*}
+		(\lambda b. \; \lambda x. \; \lambda y. \; b \; x \; y) \; fls \; t \; e \\
+		(\lambda x. \; \lambda y. \; fls \; x \; y) \; t \; e \\
+		(\lambda y. \; fls \; t \; y) \; e \\
+		fls \; t \; e \\
+		(\lambda t. \; \lambda f. \; f) \; t \; e \\
+		(\lambda f. \; f) \; e \\
+		e
+	\end{eqnarray*}
+\end{proof}
+\textbf{todo: ``and'', ``or''}
+
+\subsection*{Pourquoi langage de programmation?}
+Recursion à l'aide de combinators
 
 \end{document}
