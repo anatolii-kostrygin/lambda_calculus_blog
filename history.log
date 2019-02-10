@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.11.27)  8 FEB 2019 10:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.11.27)  10 FEB 2019 15:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -294,106 +294,107 @@ LaTeX Info: Redefining \nameref on input line 15.
 \@outlinefile=\write3
 \openout3 = `history.out'.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 16.
+
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
+File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 25.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 16.
+LaTeX Font Info:    Try loading font information for U+msb on input line 25.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 16.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 25.
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-)
-(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
-File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
-)
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 42.
+) [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 56.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 42.
- [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (20.19713pt too wide) in paragraph at lines 74--75
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 56.
+ [2]
+Overfull \hbox (20.19713pt too wide) in paragraph at lines 88--89
 []\OT1/cmr/m/n/12 Il y a des ax-iomes dont on peut d^^Seduire tout les th^^Seor
 ^^Remes de l'arithm^^Setique. 
  []
 
-[2] [3] [4]
-Overfull \hbox (14.13052pt too wide) in paragraph at lines 169--172
+[3] [4] [5]
+Overfull \hbox (14.13052pt too wide) in paragraph at lines 183--186
 \OT1/cmr/m/n/12 prou-ver la con-sis-tence d'arithm^^Setique il faut ajouter les
  ax-iomes suppl^^Sementaires
  []
 
-[5] [6]
-Overfull \hbox (6.132pt too wide) in paragraph at lines 203--207
+[6] [7]
+Overfull \hbox (6.132pt too wide) in paragraph at lines 217--221
 \OT1/cmr/m/n/12 Le con-cept de $\OML/cmm/m/it/12 ^^U$\OT1/cmr/m/n/12 -calcul a 
 jou^^Se une r^ole telle-ment im-por-tante dans l'informatique
  []
 
 
-Overfull \hbox (5.2423pt too wide) in paragraph at lines 212--213
+Overfull \hbox (5.2423pt too wide) in paragraph at lines 226--227
 []\OT1/cmr/m/it/12 Preuves de cal-cu-la-bilit^^Se. \OT1/cmr/m/n/12 Car les troi
 s con-cept sont ^^Sequivalents, n'importe
  []
 
-[7] [8]
-LaTeX Font Info:    Try loading font information for OT1+pzc on input line 259.
+[8] [9]
+LaTeX Font Info:    Try loading font information for OT1+pzc on input line 275.
 
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pzc.fd
 File: ot1pzc.fd 2001/06/04 font definitions for OT1/pzc.
 )
 LaTeX Font Info:    Font shape `OT1/pzc/m/it' in size <12> not available
-(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 259.
+(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 275.
 
 LaTeX Font Info:    Font shape `OT1/pzc/m/it' in size <8> not available
-(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 259.
+(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 275.
 
 LaTeX Font Info:    Font shape `OT1/pzc/m/it' in size <6> not available
-(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 259.
+(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 275.
 
 LaTeX Font Info:    Font shape `OT1/pzc/m/it' in size <10> not available
-(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 271.
+(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 287.
 
 LaTeX Font Info:    Font shape `OT1/pzc/m/it' in size <7> not available
-(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 271.
+(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 287.
 
 LaTeX Font Info:    Font shape `OT1/pzc/m/it' in size <5> not available
-(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 271.
+(Font)              Font shape `OT1/pzc/mb/it' tried instead on input line 287.
 
- [9]
-Overfull \hbox (6.79764pt too wide) in paragraph at lines 294--296
+ [10]
+Overfull \hbox (6.79764pt too wide) in paragraph at lines 310--312
 []$\OML/cmm/m/it/12 $\OT1/cmr/bx/n/12 -equivalence\OT1/cmr/m/n/12 . In-formell
 e-ment[][][], on dit que deux ter-mes sont ^^Sequivalent
  []
 
-[10]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 315.
- [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 315.
+[11]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 347.
+ [12]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 347.
  (./history.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 315.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 315.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 347.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 347.
 Package rerunfilecheck Info: File `history.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 315.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 347.
  ) 
 Here is how much of TeX's memory you used:
- 6079 strings out of 493826
- 86617 string characters out of 6156380
+ 6083 strings out of 493826
+ 86654 string characters out of 6156380
  171158 words of memory out of 5000000
- 9302 multiletter control sequences out of 15000+600000
+ 9303 multiletter control sequences out of 15000+600000
  18370 words of font info for 66 fonts, out of 8000000 for 9000
  788 hyphenation exceptions out of 8191
- 29i,9n,26p,904b,478s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,11n,26p,904b,478s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
@@ -407,10 +408,10 @@ s/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
 hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/t
 exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/urw/zapfchan/uzcmi8a.pfb>
-Output written on history.pdf (11 pages, 178624 bytes).
+Output written on history.pdf (12 pages, 180961 bytes).
 PDF statistics:
- 163 PDF objects out of 1000 (max. 8388607)
- 135 compressed objects within 2 object streams
- 50 named destinations out of 1000 (max. 500000)
+ 169 PDF objects out of 1000 (max. 8388607)
+ 140 compressed objects within 2 object streams
+ 53 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

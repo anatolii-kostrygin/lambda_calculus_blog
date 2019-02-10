@@ -13,6 +13,20 @@
 \newtheorem*{problem}{Problème}
 \newtheorem*{remark}{Remarque}
 \begin{document}
+	
+\section*{Disclaimer}
+Le deux partie de ce document sont indépendantes et peuvent être lues dans n'importe quel ordre.
+L'objectif initial de partie 1 a était de discuter qu'est-ce que c'est un corrècte théorie mathématique en utilisant l'arithmétique comme exemple.
+Cependant, ce tentative s'est transformé vite dans un essai sur l'histoire de mathématique de la fin XIXème siècle jusqu'au milieu du XXème.
+On se concentre principalement sur les problèmes de consistence et notamment sur la deuxième problème de Hilberte.
+Il est evident que notre approche ne peut jamais être complète, donc on se restreinte sur le contèxte historique des avancement en formalisation d'arithmétique ainsi que la notion de calculabilité.
+Intentionellement, on évite au maximum les définitions formelles et formules et invite le lécteur curieux de faire ses propres recherches en partant du Wikipédia (plutôt anglais) qui présente la plupart des définitions manquantes.
+
+Au contraire, l'objectif de partie 2 est de donner au lecteur le goût de $\lambda$-calcul : on présente une définition plutôt complète, puis on montre, comment construire une language de programmation elementaire mais aussi puisant que la machine de Turing.
+Ce langage et connu comme la paradigme fonctionnelle.
+
+Finalement, l'ordre de lécture conseillée est plutôt le suivant : un passage ``diagonale'' de partie 2, puis lecture complète de partie 1 et la relecture de la partie 1 pendant lequelle on devra voir le sense derrière le forêt de detailles techniques nécessaires pour introduire un système formel tel que $\lambda$-calcul.
+	
 \section*{Part 1. Histoire de $\lambda$-calcul}
 
 Qu'est-ce que c'est un $\lambda$-calcul ?
@@ -218,6 +232,8 @@ En réalité le concept a eu quatre impacts principaux.
 
 \section*{Part 2. Les formalités.}
 
+\subsubsection*{Introduction informelle dans la programmation fonctionnelle}
+
 \subsubsection*{What is $\lambda$?}\footnote{based on Selinger's lecture notes}
 En mathématique la notion d'une fonction est liée avec une application, i.e., règle qui transform paramètre dans un résultat.
 Au contraire, $\lambda$-calcul est une théorie des ``fonctions comme formules''. La différence est ce que une formule formelle n'est pas obligatoirement se traduit en règle bien précise.
@@ -298,16 +314,32 @@ Pour $\lambda$-calcul il y en a deux :
 Notons que dans $\lambda$-calcul, il n'y a rien sauf application, abstraction et $\beta$-equivalence.
 \begin{proof}[Preuve ($if \; fls \; t \; e = e$)]
 	\begin{eqnarray*}
-		(\lambda b. \; \lambda x. \; \lambda y. \; b \; x \; y) \; fls \; t \; e \\
-		(\lambda x. \; \lambda y. \; fls \; x \; y) \; t \; e \\
-		(\lambda y. \; fls \; t \; y) \; e \\
-		fls \; t \; e \\
-		(\lambda t. \; \lambda f. \; f) \; t \; e \\
-		(\lambda f. \; f) \; e \\
-		e
+		if \; fls \; t \; e
+		= \underline{(\lambda b. \; \lambda x. \; \lambda y. \; b \; x \; y) \; fls} \; t \; e
+			& \qquad \text{ par définition de $if$}\\ 
+		= \underline{(\lambda x. \; \lambda y. \; fls \; x \; y) \; t} \; e
+			& \qquad \text{ par $\beta$-reduction de $\lambda b$}\\
+		= \underline{(\lambda y. \; fls \; t \; y)} \; e
+			& \qquad \text{ par $\beta$-reduction de $\lambda x$}\\
+		= fls \; t \; e
+			& \qquad \text{ par $\beta$-reduction de $\lambda y$}\\
+		= \underline{(\lambda t. \; \lambda f. \; f) \; t} \; e
+			& \qquad \text{ par définition de $fls$}\\
+		= \underline{(\lambda f. \; f)} \; e
+			& \qquad \text{ par $\beta$-reduction de $\lambda t$}\\
+		= e
+			& \qquad \text{ par $\beta$-reduction de $\lambda f$}
 	\end{eqnarray*}
 \end{proof}
-\textbf{todo: ``and'', ``or''}
+Un lecteur courieux peut vérifier par lui-même que $if \; tru \; t \; e = e$.
+De plus, un vrai passioné peut essayer de trouver les bonnes expressions pour conjunctions (``and''), disjonction (``or'') ainsi que negation (``not'').
+
+\textbf{spoiler.} 
+\begin{itemize}
+	\item $and = \lambda x. \; \lambda y. \; x \; y \; fls$
+	\item $or = \lambda x. \lambda y. \; x \; tru \; y$
+	\item $not = \lambda x. \; x \; fls \; tru$
+\end{itemize}
 
 \subsection*{Pourquoi langage de programmation?}
 Recursion à l'aide de combinators
