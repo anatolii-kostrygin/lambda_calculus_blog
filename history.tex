@@ -5,6 +5,7 @@
 \usepackage[mathscr]{eucal}
 \usepackage{eufrak}
 \usepackage{mathrsfs}
+\usepackage{listings}
 %\pagestyle{empty}
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 \newcommand{\lft}{\leftarrow}
@@ -233,6 +234,55 @@ En réalité le concept a eu quatre impacts principaux.
 \section*{Part 2. Les formalités.}
 
 \subsubsection*{Introduction informelle dans la programmation fonctionnelle}
+Le concepte de langage de programmation le plus elémentaire connu par tout le monde est un machine de Turing.
+Sa ruban contenant les instructions et les datas se traduit facilement dans la programmation impérative -- un paradigme implémenté par ``OVER9000'' des langages populaires.
+Dans ce paradigme, le proces du calcul est décrit en termes des instructions qui changent l'état de ``calculateur''.
+Les caractéristiques de programmes impératifs sont :
+\begin{itemize}
+	\item L'état se change par des instruction de l'affectation (\verb|v = E|).
+	\item Les instruction sont executé consécutivement (\verb|C1; C2; C3|).
+	\item Il y a un méchanisme de branchement (\verb|if|, \verb|switch|).
+	\item Il y a un méchanisme de boucles (\verb|while|, \verb|for|).
+\end{itemize}
+Exemple (le calcul d'un factoriel impératif):
+\begin{lstlisting}[language=Python]
+  res = 1;
+  for i = 1..n:
+      res = res * i;
+\end{lstlisting}
+C'est un programme le plus compliqué dans cet article.
+Cependant, on peut voir clairement que l'execution est imperative car il est composé de instructions consecutives qui translatent le calculateur de l'état initial à son état final.
+Une partie de l'état final (variable \verb|res|) est interprété comme un résultat du calcul.
+
+En parallèle de l'approche programme comme l'instruction, il existe une paradigme fonctionnel qui présente un programme comme une fonction.
+Par example, le factoriel est une expression qui depende de l'entrée \verb|n|.
+L'execution de ce programme est une suite de réduction de cette expression jusqu'à l'expression triviale qui ne contient que le résultat.
+De plus,
+\begin{itemize}
+	\item Il n'y a pas de notion des états ainsi que des variables.
+	\item Pas de variables -- pas de l'opération de l'affectation.
+	\item Pas de cycles, car il n'y a pas de différences entre les itérations.
+	\item L'ordre de calcul n'est pas important car les expressions sont indépendant.
+\end{itemize}
+En revanche, le paradigme fonctionnel nou donne:
+\begin{itemize}
+	\item La récursion à la place des boucles.
+	\item Fonctions d'ordre supérieur, i.e., les fonctions qui prennent à l'entrée et renvoient autres fonctions.
+	\item Filtrage par motif.
+\end{itemize}
+Bien sûr, quelqu'un peut répliquer que toutes ses détails sont présents dans la plupart des langages modernes.
+En fait, les langages modernes sont multi-paradigmes -- ils prennes les meilleurs des tous.
+Par contre, langage machine et donc Assembler restent les langages pures impératifs.
+De plus, rajoutons qu'en programmation fonctionnelle, toutes les fonctions sont \emph{pures}, i.e., ne dependent que des ces paramètres.
+
+Dans la suite de cet article, nous construisont $\lambda$-calcul qui joue le rôle de ``machine de Turing'' pour la programmation fonctionnelle.
+\begin{remark}
+	$\quad$
+	\begin{enumerate}
+		\item La construction complète sont téchnique et même la définition de $\lambda$-calcul dépasse largement la taille de cet article. Nous essayons plutôt de donner une idée comment les primitives de la programmation impérative peuvent être exprimés en termes de $\lambda$-calcul. Ainsi, on ne donnera pas l'example plus sophistiqué que le calcul d'un factoriel.
+		\item Comment peut-on montrer que langages de programmation \textbf{X} et \textbf{Y} sont équivalent ? Il faut montrer deux proposition : (i) un programme quelconque écrit en \textbf{X} peut être réecrit en \textbf{Y} et (ii) un programme quelconque écrit en \textbf{Y} peut être réecrit en \textbf{X}. Cépendant, ce théorème d'équivalence \textbf{citation?} pour $\lambda$-calcul et le machine de Turing est assez complexe, donc nous nous limitons à une démonstration de \emph{$\lambda$-branchement} (\verb|if|) et récursion qui peut jouer le rôle de \emph{$\lambda$-boucle}.
+	\end{enumerate}
+\end{remark}
 
 \subsubsection*{What is $\lambda$?}\footnote{based on Selinger's lecture notes}
 En mathématique la notion d'une fonction est liée avec une application, i.e., règle qui transform paramètre dans un résultat.
