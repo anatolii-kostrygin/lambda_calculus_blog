@@ -1,3 +1,4 @@
+% !TeX encoding = UTF-8
 \documentclass[12pt, a4paper]{article}
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage[utf8x]{inputenc}
@@ -13,6 +14,7 @@
 %\newtheorem{problem}{Problème}
 \newtheorem*{problem}{Problème}
 \newtheorem*{remark}{Remarque}
+\newtheorem*{example}{Example}
 \begin{document}
 	
 \section*{Disclaimer}
@@ -231,6 +233,7 @@ En réalité le concept a eu quatre impacts principaux.
 	\item $\lambda$-calul est un \emph{langage de programmation} primitif (en nombre de constructions). Comme la machine de Turing est le fondament de tout les langages impératifs, $\lambda$-calcul est une base pour les langages fonctionnels tels que Haskell ou OCaml.
 \end{enumerate}
 
+\newpage
 \section*{Part 2. Les formalités.}
 
 \subsubsection*{Introduction informelle dans la programmation fonctionnelle}
@@ -284,7 +287,33 @@ Dans la suite de cet article, nous construisont $\lambda$-calcul qui joue le rô
 	\end{enumerate}
 \end{remark}
 
-\subsubsection*{What is $\lambda$?}\footnote{based on Selinger's lecture notes}
+\subsubsection*{Deux operations\footnote{based on Moskvin's presentations}}
+Dans $\lambda$-calcul nous n'avons que deux moyen pour construire les expressions : \emph{application} et \emph{abstraction}.
+
+\textbf{1. Application.} La notion \verb|f x| signifie que \verb|f| est appliqué à \verb|x|. Du point de vue de codeur on peut dire qu'un algorithme \verb|f| est appliqué à l'entrée \verb|x|. Cependant nous construisons un \emph{système formel} ou il n'y a pas de différence entre les algorithmes et les données, donc l'auto-application est aussi autorisée : \verb|f f|.
+
+\textbf{2. Abstraction.} Soit $M \equiv M[x]$ est une expression qui (probablement) contient $x$. Dans ce cas, la notion $\lambda x.M$ signifie une fonction $x \to M[x]$ qui mappe $x$ à $M[x]$.
+Ainsi, $\lambda$-abstraction est un moyen de créer une fonction anonyme en partant d'une expression $M$.
+\begin{example}
+	Considerons $\lambda$-expression : $(\lambda x.2x + 8)17$.
+	Le calcul est une serie de reductions d'une paire abstraction--application :
+	$$(\lambda x.2 \cdot x + 8)17 =(x:=17) 2 \cdot 17 + 8 = 42.$$
+\end{example}
+Cette réduction s'appele $\beta$-réduction.
+Si les expressions sont liées par la $\beta$-réduction, on dit qu'elles sont $\beta$-équivalentes.
+Le règle formel de $\beta$-équivalence est suivant :
+$$(\lambda x.M)N =_\beta M[x:=N]$$
+
+Dans $\lambda$-calcul sans type il n'y a rien à part de l'application, l'abstraction et $\beta$-réduction.
+En plus, pour omettre les parenthèses, nous avons les accords suivants :
+\begin{itemize}
+	\item L'application est gauche-associative ($F X Y Z := (((F X) Y) Z)$).
+	\item L'abstraction est droite-associative ($\lambda x y z.M := (\lambda x.(\lambda y.(\lambda z.M)))$).
+	\item L'abstraction s'applique à tous ce qu'elle arrive à ``toucher'' ($\lambda x. M N K := \lambda x.(MNK)$).
+\end{itemize}
+\textbf{todo: variables libres et liées}
+
+\subsubsection*{What is $\lambda$?\footnote{based on Selinger's lecture notes}}
 En mathématique la notion d'une fonction est liée avec une application, i.e., règle qui transform paramètre dans un résultat.
 Au contraire, $\lambda$-calcul est une théorie des ``fonctions comme formules''. La différence est ce que une formule formelle n'est pas obligatoirement se traduit en règle bien précise.
 Commençons par un exemple.
@@ -393,5 +422,17 @@ De plus, un vrai passioné peut essayer de trouver les bonnes expressions pour c
 
 \subsection*{Pourquoi langage de programmation?}
 Recursion à l'aide de combinators
+
+\subsection*{Résumé}
+Si vous pensez que $\lambda$-calcul est simple et les règles décrites sont évidents, je vais vous déranger : essayer de calculer ce terme-là.
+\textbf{todo}
+Cependant ce n'est que $\lambda$-répresentation de nombre 2 (vous vous probablement souvenez qu'il n'y a pas de nombres en $\lambda$-calcul).
+Cette réduction a été fait par Kleene, pendant son visite au dentiste (pourtant, les analgésiques modernes sont moins efficace en mathématique).
+Vu le nombre des efforts que nous avons besoin pour les calculs les plus primitifs, $\lambda$-calcul sans type reste une construction purement théorique, qui répresente un modèle de calcul aussi puissant que la machine de Turing.
+En enrichissant ce modèle par des constantes et système de types, on s'approche relativement vite au langages fonctionnels existants comme Haskell.
+Cependant, on perd le simplicité de la construction.
+
+Maintenant, je vous conseil de relire la partie 1 pour voir le contexte dans lequel ce système a été introduit aux années 30s.
+Si vous n'avez vraiment rien compris, comment on fait les calculs avec $\lambda$, \href{http://worrydream.com/AlligatorEggs/}{ce site} va surement aider d'avoir l'idée ce que s'est passé.
 
 \end{document}
