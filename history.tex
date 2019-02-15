@@ -1,6 +1,6 @@
 % !TeX encoding = UTF-8
 \documentclass[12pt, a4paper]{article}
-\usepackage{amsmath,amsthm,amssymb}
+\usepackage{amsmath,amsthm,amssymb,amsfonts,bm}
 \usepackage[utf8x]{inputenc}
 \usepackage{hyperref}
 \usepackage[mathscr]{eucal}
@@ -11,6 +11,9 @@
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 \newcommand{\lft}{\leftarrow}
 \newcommand{\rgt}{\rightarrow}
+\newcommand{\cK}{\mathbf{K}}
+\newcommand{\cS}{\mathbf{S}}
+\newcommand{\cI}{\mathbf{I}}
 %\newtheorem{problem}{Problème}
 \newtheorem*{problem}{Problème}
 \newtheorem*{remark}{Remarque}
@@ -307,11 +310,18 @@ $$(\lambda x.M)N =_\beta M[x:=N]$$
 Dans $\lambda$-calcul sans type il n'y a rien à part de l'application, l'abstraction et $\beta$-réduction.
 En plus, pour omettre les parenthèses, nous avons les accords suivants :
 \begin{itemize}
-	\item L'application est gauche-associative ($F X Y Z := (((F X) Y) Z)$).
-	\item L'abstraction est droite-associative ($\lambda x y z.M := (\lambda x.(\lambda y.(\lambda z.M)))$).
-	\item L'abstraction s'applique à tous ce qu'elle arrive à ``toucher'' ($\lambda x. M N K := \lambda x.(MNK)$).
+	\item L'application est gauche-associative, i.e., $F X Y Z := (((F X) Y) Z)$.
+	\item L'abstraction est droite-associative, i.e., $\lambda x y z.M := (\lambda x.(\lambda y.(\lambda z.M)))$.
+	\item L'abstraction s'applique à tous ce qu'elle arrive à ``toucher'', i.e., $\lambda x. M N K := \lambda x.(MNK)$.
 \end{itemize}
-\textbf{todo: variables libres et liées}
+\textbf{Variables libres et liées.}
+Considerons un terme $M[x]$. On dit que variable $x$ est \emph{libre} dans $M$.
+Par contre, dans l'abstraction $\lambda x.M[x]$, variable $x$ devient liée par un $\lambda$.
+\begin{example}
+	Dans le terme ci-dessous, les variables $x$ et $y$ sont liées, $z$ et $w$ sont libres.
+	$$(\lambda y. (\lambda x. xz)y)w$$
+\end{example}
+%Si on rénomme les variables liées, on obtient le terme ne change pas. On dit que tels termes sont $\alpha$-équivalents.
 
 \subsubsection*{What is $\lambda$?\footnote{based on Selinger's lecture notes}}
 En mathématique la notion d'une fonction est liée avec une application, i.e., règle qui transform paramètre dans un résultat.
@@ -339,28 +349,51 @@ Remarquons que $f(f)$ n'a jamais du sens dans mathématique classique car la fon
 Le cas spécial de $\lambda$-termes sans type sont les termes qui n'ont pas des variables libres. Ils s'appellent \emph{combinateurs}.
 Voici les examples des combinateurs classiques :
 \begin{itemize}
-	\item $I = \lambda x. x$
-	\item $\omega = \lambda x. xx$
-	\item $\Omega = \omega \omega = (\lambda x. xx) \lambda x. xx$
-	\item $K = \lambda x y. x$
-	\item $K_* = \lambda x y. y$
-	\item $C = \lambda fxy. fyx$
-	\item $B = \lambda fgx. f(gx)$
-	\item $S = \lambda fgx. fx(gx)$
+	\item $\mathbf{I} = \lambda x. x$ -- combinateur d'identité
+	\item $\mathbf{K} = \lambda x y. x$ -- ``suppresseur''
+	\item $\mathbf{S} = \lambda fgx. fx(gx)$ -- ``distributeur''
+\end{itemize}
+En fait, tout les combinateurs peuvent être exprimés en termes de ces trois -- on dit qu'ils forment la base chez les combinateurs.
+Cependant, cette base n'est pas minimal, car $\mathbf{I} = \mathbf{SKK}$.
+\textbf{Théorème} Tout les combinateurs peuvent être exprimés en termes de $\mathbf{K}$ et $\mathbf{S}$.
+
+Mais $\cI$ est très utile pour simplifier les calculs car sans lui les formules sont trop longues. Pour cette raison, on parle plutôt du système $\mathbf{S, K, I}$.
+Autres exemples des combinateurs avec leurs représentations en base $\cS, \cK$ et $\cS, \cK, \cI$ (todo!) :
+\begin{itemize}
+	\item $\bm{\omega} = \lambda x. xx = \cS \mathbf{I} \mathbf{I}$ (verify!)
+	\item $\mathbf{\Omega} = \bm{\omega} \bm{\omega} = (\lambda x. xx) \lambda x. xx$
+	\item $\mathbf{C}
+		= \lambda fxy. fyx
+		= \cS
+			\left(
+				\left(\cS(\cK\cS)\cK\right)
+				\left(\cS(\cK\cS)\cK\right)
+				(\cK\cK)
+			\right)$
+	\item $\mathbf{B} = \lambda fgx. f(gx) = \cS(\cK\cS)\cK$
+	\item $\mathbf{W} = \lambda xy. xyy = \cS \cS \left(\cK (\cS \cK \cK)\right)$
 \end{itemize}
 
-Chaque combinateur peut être appliqué aux autre tèrmes, par exemple :
+%Chaque combinateur peut être appliqué aux autre tèrmes, par exemple :
+%\begin{itemize}
+%	\item $I \mathpzc{x} = \mathpzc{x}$
+%	\item $\omega \mathpzc{x} = \mathpzc{x}\mathpzc{x}$
+%	\item $K \mathpzc{xy} = \mathpzc{x}$
+%	\item $S \mathpzc{fgx} = f\mathpzc{x} (\mathpzc{gx})$
+%\end{itemize}
+%Les formules ci-dessus peuvent s'en servir tant que la définition des combinateurs.
+%Le calcul est effectué en remplaçant les arguments formels par ses valeurs, e.g.,
+%$$\omega I = I I = I$$.
+%Notons, que les certains combinateurs peuvent être exprimé en termes des autres. (\textbf{todo})
+%Si on choisit une base, e.g., $S$, $K$ (et $I$ tant que un élement neutre), on peut obtenir un système de calcul qui est équivalent au $\lambda$-calcul.
+
+Notons qu'on peut penser de logique combinatoire comme du $\lambda$-calcul sans symbol $\lambda$ -- les deux systèmes sont équivalent, la difference n'est que dans le brique de base :
 \begin{itemize}
-	\item $I \mathpzc{x} = \mathpzc{x}$
-	\item $\omega \mathpzc{x} = \mathpzc{x}\mathpzc{x}$
-	\item $K \mathpzc{xy} = \mathpzc{x}$
-	\item $S \mathpzc{fgx} = f\mathpzc{x} (\mathpzc{gx})$
+	\item Dans $\lambda$-calcul, nous utilisons l'application et l'abstraction des fonctions aux variables.
+	\item Dans logique combinatoire on part des fonctions d'ordre supérieur, i.e., les fonctions qui ne contient pas de variables libres.
 \end{itemize}
-Les formules ci-dessus peuvent s'en servir tant que la définition des combinateurs.
-Le calcul est effectué en remplaçant les arguments formels par ses valeurs, e.g.,
-$$\omega I = I I = I$$.
-Notons, que les certains combinateurs peuvent être exprimé en termes des autres. (\textbf{todo})
-Si on choisit une base, e.g., $S$, $K$ (et $I$ tant que un élement neutre), on peut obtenir un système de calcul qui est équivalent au $\lambda$-calcul.
+Les constructions logiques dans le monde combinatoire seront probablement (ou pas) presentés en autres articles.
+Dans le futur, nous ne considerons que $\lambda$-calcul.
 
 
 \subsubsection*{Prise en main\footnote{Basé sur l'article russe \url{https://habr.com/ru/post/215991/}}}
