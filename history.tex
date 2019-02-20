@@ -14,6 +14,7 @@
 \newcommand{\cK}{\mathbf{K}}
 \newcommand{\cS}{\mathbf{S}}
 \newcommand{\cI}{\mathbf{I}}
+\newcommand{\id}{\mathbf{id}}
 %\newtheorem{problem}{Problème}
 \newtheorem*{problem}{Problème}
 \newtheorem*{remark}{Remarque}
@@ -283,11 +284,7 @@ De plus, rajoutons qu'en programmation fonctionnelle, toutes les fonctions sont 
 
 Dans la suite de cet article, nous construisont $\lambda$-calcul qui joue le rôle de ``machine de Turing'' pour la programmation fonctionnelle.
 \begin{remark}
-	$\quad$
-	\begin{enumerate}
-		\item La construction complète sont téchnique et même la définition de $\lambda$-calcul dépasse largement la taille de cet article. Nous essayons plutôt de donner une idée comment les primitives de la programmation impérative peuvent être exprimés en termes de $\lambda$-calcul. Ainsi, on ne donnera pas l'example plus sophistiqué que le calcul d'un factoriel.
-		\item Comment peut-on montrer que langages de programmation \textbf{X} et \textbf{Y} sont équivalent ? Il faut montrer deux proposition : (i) un programme quelconque écrit en \textbf{X} peut être réecrit en \textbf{Y} et (ii) un programme quelconque écrit en \textbf{Y} peut être réecrit en \textbf{X}. Cépendant, ce théorème d'équivalence \textbf{citation?} pour $\lambda$-calcul et le machine de Turing est assez complexe, donc nous nous limitons à une démonstration de \emph{$\lambda$-branchement} (\verb|if|) et récursion qui peut jouer le rôle de \emph{$\lambda$-boucle}.
-	\end{enumerate}
+	La construction complète sont téchnique et même la définition de $\lambda$-calcul dépasse largement la taille de cet article. Nous essayons plutôt de donner une idée comment les primitives de la programmation impérative peuvent être exprimés en termes de $\lambda$-calcul. Ainsi, on ne donnera pas l'example plus sophistiqué que le calcul d'un factoriel.
 \end{remark}
 
 \subsubsection*{Deux operations\footnote{based on Moskvin's presentations}}
@@ -454,7 +451,82 @@ De plus, un vrai passioné peut essayer de trouver les bonnes expressions pour c
 \end{itemize}
 
 \subsection*{Pourquoi langage de programmation?}
-Recursion à l'aide de combinators
+\textbf{TODO. Recursion à l'aide de combinators}
+
+Comment peut-on montrer que langages de programmation \textbf{X} et \textbf{Y} sont équivalent ?
+Il faut montrer deux proposition : (i) un programme quelconque écrit en \textbf{X} peut être réecrit en \textbf{Y} et (ii) un programme quelconque écrit en \textbf{Y} peut être réecrit en \textbf{X}.
+Helas, prouver ces deux réductions entre \textbf{citation?} $\lambda$-calcul et le machine de Turing est assez technique et demande quelques disaines de pages ércites.
+Donc nous nous limiterons à la démonstration de deux méchanismes :
+\begin{itemize}
+	\item Pour le \emph{branchement}, nous avons montre ci-dessus que terme $\mathbf{if}$ joue le rôle de même operateur dans la programmation.
+	\item Ci-dessous nous montrerons que la \emph{récursion} est aussi possible en $\lambda$-calcul. Ce méchanisme va jouer le rôle des boucles qui n'existe pas dans ce système.
+\end{itemize}
+Informellement, on comprends très bien que ces deux méchanismes sont suffisantes pour écrire n'importe quel programme.\footnote{La vrai dificulté est dans la formalisation de cette dernière proposition, ainsi que dans le propre construction pour la récurtion arbtitraire qui est fait à l'aide des combinateurs.}
+De plus, la construction de recursion n'est pas simple du tout.
+
+\textbf{Ingrédients.} Supposons que nous sommes beaucoup avancés dans le sujet et réussis à construire les fonctions suivantes (rappellons que par défaut il n'y a pas ni nombres ni opérations arithmétiques à $\lambda$-calcul.
+\begin{itemize}
+	\item $\mathbf{1}$, juste nombre 1, mais il faut le construire à l'aide de application et abstraction;
+	\item $\mathbf{isZero}$, si argument de cette fonction est égal au 0, elle renvoie $tru$, sinon -- $fls$;
+	\item $\mathbf{mult}$ renvoie un produit de ces deux arguments.
+	\item $\mathbf{pred}$ prend à l'entrée un nombre naturel et calcul son prédesesseur (souvez-vous des axiomes de Peano, si vous avez déjà lu la partie 1). Pourtant, cette fonction est le plus complexe : le construiction à été inventé par Kleene pendend l'extraction de son dent de sagesse. Aujourd'hui, l'anesthésie n'est pas pareil\ldots
+\end{itemize}
+\textbf{1ère approche.}
+Tout ces ingrédients nous permets d'introduir un factoriel assez naturellement~:
+$$\mathbf{fact} = \lambda x. \; \mathbf{if} \; (\mathbf{isZero} \; x) \; \mathbf{1} \; (\mathbf{fact} \; (\mathbf{pred} \; x))$$
+Rien de miracle, si $x$ est égal à 0, on renvoie 1, sinon -- le produit de $x$ et factoriel de $x-1$.
+Si on remplace $\mathbf{fact}$ par son définition, on obtient une série infinie des réductions. We have a problem\ldots
+
+\textbf{Calcul ``lazy''}. J'espère que vous protestiez contre cela, en argumentant que pour calculer $\mathbf{fact\;0}$, nous n'avons pas besoin de substitutions infinies car nous savons déjà que le troisième argument de $\mathbf{if}$ sera ignoré.
+Tout a fait, mais les règles de jeu "Informatique théorique" nous impose d'utiliser que les opérations bien précis : si on prétend que $\lambda$-calcul est un langage de programmation, alors on doit être capable de proposer un algorithme qui l'execute et donc aucun ambiguïté n'est pas toléré.
+Dans notre cas on a ``oublié'' de fixer l'ordre de calcul.
+Considerons un terme suivant~:
+$$(\lambda x.x) \; ((\lambda x.x) \; (\lambda z. \; (\lambda x.x) z))$$
+Pour simplicité on peut le réécrire~:
+$$\id \; (\id \; (\lambda z. \; \id \; z))$$
+Ce terme-là contient 3 redexes. Nous n'avons plusieurs choix de l'ordre des réductions :
+\begin{itemize}
+	\item \textbf{$\beta$-reduction complète.}
+		Le redex est choisi au hazard à chaque étape. Il est facile de voir que si l'expression initiale est finie, le résultat ne dépends pas de l'ordre de calcul (rappelons qu'il n y a pas de notion d'état, donc les effets de bord sont impossibles).
+		Voici une des réductions possibles d'une expression ci-dessus :
+		\begin{align*}
+			& \id \; (\id \; (\lambda z. \; \underline{\id \; z})) \\
+			= & \; \id \; \underline{(\id \; (\lambda z. \; z))} \\
+			= & \; \underline{\id \; (\lambda z. \; z)} \\
+			= & \; \lambda z. \; z
+		\end{align*}
+	\item \textbf{L'ordre normal.}
+		À chaque étape on choisi un redex le plus gauche (i.e., le plus externe) :
+		\begin{align*}
+			& \underline{\id \; (\id \; (\lambda z. \; \id \; z))} \\
+			= & \; \underline{\id \; (\lambda z. \; \id \; z)} \\
+			= & \; \underline{\lambda z. \; \id \; z} \\
+			= & \; \lambda z. \; z
+		\end{align*}		
+	\item \textbf{L'appel par nom.}
+		% todo: put it after the itemize, because there's an additional rule
+		L'ordre de calcul est identique à l'ordre normal. En plus, on interdit les reductions à l'intérieur de l'abstraction. Dans notre example on s'arrête sur l'étape avant dernier :
+		\begin{align*}
+			& \underline{\id \; (\id \; (\lambda z. \; \id \; z))} \\
+			= & \; \underline{\id \; (\lambda z. \; \id \; z)} \\
+			= & \; \lambda z. \; \id \; z
+		\end{align*}
+		Une version optimisée de cette strategie est utilisé par Haskell par défaut.
+		C'est le calcul ``lazy''.
+	\item \textbf{L'appel par valeur.}
+		On commence par un redex les plus gauche (externe), dans la partie droite duquel il y a une valeur -- un terme clos qui ne peut plus être réduit :
+		\begin{align*}
+			& \id \; \underline{(\id \; (\lambda z. \; \id \; z))} \\
+			= & \; \underline{\id (\lambda z. \; \id \; z)} \\
+			= & \; \lambda z. \; \id \; z
+		\end{align*}
+		Cette strategie est utilisée dans la plupart des langages de programmation : pour executer une fonction, on calcule d'abord tous ces arguments.
+\end{itemize}
+Remarquons que les tout les strategies sauf calcul lazy formellement interdit la récursion.
+Le méchanisme de ``lazyness'' est fait exactement pour éviter les calculs non-nécessaires.
+En réalité, cette mechanisme est utilisé dans la plupart des langages, mais pas dans l'execution de fonction. Dans le code suivant : \verb|if a and b: ...|, si \verb|a| est déjà fausse, il est probable que \verb|b| ne sera jamais calculé, ce que nous oblige de porter plus d'attention sur les effets de bords possible.
+
+\textbf{Y-combinator -- Est-ce qu'on a vraiment besoin de cette partie~?}
 
 \subsection*{Résumé}
 Si vous pensez que $\lambda$-calcul est simple et les règles décrites sont évidents, je vais vous déranger : essayer de calculer ce terme-là.
@@ -467,5 +539,7 @@ Cependant, on perd le simplicité de la construction.
 
 Maintenant, je vous conseil de relire la partie 1 pour voir le contexte dans lequel ce système a été introduit aux années 30s.
 Si vous n'avez vraiment rien compris, comment on fait les calculs avec $\lambda$, \href{http://worrydream.com/AlligatorEggs/}{ce site} va surement aider d'avoir l'idée ce que s'est passé.
+
+
 
 \end{document}
