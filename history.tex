@@ -15,10 +15,15 @@
 \newcommand{\cS}{\mathbf{S}}
 \newcommand{\cI}{\mathbf{I}}
 \newcommand{\id}{\mathbf{id}}
+\newcommand{\lx}{\lambda x}
+\newcommand{\ly}{\lambda y}
+\newcommand{\lf}{\lambda f}
 %\newtheorem{problem}{Problème}
 \newtheorem*{problem}{Problème}
 \newtheorem*{remark}{Remarque}
 \newtheorem*{example}{Example}
+\newtheorem*{definition}{Définition}
+\newtheorem*{theorem}{Théorème}
 \begin{document}
 	
 \section*{Disclaimer}
@@ -240,7 +245,7 @@ En réalité le concept a eu quatre impacts principaux.
 \newpage
 \section*{Part 2. Les formalités.}
 
-\subsubsection*{Introduction informelle dans la programmation fonctionnelle}
+\subsection*{Introduction informelle dans la programmation fonctionnelle}
 Le concepte de langage de programmation le plus elémentaire connu par tout le monde est un machine de Turing.
 Sa ruban contenant les instructions et les datas se traduit facilement dans la programmation impérative -- un paradigme implémenté par ``OVER9000'' des langages populaires.
 Dans ce paradigme, le proces du calcul est décrit en termes des instructions qui changent l'état de ``calculateur''.
@@ -287,7 +292,7 @@ Dans la suite de cet article, nous construisont $\lambda$-calcul qui joue le rô
 	La construction complète sont téchnique et même la définition de $\lambda$-calcul dépasse largement la taille de cet article. Nous essayons plutôt de donner une idée comment les primitives de la programmation impérative peuvent être exprimés en termes de $\lambda$-calcul. Ainsi, on ne donnera pas l'example plus sophistiqué que le calcul d'un factoriel.
 \end{remark}
 
-\subsubsection*{Deux operations\footnote{based on Moskvin's presentations}}
+\subsection*{Deux operations\footnote{based on Moskvin's presentations}}
 Dans $\lambda$-calcul nous n'avons que deux moyen pour construire les expressions : \emph{application} et \emph{abstraction}.
 
 \textbf{1. Application.} La notion \verb|f x| signifie que \verb|f| est appliqué à \verb|x|. Du point de vue de codeur on peut dire qu'un algorithme \verb|f| est appliqué à l'entrée \verb|x|. Cependant nous construisons un \emph{système formel} ou il n'y a pas de différence entre les algorithmes et les données, donc l'auto-application est aussi autorisée : \verb|f f|.
@@ -320,7 +325,7 @@ Par contre, dans l'abstraction $\lambda x.M[x]$, variable $x$ devient liée par 
 \end{example}
 %Si on rénomme les variables liées, on obtient le terme ne change pas. On dit que tels termes sont $\alpha$-équivalents.
 
-\subsubsection*{What is $\lambda$?\footnote{based on Selinger's lecture notes}}
+\subsection*{What is $\lambda$?\footnote{based on Selinger's lecture notes}}
 En mathématique la notion d'une fonction est liée avec une application, i.e., règle qui transform paramètre dans un résultat.
 Au contraire, $\lambda$-calcul est une théorie des ``fonctions comme formules''. La différence est ce que une formule formelle n'est pas obligatoirement se traduit en règle bien précise.
 Commençons par un exemple.
@@ -342,7 +347,7 @@ Remarquons que $f(f)$ n'a jamais du sens dans mathématique classique car la fon
 
 \textbf{todo: $\lambda$ sans type est simplement typé}
 
-\subsubsection*{Combinateurs}
+\subsection*{Combinateurs}
 Le cas spécial de $\lambda$-termes sans type sont les termes qui n'ont pas des variables libres. Ils s'appellent \emph{combinateurs}.
 Voici les examples des combinateurs classiques :
 \begin{itemize}
@@ -393,7 +398,7 @@ Les constructions logiques dans le monde combinatoire seront probablement (ou pa
 Dans le futur, nous ne considerons que $\lambda$-calcul.
 
 
-\subsubsection*{Prise en main\footnote{Basé sur l'article russe \url{https://habr.com/ru/post/215991/}}}
+\subsection*{Prise en main\footnote{Basé sur l'article russe \url{https://habr.com/ru/post/215991/}}}
 Dans $lambda$-calcul sans type nous n'avons qu'un seul primitif - des fonctions.
 Dons, si on veut l'utiliser pour la programmation, c'est à nous de réaliser même les objets les plus élementaires, tels que les nombres ou les constantes booléennes.
 \begin{eqnarray*}
@@ -451,7 +456,6 @@ De plus, un vrai passioné peut essayer de trouver les bonnes expressions pour c
 \end{itemize}
 
 \subsection*{Pourquoi langage de programmation?}
-\textbf{TODO. Recursion à l'aide de combinators}
 
 Comment peut-on montrer que langages de programmation \textbf{X} et \textbf{Y} sont équivalent ?
 Il faut montrer deux proposition : (i) un programme quelconque écrit en \textbf{X} peut être réecrit en \textbf{Y} et (ii) un programme quelconque écrit en \textbf{Y} peut être réecrit en \textbf{X}.
@@ -464,20 +468,22 @@ Donc nous nous limiterons à la démonstration de deux méchanismes :
 Informellement, on comprends très bien que ces deux méchanismes sont suffisantes pour écrire n'importe quel programme.\footnote{La vrai dificulté est dans la formalisation de cette dernière proposition, ainsi que dans le propre construction pour la récurtion arbtitraire qui est fait à l'aide des combinateurs.}
 De plus, la construction de recursion n'est pas simple du tout.
 
-\textbf{Ingrédients.} Supposons que nous sommes beaucoup avancés dans le sujet et réussis à construire les fonctions suivantes (rappellons que par défaut il n'y a pas ni nombres ni opérations arithmétiques à $\lambda$-calcul.
+\subsubsection*{Calcul du factoriel. Ingrédients}
+Supposons que nous sommes beaucoup avancés dans le sujet et réussis à construire les fonctions suivantes (rappellons que par défaut il n'y a pas ni nombres ni opérations arithmétiques à $\lambda$-calcul.
 \begin{itemize}
 	\item $\mathbf{1}$, juste nombre 1, mais il faut le construire à l'aide de application et abstraction;
 	\item $\mathbf{isZero}$, si argument de cette fonction est égal au 0, elle renvoie $tru$, sinon -- $fls$;
 	\item $\mathbf{mult}$ renvoie un produit de ces deux arguments.
 	\item $\mathbf{pred}$ prend à l'entrée un nombre naturel et calcul son prédesesseur (souvez-vous des axiomes de Peano, si vous avez déjà lu la partie 1). Pourtant, cette fonction est le plus complexe : le construiction à été inventé par Kleene pendend l'extraction de son dent de sagesse. Aujourd'hui, l'anesthésie n'est pas pareil\ldots
 \end{itemize}
-\textbf{1ère approche.}
+\subsubsection*{Calcul du factoriel. 1ère approche}
 Tout ces ingrédients nous permets d'introduir un factoriel assez naturellement~:
 $$\mathbf{fact} = \lambda x. \; \mathbf{if} \; (\mathbf{isZero} \; x) \; \mathbf{1} \; (\mathbf{fact} \; (\mathbf{pred} \; x))$$
 Rien de miracle, si $x$ est égal à 0, on renvoie 1, sinon -- le produit de $x$ et factoriel de $x-1$.
 Si on remplace $\mathbf{fact}$ par son définition, on obtient une série infinie des réductions. We have a problem\ldots
 
-\textbf{Calcul ``lazy''}. J'espère que vous protestiez contre cela, en argumentant que pour calculer $\mathbf{fact\;0}$, nous n'avons pas besoin de substitutions infinies car nous savons déjà que le troisième argument de $\mathbf{if}$ sera ignoré.
+\subsubsection*{Calcul ``lazy''}
+J'espère que vous protestiez contre cela, en argumentant que pour calculer $\mathbf{fact\;0}$, nous n'avons pas besoin de substitutions infinies car nous savons déjà que le troisième argument de $\mathbf{if}$ sera ignoré.
 Tout a fait, mais les règles de jeu "Informatique théorique" nous impose d'utiliser que les opérations bien précis : si on prétend que $\lambda$-calcul est un langage de programmation, alors on doit être capable de proposer un algorithme qui l'execute et donc aucun ambiguïté n'est pas toléré.
 Dans notre cas on a ``oublié'' de fixer l'ordre de calcul.
 Considerons un terme suivant~:
@@ -526,7 +532,41 @@ Remarquons que les tout les strategies sauf calcul lazy formellement interdit la
 Le méchanisme de ``lazyness'' est fait exactement pour éviter les calculs non-nécessaires.
 En réalité, cette mechanisme est utilisé dans la plupart des langages, mais pas dans l'execution de fonction. Dans le code suivant : \verb|if a and b: ...|, si \verb|a| est déjà fausse, il est probable que \verb|b| ne sera jamais calculé, ce que nous oblige de porter plus d'attention sur les effets de bords possible.
 
-\textbf{Y-combinator -- Est-ce qu'on a vraiment besoin de cette partie~?}
+\subsubsection*{Combinator de point fixe} (attention, beaucoup de lettres cursives\ldots)
+\begin{definition}
+	\emph{Un point fixe} de $\lambda$-fonction $f$ est une fonction $x$ tel que $$f \; x \equiv_\beta x$$
+\end{definition}
+\begin{theorem}
+	En $\lambda$-calcul (ainsi qu'en logique combinatoire), pour chaque terme $x$ il existe au moins un terme $p$ tel que $xp$ = $p$.
+	De plus, il existe un combinateur $\mathbf{Y}$ tel que $\mathbf{Y} x = x \mathbf{Y} x$.
+\end{theorem}
+\begin{proof}[Preuve]
+	Pour prouver ce théorème, construisons un tel combinateur :
+	$$Y = \lambda f. \; \underline{(\lambda x. \; f(x \; x)} (\lambda x. \; f(x \; x)$$
+	Appliquons la reduction à l'expression soulignée :
+	$$Y = \lambda f. \; f ((\lambda x. \; f(x \; x) (\lambda x. \; f(x \; x))$$
+	On en déduit que $Y \; f = f \; Y \; f$.
+	Donc $Y \; f$ est un point fixe de $f$.
+	$Y$ s'appelle un \emph{combinateur du point fixe}.
+	En cette formle-là il a été introduit par Haskell Curry
+	\footnote{
+		Un combinateur d'un point fixe n'est pas unique (en réalité, il y a un nombre infini de tels).
+		Par example, celui a été proposé par Alan Turing : $$\Theta = (\lx.\ly.(y(xxy)))(\lx.\ly.(y(xxy)))$$
+	}
+	(on reppel que combinateur est un terme dont tout les variables sont liées par $\lambda$-abstraction).
+\end{proof}
+
+\subsubsection*{Calcul du factoriel. Y à l'aide !}
+L'un de rôle du combinateur de point fixe est de se faire priver de la récursion en $\lambda$-calcul -- celui-si nous permettra de calculer le factoriel sans un truc avec calcul ``lazy''.
+Considerons une fonction :
+$$\mathbf{fact'} = \lf. \; \lx. \; \mathbf{if} (\mathbf{isZero} \; x) \mathbf{1} (\mathbf{mult} \; x (f (\mathbf{pred} \; x)))$$
+Cette fonction est très ressemblant à $\mathbf{fact}$. La seule différence est ce que $\mathbf{fact'}$ au lieu d'appliquer lui même sur $\mathbf{pred} \; x$, applique $f$ qui est son paramètre.
+Donc, si on pose $f := \mathbf{fact}$, notre fonction calcule le factoirel.
+Autrement dit, $\mathbf{fact'} \; \mathbf{fact} = \mathbf{fact}$, i.e., $\mathbf{fact}$ est un point fixe de $\mathbf{fact'}$.
+Donc $$\mathbf{fact} = \mathbf{Y} \mathbf{fact'}$$
+Cette fonction n'est pas récursive et elle calcul le factoriel du $x$\footnote{
+	En revanche le calcul devient le-e-e-ente : pour calculer 5! il faut fait 66066 $\beta$-reductions ! Evidemment, j'ai jamais vérifier á la main, je trouver ce nombre dans mes notes du cours et je ne garantie pas que mon prof a fait les calculs lui-même\ldots
+}
 
 \subsection*{Résumé}
 Si vous pensez que $\lambda$-calcul est simple et les règles décrites sont évidents, je vais vous déranger : essayer de calculer ce terme-là.
@@ -539,7 +579,5 @@ Cependant, on perd le simplicité de la construction.
 
 Maintenant, je vous conseil de relire la partie 1 pour voir le contexte dans lequel ce système a été introduit aux années 30s.
 Si vous n'avez vraiment rien compris, comment on fait les calculs avec $\lambda$, \href{http://worrydream.com/AlligatorEggs/}{ce site} va surement aider d'avoir l'idée ce que s'est passé.
-
-
 
 \end{document}
