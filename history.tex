@@ -15,96 +15,91 @@
 \newcommand{\cS}{\mathbf{S}}
 \newcommand{\cI}{\mathbf{I}}
 \newcommand{\id}{\mathbf{id}}
-\newcommand{\lx}{\lambda x}
-\newcommand{\ly}{\lambda y}
-\newcommand{\lf}{\lambda f}
 %\newtheorem{problem}{Problème}
 \newtheorem*{problem}{Problème}
 \newtheorem*{remark}{Remarque}
 \newtheorem*{example}{Example}
-\newtheorem*{definition}{Définition}
-\newtheorem*{theorem}{Théorème}
 \begin{document}
 	
 \section*{Disclaimer}
-Le deux partie de ce document sont indépendantes et peuvent être lues dans n'importe quel ordre.
-L'objectif initial de partie 1 a était de discuter qu'est-ce que c'est un corrècte théorie mathématique en utilisant l'arithmétique comme exemple.
-Cependant, ce tentative s'est transformé vite dans un essai sur l'histoire de mathématique de la fin XIXème siècle jusqu'au milieu du XXème.
-On se concentre principalement sur les problèmes de consistence et notamment sur la deuxième problème de Hilberte.
-Il est evident que notre approche ne peut jamais être complète, donc on se restreinte sur le contèxte historique des avancement en formalisation d'arithmétique ainsi que la notion de calculabilité.
-Intentionellement, on évite au maximum les définitions formelles et formules et invite le lécteur curieux de faire ses propres recherches en partant du Wikipédia (plutôt anglais) qui présente la plupart des définitions manquantes.
+L'objectif initial de la première partie était de discuter de ce qu'est une théorie mathématique correcte en prenant l'arithmétique comme exemple. Cette tentative s'est vite transformée en un essai sur l'histoire des mathématiques de la fin du XIXème jusqu'au milieu du XXème siècle, en se concentrant principalement sur les problèmes de consistence et notamment sur le deuxième problème de Hilbert.
 
-Au contraire, l'objectif de partie 2 est de donner au lecteur le goût de $\lambda$-calcul : on présente une définition plutôt complète, puis on montre, comment construire une language de programmation elementaire mais aussi puisant que la machine de Turing.
-Ce langage et connu comme la paradigme fonctionnelle.
+Il est évident que notre approche ne peut être considérée comme complète, on s'est restreint au contexte historique des avancements concernant la formalisation de l'arithmétique ainsi que la notion de calculabilité. Intentionellement, on a évité au maximum les définitions formelles. On invite plutôt le lecteur curieux à faire ses propres recherches en partant de Wikipédia (plutôt la version anglaise) qui contient la plupart des définitions manquantes.
 
-Finalement, l'ordre de lécture conseillée est plutôt le suivant : un passage ``diagonale'' de partie 2, puis lecture complète de partie 1 et la relecture de la partie 1 pendant lequelle on devra voir le sense derrière le forêt de detailles techniques nécessaires pour introduire un système formel tel que $\lambda$-calcul.
+A l'opposé, l'objectif de la deuxième partie était de donner au lecteur le goût du $\lambda$-calcul : on présente une définition plutôt complète, puis on montre comment construire un language de programmation élémentaire mais aussi puissant que la machine de Turing. Ce langage est connu comme le paradigme fonctionnel.
+
+Les deux parties de ce document sont indépendantes et peuvent être lues dans n'importe quel ordre.
+Cependant, l'ordre de lecture conseillé est plutôt le suivant : un passage ``diagonale'' sur la partie 2, puis une lecture complète de la partie 1 et enfin la relecture de la partie 2 pendant lequelle on pourra faire attention au sens global derrière la forêt de détails techniques nécessaire pour introduire un système formel tel que le $\lambda$-calcul.
 	
-\section*{Part 1. Histoire de $\lambda$-calcul}
+\section*{Partie 1. Histoire du $\lambda$-calcul}
 
-Qu'est-ce que c'est un $\lambda$-calcul ?
-Les codeurs sont familiers avec une notion de $\lambda$-fonction - une fonction anonyme qui est utilisée dans les morceaux du code qui ne méritent pas d'avoir un méthode nommé : clé de trie, les petits transformation dans les requêtes à la sql etc.
-Cépendant, la notion de $\lambda$-fonction a été pris d'une système de calcul aussi puisant que la machine de Turing (est inventé dans les mêmes années 30s).
-Dans cet article on va discuter l'histoire de son invention pour mieux comprendre le concept.
+Qu'est-ce que le $\lambda$-calcul ?
+Les développeurs sont familiers avec la notion de $\lambda$-fonction : une fonction anonyme qui est utilisée dans des morceaux de code qui ne méritent pas d'avoir un nom : clé de tri, petites transformations dans des requêtes similaires à du SQL...
+Cependant, la notion de $\lambda$-fonction a été reprise d'un système de calcul aussi puissant que la machine de Turing (et inventée dans les mêmes années 30).
+Dans cet article, on présente l'histoire de l'invention du $\lambda$-calcul afin de mieux appréhender ce concept difficile.
 
 \subsubsection*{Plan}
 \begin{enumerate}
-	\item Crise des fondaments
+	\item Crise des fondements
 	\item Axiomes de Peano
-	\item 1ere version de Lambda calculs
-	\item Theoreme de Goedel
+	\item 1ère version du $\lambda$-calcul
+	\item Theorème de Gödel
 	\item Machine de Turing et calculabilité
 	\item Thèse de Church-Turing
 	\item Impact et applications
 \end{enumerate}
 
 
-\subsubsection*{Crise des fondaments}
-Qui n'a jamais vu cette phrase : \emph{``Cette phrase est fausse''} ?
+\subsubsection*{Crise des fondements}
+Qui a déjà vu cette phrase : \emph{``Cette phrase est fausse''} ?
 Probablement, personne.
-Tout le monde sait qu'elle n'est ni vrai ni fausse (effectivement, s'il on suppose qu'elle est vrai, alors elle doit être fausse et à l'invers).
-Connue depuis presque 3000 ans sous un nom d'un paradoxe du menteur, les mathématiciens ont eu une habitude de vivre avec jusqu'à la fin de XIXème siècle.
-Cépéndant, les ``invités inattandus'' ont arrivés de temps en temps :
+Tout le monde sait qu'elle n'est ni vrai ni fausse (si on suppose qu'elle est vraie, alors elle doit être fausse et inversément).
+Connue depuis presque 3000 ans sous le nom du paradoxe du menteur, les mathématiciens ont eu l'habitude de vivre avec jusqu'à la fin de XIXème siècle.
+D'autres formulations similaires ont vu le jour depuis :
 \begin{itemize}
 	\item \textbf{Paradoxe du barbier.}
-		Un barbier rase tous qui ne se rasent pas eux-mêmes et seulement ceux-ci; Qui rase ce barbier ?
+		Dans un village, un barbier rase tous les habitants du village qui ne se rasent pas eux-mêmes et seulement ceux-ci; Qui rase ce barbier ?
 	\item \textbf{Paradoxe sorite.}
 		Un grain isolé ne constitue pas un tas.
 		L'ajout d'un grain ne fait pas d'un non-tas, un tas.
-		Donc on ne peut pas construire un tas par l'ajout des grains.
+		Donc on ne peut pas construire un tas par l'ajout de grains.
 	\item \textbf{Paradoxe du crocodile.}
-		Un crocodile méchant vous attrape et propose de deviner votre déstin.
-		Si votre devine est incorrecte, il vous mange.
+		Un méchant crocodile vous attrape et vous propose de deviner votre destin.
+		Si votre réponse est incorrecte, il vous mange.
 		La réponse ? -- ``Tu vas me dévorer'' !
 \end{itemize}
 
-Pour une liste exhaustive des paradoxes simples, on peut consulter un livre de Martin Gardner. ``Aha! Gotcha. Paradoxes to puzzle and delight''.
-Maintenant, discutons un autre saboteur de logique : \emph{Paradoxe de l'ensemble de Russel}.
-Disons qu'un ensemble est \emph{simple} s'il n'appartient pas à lui-même. Par exemple, l'ensemble des tout les gens est simple, car cet ensemble n'est pas une personne. Ainsi, l'ensemble des tout les ensemble n'est pas simple par son définition. \emph{L'ensemble de Russel} est un ensemble qui contient tout les ensembles simples et rien d'autre.
+Pour une liste exhaustive des paradoxes simples, on peut consulter le livre de Martin Gardner : ``Aha! Gotcha. Paradoxes to puzzle and delight''.
+
+Maintenant, discutons d'un autre saboteur de logique : le \emph{Paradoxe de l'ensemble de Russel}.
+Disons qu'un ensemble est \emph{simple} s'il n'appartient pas à lui-même. Par exemple, l'ensemble de tous les gens est simple, car cet ensemble n'est pas une personne. Ainsi, l'ensemble de tous les ensembles n'est pas simple par définition. \emph{L'ensemble de Russel} est un ensemble qui contient tous les ensembles simples et rien d'autre.
 Est-ce qu'un ensemble de Russel est simple ? Si c'est le cas, par construction il contient lui-même. Donc il n'est pas simple. Mais s'il n'est pas simple il doit contenir lui-même, ce que signifie qu'il est simple. \emph{Contradiction}.
 
 % link => Martin Gardner. Aha! Gotcha. Paradoxes to puzzle and delight. 
-Les mathématiciens n'étude pas ni crocodiles, ni barbiers.
-Les questions des menteurs sont plutôt les compétences de code penal ou les philosophes.
-Cépendant dans une version de Russel ce paradoxe n'utilise que les constructions formelles de mathématique. Cela signifie que telles constructions sont contradictoires elles-mêmes : si nous avons prouvé qu'une formule propositionnelle est à la fois vrai et fausse, le même peut avoir lieu pour n'importe quel théorème.
-Si on ajoute qu'au début de XXème siècle paradoxe de Russel n'a pas été le seul paradoxe connu, on voit bien qu'est-ce que c'était le \emph{crise de fondaments} en mathématique.
+Les mathématiciens n'étudient ni les crocodiles, ni les barbiers.
+Les questions de menteur sont plutôt les compétences du code pénal ou des philosophes.
+Cependant, dans la version de Russel, ce paradoxe n'utilise que des constructions formelles des mathématiques. Cela signifie que de telles constructions sont contradictoires elles-mêmes : si nous avons prouvé qu'une formule propositionnelle est à la fois vraie et fausse, n'importe quel théorème peut également devenir vrai et faux à la fois.
+Si on ajoute qu'au début de XXème siècle, le paradoxe de Russel n'a pas été le seul paradoxe connu, on aperçoit ce qu'a été la \emph{crise de fondements} en mathématiques.
 
-Ce crise a été refleté sous le numéro 2 dans une liste des 23 fameux problèmes de Hilbert détérminants le développement du mathématique en XXème siècle. \\
+Cette crise a été cristalisée dans le second problème de la liste des 23 fameux problèmes de Hilbert déterminants le développement des mathématiques au XXème siècle. \\
 \textbf{2ème problème de Hilbert}
-\textit{Déterminer la consistence de l'arithmétique.}
+\textit{Déterminer la consistance de l'arithmétique.}
 %\begin{problem}[2ème problème de Hilbert]
 %	Déterminer la consistence de l'arithmétique.
 %\end{problem}
 
-Dans le sens plus formel, la consistence signifie le suivant.
+Dans le sens le plus formel, la consistance peut être définie comme cela :
+
 \begin{enumerate}
-	\item Il y a des axiomes dont on peut déduire tout les théorèmes de l'arithmétique.
-	\item Aucun axiomes ne peut pas être déduit des autres.
-	\item Il n'existe pas d'une proposition X, tel que les axiome implique X ainsi que "non X".
+	\item Il y a des axiomes dont on peut déduire tous les théorèmes de l'arithmétique.
+	\item Aucun axiome ne peut être déduit des autres.
+	\item Il n'existe pas de proposition X, tel que les axiomes implique X ainsi que "non X".
 \end{enumerate}
-L'étape 1 est plutôt constructif : en pratique, il est suffisant de produire les nombres (entiers, rationnels, réels) avec ses propertés habituels.
-Dans l'étape 2 il faut prouver que les axiomes sont indépendants l'un des autres.
-Équivalentment, si on supprime n'importe quel axiome, l'étape 1 n'est plus vrai.
-L'étape 3 est le plus compliqué.
+
+L'étape 1 est plutôt constructive : en pratique, il est suffisant de produire les nombres (entiers, rationnels, réels) avec leurs propriétés habituelles.
+Dans l'étape 2, il faut prouver que les axiomes sont indépendants les uns des autres.
+Ce qui est équivalent à dire que si on supprime n'importe quel axiome, l'étape 1 n'est plus vrai.
+L'étape 3 est la plus compliquée.
 
 
 
@@ -117,135 +112,142 @@ L'étape 3 est le plus compliqué.
 
 
 \subsubsection*{Axiomes de Peano}
-L'arithmétique est un domain de mathématique qui étude les nombres et rélations entre eux.
-Elle est appliquée partout de premiers années de l'école jusqu'à les conceptes modernes d'astrophysique.
-Cépendant, pour construire les bases de l'arithmétique, il est presque suffisant de bien déterminer les nombres naturels ainsi que les action qu'on peut faire avec.
-(Les nombres entiers est une extension pour que opération $x - y$ renvoit toujours un nombre valide, les nombres rationnels aparaissent si on étudie la division. Finalement, les nombres algébrique sont résponsable pour résoudre les équatinos polynomials et le reste - pour "fermer des trous").
-Classiquement, les nombres naturels peuvent être définis de même façon qu'on fait quand les petits enfants apprennent à compter: ce résultat est connus dépuis la find de XIXème siècle comme les axiomes de Peano:
+L'arithmétique est un domaine des mathématiques qui étudie les nombres et leurs relations.
+Elle se retrouve partout, des premières années d'école primaire jusqu'aux concepts modernes d'astrophysique.
+Cependant, pour construire les bases de l'arithmétique, il est presque suffisant de bien déterminer les nombres naturels ainsi que leurs interactions
+(les nombres entiers sont une extension des nombres naturels pour que l'opération $x - y$ renvoit toujours un nombre valide ; les nombres rationnels aparaissent si on étudie la division ; les nombres algébriques sont utilisés pour résoudre les équations polynomiales et le reste, c'est pour "boucher les trous").
+
+Classiquement, les nombres naturels peuvent être définis de la même façon qu'on l'explique aux enfants lorsqu'ils apprenent à compter. Ce résultat est connu depuis la fin du XIXème siècle comme les axiomes de Peano :
 \begin{enumerate}
 	\item 1 est naturel;
 	\item le nombre suivant d'un nombre naturel est naturel;
-	\item rien ne suivi de 1;
-	\item si $a$ suive $b$ et $a$ suive $c$, alorc $b=c$;
-	\item axiome de recurrence (i.e., si un prédicat $A(x)$ est vrai pour $x=1$ ainsi que $A(n)$ implique $A(n+1)$, alors $A(x)$ est vrai pour tout $n$ naturel).
+	\item rien n'est suivi de 1;
+	\item si $a$ suit $b$ et $a$ suit $c$, alorc $b=c$;
+	\item axiome de récurrence (i.e. si un prédicat $A(x)$ est vrai pour $x=1$ ainsi que $A(n)$ implique $A(n+1)$, alors $A(x)$ est vrai pour tout $n$ naturel).
 \end{enumerate}
-Montrons que avec ces axiomes sont suffisant pour construire tout les nombres.
+Montrons maintenant que ces axiomes sont suffisants pour construire l'ensemble des nombres naturels.
 \begin{itemize}
-	\item \textbf{Nombres naturels} sont déjà construit. Ok, pour être honête, nous avons construit les objets ``bizzares'' et les avons appelés les nombres naturels -- prenez l'habitude que mathématique fondamental est une façon de parler des choses évidents depuil l'école avec des mots très sophistiqués. Mais la vrai avantage de cet approche est son \textbf{correctité} absolu.
-	\item \textbf{Zero} est indispensable pour compter. Rien plus simple - ajoutons un objet nouveau spéciale, qui est (i) suivi de 1. Appelons lui ``0''. Posons que pour tout $n$ naturel (ii) $n + 0 = 0 + n = n$ et aussi (iii) $n \cdot 0 = 0 \cdot n = 0$ (servira pour le futur).
-	\item On peut compter et même calculer la somme, mais les mathématiciens veulent plus de symmetrie, donc l'opération réciproque de ``+'' doit exister. D'accord: par définition, la différence $a - b$ est un nombre $c$ tel que $a = b + c$. Que vaut 2 - 5? Oups, il n'existe pas tel $c$ que $c$ + 5 = 2 - n'oubliez pas qu'on veut la strictité absolue, donc on ne peut utiliser que des nombres déjà calculés. Nous n'avons pas de choix: disons que ``2 - 5'' et un nouveau nombre. Ainsi que ``1 - 2'', ``42 - 45'' et même ``239 - 261''. Cela semble beaucoup, mais remarquons que 2 - 5 est égal au 42 - 45 et aussi au 0 - 3. Pour simplicité, omittons zero et écrivons juste -3. Félicitations ! Vous venez de construire les nombres \textbf{négatifs} et donc les nombres \textbf{entières} !
-	Cet opération s'appelle la \textbf{closure} et est très typique pour la génération des nouveaux objets.
-	\item Les \textbf{nombres rationnels} arrivent par la même logique que : si nous pouvons calculer le produit, alors nous voulons diviser. Les résultats de tout les divisions possibles (1/2, -2/3, 2/4, 37/17, 5/5, etc.) forment les nombres rationnels -- vous devez le souvenir bien depuis l'école - d'habitude ils sont appris plus tard que les nombres négatifs.
-	\item Imaginons l'axe de nombres. D'un point de vue, il est très dense -- pour n'importe quel nombre rationnel, il existe un autre nombre rationnel qui est ``autant proche de lui qu'on veut''. Il n'est pas suffisant ! Malheureusement, $\sqrt{2}$ n'est pas rationnel (à propos : 7ème problème de Hilbert s'agit de prouver que $\sqrt2^{\sqrt2}$ n'est pas rationnel).
-	Donc les \textbf{nombres réels} sont définit par une autre closure. Informellement on rempli des ``trous'' sur l'axe des nombres.
-	Pour les plus curieux qui souhaitent la construiction formelle, la page de
+	\item Les \textbf{nombres naturels} sont déjà construits. Pour être honête, nous avons construit des objets ``bizzares'' et les avons appelés des nombres naturels -- prenez l'habitude qu'en mathématique fondamentale, il est courant de parler de choses évidentes avec des mots très sophistiqués. Le vrai avantage de cette approche est son aspect absolument \textbf{correct}.
+	\item \textbf{Zéro} est indispensable pour compter. Rien de plus simple - ajoutons un nouvel objet spécial, qui est (i) suivi de 1. Appelons le ``0''. Posons que pour tout $n$ naturel (ii) $n + 0 = 0 + n = n$ et aussi (iii) $n \cdot 0 = 0 \cdot n = 0$ (cela servira dans le futur).
+	\item On peut ainsi compter et même calculer la somme, mais les mathématiciens veulent plus de symétrie, ils aimeraient l'opération réciproque de ``+''. D'accord: par définition, la différence $a - b$ est un nombre $c$ tel que $a = b + c$. Que vaut 2 - 5 ? Oups, il n'existe pas de $c$ tel que $c$ + 5 = 2 -- n'oubliez pas qu'on souhaite une exactitude absolue, donc on ne peut utiliser que des nombres déjà calculés. Nous n'avons pas le choix: disons que ``2 - 5'' est un nouveau nombre. Ainsi que ``1 - 2'', ``42 - 45'' et même ``239 - 261''. Cela semble beaucoup, mais remarquons que ``2 - 5'' est égal à ``42 - 45'' et aussi à ``0 - 3''. Par simplicité, omettons zéro et écrivons juste -3. Félicitations ! Vous venez de construire les nombres \textbf{négatifs} et donc les nombres \textbf{entiers} !
+	Cet opération s'appelle une \textbf{clôture} et est très typique pour générer de nouveaux objets.
+	\item Les \textbf{nombres rationnels} arrivent en utilisant la même logique : si nous pouvons calculer le produit, alors nous voulons également diviser. Les résultats de toutes les divisions possibles (1/2, -2/3, 2/4, 37/17, 5/5, etc.) forment les nombres rationnels.
+	\item Imaginons tous les nombres rationnels sur un axe. D'un certain point de vue, cet axe est très dense -- pour n'importe quel nombre rationnel, il existe un autre nombre rationnel qui est ``aussi proche de lui que l'on veut''. Mais ce n'est pas suffisant ! Malheureusement, $\sqrt{2}$ n'est pas rationnel (à propos : dans le 7ème problème de Hilbert, il s'agit de prouver que $\sqrt2^{\sqrt2}$ n'est pas rationnel).
+	Donc les \textbf{nombres réels} sont définit par une autre clôture. Informellement, on remplit les ``trous'' sur l'axe des nombres.
+	\item Pour les plus curieux qui souhaitent accéder à la construction formelle, la page de
 	\href{
 		/wiki/Construction_des_nombres_r%C3%A9els
-		}{wikipedia} est bien explicatif.
-	Personnellement, je prefère la construiction par des coupes de Dedekind.
+		}{wikipedia} sur la construction des nombres est bien faite et très explicite.
+	Personnellement, je prefère la construction par coupure de Dedekind.
 \end{itemize}
 
 \textbf{todo: introduce the main manipulations for the lambda, combinators, SKI}
 
-Heureusement, la vraie preuve d'une consistence des axiomes de Peano est un problème beaucoup plus sophistiqué que l'invention de ses axiomes, et l'histoire n'est donc que commencée.
+Heureusement, la vraie preuve de la consistance des axiomes de Peano est un problème beaucoup plus sophistiqué que l'invention de ses axiomes, et l'histoire ne fait donc que commencer...
 
-\subsubsection*{1ère version de Lambda calcul}
-En 1932 Church a proposé une autre construction qui est connue comme \textbf{$\lambda$-calcul non-typé}.
-Malheureusement, son étudiant, Kleene a prouvé que cette construction n'a pas été consistente.
+\subsubsection*{1ère version du $\lambda$-calcul}
+En 1932, Church a proposé une autre construction qui est connue comme le \textbf{$\lambda$-calcul non-typé}. Malheureusement, son étudiant Kleene a prouvé que cette construction n'est pas consistante.
 
-$\lambda$-calcul a formalisé une application d'une fonction. L'écriture envisage la compréhension d'une fonction comme une "règle". Et l'écriture classique $f(x)$ pointe plutôt sur le résultat de ce règle.
+Le $\lambda$-calcul a formalisé l'application d'une fonction. L'écriture envisage la compréhension d'une fonction comme une ``règle''. Et l'écriture classique $f(x)$ pointe plutôt sur le résultat de cette règle.
 
-Rappelon brièvement, qu'est ce que c'est. (Sinon, wiki et les autres articles ou "Eggs and crocodiles")
-Le brique principal est une fonction. 
+Rappelons brièvement ce que c'est. (Sinon, wiki et les autres articles ou "Eggs and crocodiles")
+La brique principale est la fonction.
 Au lieu de $f(x)$ on écrit $\lambda x.f$.
 Si on parle de la valeur de $f(x)$ quand $x=a$, on écrit $\lambda x.f a$.
-Naturelement, ion peut définir une composition...
-Pour transformer des propositions on a une règle de $\beta$-reduction.
+Naturellement, on peut définir une composition de fonctions.
+Pour transformer des propositions, on a une règle de $\beta$-reduction.
 
-Malgré sa simplicité et abstraité, cette construction permet néanmoins rédefinir tout les opérations arithmétiques, la logique Booléen etc.
-Est-ce que $\lambda$-calcul non-typé est un bon candidat pour le rôle de fondament de mathématique ?
-La réponse est \textbf{non}: à cause de Paradoxe de Kleene-Rosser proposé en 1935 par J. B. Rosser et Stephen Kleene qui a été un étudiant de Church.
+Malgré sa simplicité et son caractère abstrait, cette construction permet de rédefinir toutes les opérations arithmétiques, la logique booléenne...
+Est-ce que le $\lambda$-calcul non-typé est un bon candidat pour le rôle de fondement des mathématiques ?
+La réponse est \textbf{non}: à cause du paradoxe de Kleene-Rosser proposé en 1935 par J. B. Rosser et Stephen Kleene (l'étudiant de Church).
 
-Ironiquement, ce paradoxe, beaucoup plus sophistiqué dans sa version initiale, n'a pas très loin des paradoxes plus simples décrites au début de cet article.
-Commençons par une phrase "si cette phrase est vraie, alors $X$", où $X$ est un énoncé quelconq.
+Ironiquement, ce paradoxe, beaucoup plus sophistiqué dans sa version initiale, n'est pas très éloigné des paradoxes plus simples décrits au début de cet article.
+Commençons par la phrase suivante ``si cette phrase est vraie, alors $X$'', où $X$ est un énoncé quelconque.
 \begin{itemize}
-	\item Par le propriétés d'implications ("faux => X" est toujours vrai), cette phrase ne peux pas être faux.
-	\item S'il est vrai, alors $X$ est vrai.
-	\item Nous venons de prouvé que n'importe quel enoncé est vrai, e.g. les États-Unis et la Chine ont une frontière commune (ce que peut probablement expliquer la construction de "The Great Wall").
+	\item Par la propriété d'implication ("faux $\to$ X" est toujours vrai), cette phrase ne peux pas être fausse.
+	\item Si elle est vraie, alors $X$ est vrai.
+	\item Nous venons de prouver que n'importe quel enoncé est vrai, e.g. les États-Unis et la Chine ont une frontière commune (ce que peut probablement expliquer la construction de "The Great Wall").
 \end{itemize}
-Il peut être formulé en termes de $\lambda$-calculs.
-Mais la ``rootcause'' de tout les paradoxe de ce type est la même -- l'autoréférence : la phrase entière est contenu dans sa première motié.
-Remarquons qu'intérdire les autoréférences dans la logique n'est pas la solution parfaite, car la logique devient trop restrente par rapport au langage naturelle.
+Cette phrase peut être formulée en termes de $\lambda$-calcul.
+Mais la cause principale de tous les paradoxes de ce type est la même -- l'autoréférence : la phrase entière est contenue dans sa première motié.
+Remarquons qu'interdire les autoréférences dans la logique n'est pas la solution parfaite, car la logique devient trop restreinte par rapport au langage naturel.
 
 {\footnotesize
-	Considerons une fonction $r$ définie comme $r=\lambda x.((x x) \to y)$.
+	Considérons une fonction $r$ définie comme $r=\lambda x.((x x) \to y)$.
 	$(r r)$ $\beta$-se réduit en $(r r) \to y$.
 	Si $(r r)$ est faux, alors $(r r) \to y$ est vrai par le principe d'explosion, mais cela est contradictoire avec la $\beta$-réduction.
 	Donc $(r r)$ est vrai.
 	On en déduit que $y$ est aussi vrai.
-	Comme $y$ peut être arbitraire, on a prouvé que n'importe quel proposition est vrai.
+	Comme $y$ peut être arbitraire, on a prouvé que n'importe quel proposition est vraie.
 	Contradiction.
 }
 
 \subsubsection*{Théorème de Gödel}
-Les deux paradoxes discutés ci-dessus, sont basés sur le même concept de l'autoréférence : une proposition ou n'importe quel objet qui réference lui-même (e.g., ensemble des tout les ensembles).
-Faut-il intérdir l'autoréference dans les constructions mathématiques ?
-L'idée n'est pas séduisant si on rappel que avec les paradoxes, nous avons jeté dans la poubelle tout les construcitons récursives.
+Les deux paradoxes discutés ci-dessus sont basés sur le même concept de l'autoréférence : une proposition ou n'importe quel objet qui réference lui-même (par exemple, l'ensemble de tous les ensembles).
+Faut-il interdire l'autoréference dans les constructions mathématiques ?
+L'idée n'est pas séduisante si on rappelle qu'avec les paradoxes, nous avons jeté à la poubelle toutes les constructions récursives.
 
-Néanmoins, l'autoréférence a une influence forte sur le fondement de mathématique.
-Un résultat clé et le plus connu comme la théorème de l'incomplétude a été prouvé par Kurt Gödel en 1930.
-Une des intérpretations prétends que la consistence d'une système d'axiomes ne peut pas être prouvée en n'utilisent que ces axiomes (voici l'autoréference !). En particulier, pour prouver la consistence d'arithmétique il faut ajouter les axiomes supplémentaires (qui a été vite fait, en 1936). Le seul problème est que maintenant il faut prouver une autre système...
+Néanmoins, l'autoréférence a une influence forte sur le fondement des mathématiques.
+Un résultat clé connu comme le théorème de l'incomplétude a été prouvé par Kurt Gödel en 1930.
+Une des interprétations prétend que la consistance d'un système d'axiomes ne peut pas être prouvée en n'utilisant que ces axiomes (voici l'autoréference !). En particulier, pour prouver la consistance de l'arithmétique, il faut ajouter des axiomes supplémentaires (ce qui a été vite fait, en 1936). Le seul problème est que maintenant il faut prouver une autre système...
 
 {\footnotesize
-	Pour ceux qui veulent plonger dans le sujet de l'autoréférence, nous pouvons conseiller un livre "Gödel, Escher, Bach : Les Brins d'une Guirlande Éternelle" de Douglas Hofstadter.
+	Pour ceux qui veulent creuser le sujet de l'autoréférence, nous vous conseillons le livre suivant : "Gödel, Escher, Bach : Les Brins d'une Guirlande Éternelle" de Douglas Hofstadter.
 }
 
 La crise des fondements a déclenché plusieurs études sur le sujet.
-Nous avons brièvement présenté deux modèles qui ont été les candidats sur le rôle de base minimale de l'arithmétique.
-Cépéndant, le $\lambda$-calcul non typé est contradictoire car il contient des paradoxes.
-La consistence de l'arithmétique Péano a été prouvé un an après, en utilisant la récurrence transfinie par Gerhard Gentzen.
-D'après le théorème de Gödel, l'ajout d'un proposition supplémentaire dans le système des axiomes a été nécessaire.
-C'était une idée qui a été manquant pendant presque 50 ans entre la publication des axiomes de Péano et la preuve de Gentzen.
+Nous avons brièvement présenté deux modèles qui ont été candidats sur le rôle de base minimale de l'arithmétique.
+Cependant, le $\lambda$-calcul non typé est contradictoire car il contient des paradoxes.
+La consistance de l'arithmétique Peano a été prouvée un an après, en utilisant la récurrence transfinie par Gerhard Gentzen.
+D'après le théorème de Gödel, l'ajout d'une proposition supplémentaire dans le système des axiomes a été nécessaire.
+Ce fut l'élément manquant pendant presque 50 ans, entre la publication des axiomes de Peano et la preuve de Gentzen.
 
 %Pour résumer le sujet de l'arithmétique, disons que lambda-calcul a été l'un des modèles qui pourrait formaliser les axiomes de l'arithmétique. 
 %Son version actuel a été prouvée consiétente et publiée en 1936. Cette construction devait rester un sujet purement théorique qui a intéressé les rares genies de mathématique qui a étudié ses fondaments. 
 
-Pour résumer le sujet de l'arithmétique, disons que dans la version moderne on construit le fondement toujours à partir des axiomes de Péano.
-Pour la consistence, au lieu de la récurrence transfinie, on rajout la théorie des ensemble de Zermelo-Fraenkel avec l'axiome de choix.
-Néanmoins, chez les mathématiciens il n y a pas de consensus si le deuxième problème de Hilbert est résolu ou non.
+Pour résumer le sujet de l'arithmétique, disons que, dans la version moderne, on utilise toujours les axiomes de Peano comme méthode de construction.
+Pour la consistance, on rajoute la théorie des ensembles de Zermelo-Fraenkel avec l'axiome du choix au lieu de la récurrence transfinie.
+
+Néanmoins, encore aujourd'hui, il n'y a pas de véritable consensus chez les mathématiciens pour savoir si le deuxième problème de Hilbert est résolu ou non.
 
 \subsubsection*{Machine de Turing et calculabilité}
-Cépéndant, comme il est souvent en science, il faudrait étudier le même domaine de point de vue un peu différent. Cela a été fait sur l'autre continent par un jeun étudiant Alan Turing. Il a cherché une solution pour une problème de la décision posé en 1928 par Hilbert et Ackermann : "trouver un algorithme qui détermine dans un temps fini, s'il un énoncé est vrai ou faux". La formalisation d'un terme algorithme a conduit au concept de machine de Turing connu par tout le monde. Entre outre, le théorème de Gödel a été reformuler en thermes d'une machine de Turing.
-Le résultat a été aussi négative, connu comme une théorème de Turing-Church: "il existe les énoncés pour lesquels on ne peux pas déterminer" (vérifier l'enoncé et le nom d'un théorème).
+Comme souvent en science, il est utile d'étudier le même domaine d'un point de vue un peu différent. Cela a été fait en Angleterre par un jeune étudiant, Alan Turing. Il a cherché une solution au problème de la décision posé en 1928 par Hilbert et Ackermann : "trouver un algorithme qui détermine, dans un temps fini, si un énoncé est vrai ou faux". La formalisation d'un tel algorithme a conduit au concept de machine de Turing connu par tout le monde. En outre, le théorème de Gödel a été reformulé en utilisant le concept de machine de Turing.
+
+Le résultat a été aussi négatif, connu sous le nom du théorème de Turing-Church: "il existe des énoncés pour lesquels on ne peux pas déterminer".
+\textbf{todo: vérifier l'enoncé et le nom du théorème)}
 
 \subsubsection*{Thèse de Church-Turing}
 Le résultat positif.
-S'il existe les fonctions, qu'il peuvent pas être décidées, on se pose la question, qu'est-ce que ce sont les fonction simple, i.e. les fonctions que l'on peut effectivement calculer.
-Intuitivement, c'est dont la valeur peut être calculée avec un crayon si on a suffisament de papier et du temps.
-Mais vous comprenez déjà que les mathématiciens n'acceptent pas les solutions intuitives...
-Le problème de décision est lié avec une problème de calculabilité. Qu'est-ce que signifie qu'une fonction peut être calculée ? Souvent on se refère sur "des méthodes d'un crayon et de papier". Indépendement, chaque des deux a proposé que toute fonction calculable en thèrmes de crayon et papier peut être calculé par son méthode (lambda-calcul ou la machine de Turing). Les deux propositions - ne sont pas les théorèmes, peuvent pas être prouvées car on ne peut pas formaliser autrement calculabilité. (On doit remarquer ici qu'il y avait le troisième mechanisme de détérminer la calculabilité - les fonction récursive primitive). Relativement vite il a été prouvé que tout les 3 méchanismes sont équivalent. Donc, n'importe lequel peut être utilisé comme une définition de function effectivement calculable.
+\textbf{mathias: je ne comprends pas la phrase d'avant, qui a l'air contradictoire avec la phrase d'encore avant : le résultat a été aussi négatif...)}
 
-\subsubsection*{Résumé. Impacts de $\lambda$-calcul}
-Le concept de $\lambda$-calcul a joué une rôle tellement importante dans l'informatique théorique que l'on peut voir ses échos en pratique : dans la plupart des langages de programmation une notion de $\lambda$-fonction représente une fonction ``anonyme''.
-Cette notion rends la terme connue par des ingénieurs mais la plupart ne connaît pas les détails cachés derrière.
-Cela provoque souvent les discussions dans StackOverflow similaire à celui-ci:
+S'il existe des fonctions qui ne peuvent pas être décidées, alors on peut se poser la question de ce que sont les fonctions simples, i.e. les fonctions que l'on peut effectivement calculer.
+Intuitivement, c'est celles dont la valeur peut être calculée avec un crayon si on a suffisament de papier et de temps.
+Mais vous savez bien que les mathématiciens n'acceptent pas les solutions intuitives...
+Le problème de décision est lié à un problème de calculabilité. Que signifie qu'une fonction peut être calculée ?
+
+Souvent on se refère à "des méthodes de crayon et de papier". Indépendement, chaque des deux (Church et Turing) a proposé que toute fonction calculable en termes de crayon et de papier peut être calculée par sa méthode ($\lambda$-calcul ou machine de Turing). Les deux propositions ne sont pas des théorèmes et ne peuvent pas être prouvées car on ne peut pas formaliser autrement la calculabilité. On doit remarquer ici qu'il y avait un troisième méchanisme pour déterminer la calculabilité : les fonctions récursives primitives. Relativement vite, il a été prouvé que les 3 méchanismes sont équivalents. Donc, n'importe lequel peut être utilisé comme une définition de fonction effectivement calculable.
+
+\subsubsection*{Impact et applications}
+Le concept de $\lambda$-calcul a joué un rôle tellement important dans l'informatique théorique que l'on peut voir ses échos en pratique : dans la plupart des langages de programmation, on retrouve la notion de $\lambda$-fonction qui représente une fonction ``anonyme''.
+Cette notion rend le terme connu par tous les développeurs mais la plupart ne connaissent pas les détails qui se cachent derrière.
+Cela provoque souvent des discussions dans StackOverflow similaires à celle-ci:
 \textit{``Another obvious case for combinators is obfuscation. A code translated into the SKI calculus is practically unreadable. If you really have to obfuscate an implementation of an algorithm, consider using combinators, here is an example.''}
 
-En réalité le concept a eu quatre impacts principaux.
+En réalité, le concept a eu quatre impacts principaux.
 \begin{enumerate}
-	\item \emph{Formalisation d'une notion de calculabilité.} Avant les années 1930s, la définition de calculabilité pouvait être caricaturisée comme ``calculable à l'aide du papier, crayon et suffisament du temps''. En plus il y avait une intuition que les fonctions récursives doivent définir la classe des fonctions calculables.
-	L'invention de $\lambda$-calcul et machine de Turing a relancé une discussion sur la notion de calculabilité. Comme tout les trois concept ont été prouvés équivalents, les mathématiciens se sont mis d'accord a les utiliser comme une définition formelle de calculabilité.
-	\item \emph{Preuves de calculabilité.} Car les trois concept sont équivalents, n'importe lequel peut être utilisé pour prouver la calculabilité d'un nouvaux objet. Donc on peut considerer $\lambda$-calcul comme un outil de plus (en réalité outilisé plus souvant pour prouver qu'un objet est n'est pas calculable).
+	\item \emph{Formalisation d'une notion de calculabilité.} Avant les années 1930s, la définition de calculabilité pouvait être caricaturée comme ``calculable à l'aide de papier, crayon et suffisament de temps''. En plus, il y avait l'intuition que les fonctions récursives doivent définir la classe des fonctions calculables.
+	L'invention du $\lambda$-calcul et de la machine de Turing a relancé la discussion sur la notion de calculabilité. Comme les trois concepts ont été prouvés équivalents, les mathématiciens se sont mis d'accord à les utiliser comme une définition formelle de calculabilité.
+	\item \emph{Preuves de calculabilité.} Puisque les trois concept sont équivalents, n'importe lequel peut être utilisé pour prouver la calculabilité d'un nouvel objet. On peut donc considérer le $\lambda$-calcul comme un outil de plus (en réalité plus souvent utilisé pour prouver qu'un objet est n'est pas calculable).
 	\item \emph{Preuves formelles.}
-	La version des $\lambda$-calcul typés peut être appliquée dans la théorie des preuves. Ainsi, les certains langages de preuves formelles tels que Coq ou AUTOMATH sont basés sur ce modèle.
+	La version du $\lambda$-calcul typé peut être appliquée dans la théorie des preuves. Ainsi, certains langages de preuves formelles tels que Coq ou AUTOMATH sont basés sur ce modèle.
 	
-	\item $\lambda$-calul est un \emph{langage de programmation} primitif (en nombre de constructions). Comme la machine de Turing est le fondament de tout les langages impératifs, $\lambda$-calcul est une base pour les langages fonctionnels tels que Haskell ou OCaml.
+	\item Le $\lambda$-calcul est un \emph{langage de programmation} primitif (en nombre de constructions). Comme la machine de Turing est le fondement de tous les langages impératifs, le $\lambda$-calcul est une base pour les langages fonctionnels tels que Haskell ou OCaml.
 \end{enumerate}
 
 \newpage
-\section*{Part 2. Les formalités.}
+\section*{Partie 2. Les formalités}
 
-\subsection*{Introduction informelle dans la programmation fonctionnelle}
+\subsubsection*{Introduction informelle dans la programmation fonctionnelle}
 Le concepte de langage de programmation le plus elémentaire connu par tout le monde est un machine de Turing.
 Sa ruban contenant les instructions et les datas se traduit facilement dans la programmation impérative -- un paradigme implémenté par ``OVER9000'' des langages populaires.
 Dans ce paradigme, le proces du calcul est décrit en termes des instructions qui changent l'état de ``calculateur''.
@@ -292,7 +294,7 @@ Dans la suite de cet article, nous construisont $\lambda$-calcul qui joue le rô
 	La construction complète sont téchnique et même la définition de $\lambda$-calcul dépasse largement la taille de cet article. Nous essayons plutôt de donner une idée comment les primitives de la programmation impérative peuvent être exprimés en termes de $\lambda$-calcul. Ainsi, on ne donnera pas l'example plus sophistiqué que le calcul d'un factoriel.
 \end{remark}
 
-\subsection*{Deux operations\footnote{based on Moskvin's presentations}}
+\subsubsection*{Deux operations\footnote{based on Moskvin's presentations}}
 Dans $\lambda$-calcul nous n'avons que deux moyen pour construire les expressions : \emph{application} et \emph{abstraction}.
 
 \textbf{1. Application.} La notion \verb|f x| signifie que \verb|f| est appliqué à \verb|x|. Du point de vue de codeur on peut dire qu'un algorithme \verb|f| est appliqué à l'entrée \verb|x|. Cependant nous construisons un \emph{système formel} ou il n'y a pas de différence entre les algorithmes et les données, donc l'auto-application est aussi autorisée : \verb|f f|.
@@ -325,7 +327,7 @@ Par contre, dans l'abstraction $\lambda x.M[x]$, variable $x$ devient liée par 
 \end{example}
 %Si on rénomme les variables liées, on obtient le terme ne change pas. On dit que tels termes sont $\alpha$-équivalents.
 
-\subsection*{What is $\lambda$?\footnote{based on Selinger's lecture notes}}
+\subsubsection*{What is $\lambda$?\footnote{based on Selinger's lecture notes}}
 En mathématique la notion d'une fonction est liée avec une application, i.e., règle qui transform paramètre dans un résultat.
 Au contraire, $\lambda$-calcul est une théorie des ``fonctions comme formules''. La différence est ce que une formule formelle n'est pas obligatoirement se traduit en règle bien précise.
 Commençons par un exemple.
@@ -347,7 +349,7 @@ Remarquons que $f(f)$ n'a jamais du sens dans mathématique classique car la fon
 
 \textbf{todo: $\lambda$ sans type est simplement typé}
 
-\subsection*{Combinateurs}
+\subsubsection*{Combinateurs}
 Le cas spécial de $\lambda$-termes sans type sont les termes qui n'ont pas des variables libres. Ils s'appellent \emph{combinateurs}.
 Voici les examples des combinateurs classiques :
 \begin{itemize}
@@ -398,7 +400,7 @@ Les constructions logiques dans le monde combinatoire seront probablement (ou pa
 Dans le futur, nous ne considerons que $\lambda$-calcul.
 
 
-\subsection*{Prise en main\footnote{Basé sur l'article russe \url{https://habr.com/ru/post/215991/}}}
+\subsubsection*{Prise en main\footnote{Basé sur l'article russe \url{https://habr.com/ru/post/215991/}}}
 Dans $lambda$-calcul sans type nous n'avons qu'un seul primitif - des fonctions.
 Dons, si on veut l'utiliser pour la programmation, c'est à nous de réaliser même les objets les plus élementaires, tels que les nombres ou les constantes booléennes.
 \begin{eqnarray*}
@@ -456,6 +458,7 @@ De plus, un vrai passioné peut essayer de trouver les bonnes expressions pour c
 \end{itemize}
 
 \subsection*{Pourquoi langage de programmation?}
+\textbf{TODO. Recursion à l'aide de combinators}
 
 Comment peut-on montrer que langages de programmation \textbf{X} et \textbf{Y} sont équivalent ?
 Il faut montrer deux proposition : (i) un programme quelconque écrit en \textbf{X} peut être réecrit en \textbf{Y} et (ii) un programme quelconque écrit en \textbf{Y} peut être réecrit en \textbf{X}.
@@ -468,22 +471,20 @@ Donc nous nous limiterons à la démonstration de deux méchanismes :
 Informellement, on comprends très bien que ces deux méchanismes sont suffisantes pour écrire n'importe quel programme.\footnote{La vrai dificulté est dans la formalisation de cette dernière proposition, ainsi que dans le propre construction pour la récurtion arbtitraire qui est fait à l'aide des combinateurs.}
 De plus, la construction de recursion n'est pas simple du tout.
 
-\subsubsection*{Calcul du factoriel. Ingrédients}
-Supposons que nous sommes beaucoup avancés dans le sujet et réussis à construire les fonctions suivantes (rappellons que par défaut il n'y a pas ni nombres ni opérations arithmétiques à $\lambda$-calcul.
+\textbf{Ingrédients.} Supposons que nous sommes beaucoup avancés dans le sujet et réussis à construire les fonctions suivantes (rappellons que par défaut il n'y a pas ni nombres ni opérations arithmétiques à $\lambda$-calcul.
 \begin{itemize}
 	\item $\mathbf{1}$, juste nombre 1, mais il faut le construire à l'aide de application et abstraction;
 	\item $\mathbf{isZero}$, si argument de cette fonction est égal au 0, elle renvoie $tru$, sinon -- $fls$;
 	\item $\mathbf{mult}$ renvoie un produit de ces deux arguments.
 	\item $\mathbf{pred}$ prend à l'entrée un nombre naturel et calcul son prédesesseur (souvez-vous des axiomes de Peano, si vous avez déjà lu la partie 1). Pourtant, cette fonction est le plus complexe : le construiction à été inventé par Kleene pendend l'extraction de son dent de sagesse. Aujourd'hui, l'anesthésie n'est pas pareil\ldots
 \end{itemize}
-\subsubsection*{Calcul du factoriel. 1ère approche}
+\textbf{1ère approche.}
 Tout ces ingrédients nous permets d'introduir un factoriel assez naturellement~:
 $$\mathbf{fact} = \lambda x. \; \mathbf{if} \; (\mathbf{isZero} \; x) \; \mathbf{1} \; (\mathbf{fact} \; (\mathbf{pred} \; x))$$
 Rien de miracle, si $x$ est égal à 0, on renvoie 1, sinon -- le produit de $x$ et factoriel de $x-1$.
 Si on remplace $\mathbf{fact}$ par son définition, on obtient une série infinie des réductions. We have a problem\ldots
 
-\subsubsection*{Calcul ``lazy''}
-J'espère que vous protestiez contre cela, en argumentant que pour calculer $\mathbf{fact\;0}$, nous n'avons pas besoin de substitutions infinies car nous savons déjà que le troisième argument de $\mathbf{if}$ sera ignoré.
+\textbf{Calcul ``lazy''}. J'espère que vous protestiez contre cela, en argumentant que pour calculer $\mathbf{fact\;0}$, nous n'avons pas besoin de substitutions infinies car nous savons déjà que le troisième argument de $\mathbf{if}$ sera ignoré.
 Tout a fait, mais les règles de jeu "Informatique théorique" nous impose d'utiliser que les opérations bien précis : si on prétend que $\lambda$-calcul est un langage de programmation, alors on doit être capable de proposer un algorithme qui l'execute et donc aucun ambiguïté n'est pas toléré.
 Dans notre cas on a ``oublié'' de fixer l'ordre de calcul.
 Considerons un terme suivant~:
@@ -532,41 +533,7 @@ Remarquons que les tout les strategies sauf calcul lazy formellement interdit la
 Le méchanisme de ``lazyness'' est fait exactement pour éviter les calculs non-nécessaires.
 En réalité, cette mechanisme est utilisé dans la plupart des langages, mais pas dans l'execution de fonction. Dans le code suivant : \verb|if a and b: ...|, si \verb|a| est déjà fausse, il est probable que \verb|b| ne sera jamais calculé, ce que nous oblige de porter plus d'attention sur les effets de bords possible.
 
-\subsubsection*{Combinator de point fixe} (attention, beaucoup de lettres cursives\ldots)
-\begin{definition}
-	\emph{Un point fixe} de $\lambda$-fonction $f$ est une fonction $x$ tel que $$f \; x \equiv_\beta x$$
-\end{definition}
-\begin{theorem}
-	En $\lambda$-calcul (ainsi qu'en logique combinatoire), pour chaque terme $x$ il existe au moins un terme $p$ tel que $xp$ = $p$.
-	De plus, il existe un combinateur $\mathbf{Y}$ tel que $\mathbf{Y} x = x \mathbf{Y} x$.
-\end{theorem}
-\begin{proof}[Preuve]
-	Pour prouver ce théorème, construisons un tel combinateur :
-	$$Y = \lambda f. \; \underline{(\lambda x. \; f(x \; x)} (\lambda x. \; f(x \; x)$$
-	Appliquons la reduction à l'expression soulignée :
-	$$Y = \lambda f. \; f ((\lambda x. \; f(x \; x) (\lambda x. \; f(x \; x))$$
-	On en déduit que $Y \; f = f \; Y \; f$.
-	Donc $Y \; f$ est un point fixe de $f$.
-	$Y$ s'appelle un \emph{combinateur du point fixe}.
-	En cette formle-là il a été introduit par Haskell Curry
-	\footnote{
-		Un combinateur d'un point fixe n'est pas unique (en réalité, il y a un nombre infini de tels).
-		Par example, celui a été proposé par Alan Turing : $$\Theta = (\lx.\ly.(y(xxy)))(\lx.\ly.(y(xxy)))$$
-	}
-	(on reppel que combinateur est un terme dont tout les variables sont liées par $\lambda$-abstraction).
-\end{proof}
-
-\subsubsection*{Calcul du factoriel. Y à l'aide !}
-L'un de rôle du combinateur de point fixe est de se faire priver de la récursion en $\lambda$-calcul -- celui-si nous permettra de calculer le factoriel sans un truc avec calcul ``lazy''.
-Considerons une fonction :
-$$\mathbf{fact'} = \lf. \; \lx. \; \mathbf{if} (\mathbf{isZero} \; x) \mathbf{1} (\mathbf{mult} \; x (f (\mathbf{pred} \; x)))$$
-Cette fonction est très ressemblant à $\mathbf{fact}$. La seule différence est ce que $\mathbf{fact'}$ au lieu d'appliquer lui même sur $\mathbf{pred} \; x$, applique $f$ qui est son paramètre.
-Donc, si on pose $f := \mathbf{fact}$, notre fonction calcule le factoirel.
-Autrement dit, $\mathbf{fact'} \; \mathbf{fact} = \mathbf{fact}$, i.e., $\mathbf{fact}$ est un point fixe de $\mathbf{fact'}$.
-Donc $$\mathbf{fact} = \mathbf{Y} \mathbf{fact'}$$
-Cette fonction n'est pas récursive et elle calcul le factoriel du $x$\footnote{
-	En revanche le calcul devient le-e-e-ente : pour calculer 5! il faut fait 66066 $\beta$-reductions ! Evidemment, j'ai jamais vérifier á la main, je trouver ce nombre dans mes notes du cours et je ne garantie pas que mon prof a fait les calculs lui-même\ldots
-}
+\textbf{Y-combinator -- Est-ce qu'on a vraiment besoin de cette partie~?}
 
 \subsection*{Résumé}
 Si vous pensez que $\lambda$-calcul est simple et les règles décrites sont évidents, je vais vous déranger : essayer de calculer ce terme-là.
@@ -579,5 +546,7 @@ Cependant, on perd le simplicité de la construction.
 
 Maintenant, je vous conseil de relire la partie 1 pour voir le contexte dans lequel ce système a été introduit aux années 30s.
 Si vous n'avez vraiment rien compris, comment on fait les calculs avec $\lambda$, \href{http://worrydream.com/AlligatorEggs/}{ce site} va surement aider d'avoir l'idée ce que s'est passé.
+
+
 
 \end{document}
