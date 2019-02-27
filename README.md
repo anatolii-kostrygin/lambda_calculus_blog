@@ -1,11 +1,11 @@
 # lambda-calcul
 
-## Partie 1. Introduction historique.
+## Partie 1. Histoire du lambda-calcul
 
-*  Crise des fondaments
+*  Crise des fondements
 *  Axiomes de Peano
-*  1ère version de Lambda calculs
-*  Theoreme de Goedel
+*  1ère version du lambda-calcul
+*  Theorème de Goëdel
 *  Machine de Turing et calculabilité
 *  Thèse de Church-Turing
 *  Impact et applications
