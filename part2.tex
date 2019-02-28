@@ -1,0 +1,299 @@
+\subsubsection*{Introduction informelle dans la programmation fonctionnelle}
+Le concepte de langage de programmation le plus elémentaire connu par tout le monde est un machine de Turing.
+Sa ruban contenant les instructions et les datas se traduit facilement dans la programmation impérative -- un paradigme implémenté par ``OVER9000'' des langages populaires.
+Dans ce paradigme, le proces du calcul est décrit en termes des instructions qui changent l'état de ``calculateur''.
+Les caractéristiques de programmes impératifs sont :
+\begin{itemize}
+	\item L'état se change par des instruction de l'affectation (\verb|v = E|).
+	\item Les instruction sont executé consécutivement (\verb|C1; C2; C3|).
+	\item Il y a un méchanisme de branchement (\verb|if|, \verb|switch|).
+	\item Il y a un méchanisme de boucles (\verb|while|, \verb|for|).
+\end{itemize}
+Exemple (le calcul d'un factoriel impératif):
+\begin{lstlisting}[language=Python]
+  res = 1;
+  for i = 1..n:
+      res = res * i;
+\end{lstlisting}
+C'est un programme le plus compliqué dans cet article.
+Cependant, on peut voir clairement que l'execution est imperative car il est composé de instructions consecutives qui translatent le calculateur de l'état initial à son état final.
+Une partie de l'état final (variable \verb|res|) est interprété comme un résultat du calcul.
+
+En parallèle de l'approche programme comme l'instruction, il existe une paradigme fonctionnel qui présente un programme comme une fonction.
+Par example, le factoriel est une expression qui depende de l'entrée \verb|n|.
+L'execution de ce programme est une suite de réduction de cette expression jusqu'à l'expression triviale qui ne contient que le résultat.
+De plus,
+\begin{itemize}
+	\item Il n'y a pas de notion des états ainsi que des variables.
+	\item Pas de variables -- pas de l'opération de l'affectation.
+	\item Pas de cycles, car il n'y a pas de différences entre les itérations.
+	\item L'ordre de calcul n'est pas important car les expressions sont indépendant.
+\end{itemize}
+En revanche, le paradigme fonctionnel nou donne:
+\begin{itemize}
+	\item La récursion à la place des boucles.
+	\item Fonctions d'ordre supérieur, i.e., les fonctions qui prennent à l'entrée et renvoient autres fonctions.
+	\item Filtrage par motif.
+\end{itemize}
+Bien sûr, quelqu'un peut répliquer que toutes ses détails sont présents dans la plupart des langages modernes.
+En fait, les langages modernes sont multi-paradigmes -- ils prennes les meilleurs des tous.
+Par contre, langage machine et donc Assembler restent les langages pures impératifs.
+De plus, rajoutons qu'en programmation fonctionnelle, toutes les fonctions sont \emph{pures}, i.e., ne dependent que des ces paramètres.
+
+Dans la suite de cet article, nous construisont $\lambda$-calcul qui joue le rôle de ``machine de Turing'' pour la programmation fonctionnelle.
+\begin{remark}
+	La construction complète sont téchnique et même la définition de $\lambda$-calcul dépasse largement la taille de cet article. Nous essayons plutôt de donner une idée comment les primitives de la programmation impérative peuvent être exprimés en termes de $\lambda$-calcul. Ainsi, on ne donnera pas l'example plus sophistiqué que le calcul d'un factoriel.
+\end{remark}
+
+\subsubsection*{Deux operations\footnote{based on Moskvin's presentations}}
+Dans $\lambda$-calcul nous n'avons que deux moyen pour construire les expressions : \emph{application} et \emph{abstraction}.
+
+\textbf{1. Application.} La notion \verb|f x| signifie que \verb|f| est appliqué à \verb|x|. Du point de vue de codeur on peut dire qu'un algorithme \verb|f| est appliqué à l'entrée \verb|x|. Cependant nous construisons un \emph{système formel} ou il n'y a pas de différence entre les algorithmes et les données, donc l'auto-application est aussi autorisée : \verb|f f|.
+
+\textbf{2. Abstraction.} Soit $M \equiv M[x]$ est une expression qui (probablement) contient $x$. Dans ce cas, la notion $\lambda x.M$ signifie une fonction $x \to M[x]$ qui mappe $x$ à $M[x]$.
+Ainsi, $\lambda$-abstraction est un moyen de créer une fonction anonyme en partant d'une expression $M$.
+\begin{example}
+	Considerons $\lambda$-expression : $(\lambda x.2x + 8)17$.
+	Le calcul est une serie de reductions d'une paire abstraction--application :
+	$$(\lambda x.2 \cdot x + 8)17 =(x:=17) 2 \cdot 17 + 8 = 42.$$
+\end{example}
+Cette réduction s'appele $\beta$-réduction.
+Si les expressions sont liées par la $\beta$-réduction, on dit qu'elles sont $\beta$-équivalentes.
+Le règle formel de $\beta$-équivalence est suivant :
+$$(\lambda x.M)N =_\beta M[x:=N]$$
+
+Dans $\lambda$-calcul sans type il n'y a rien à part de l'application, l'abstraction et $\beta$-réduction.
+En plus, pour omettre les parenthèses, nous avons les accords suivants :
+\begin{itemize}
+	\item L'application est gauche-associative, i.e., $F X Y Z := (((F X) Y) Z)$.
+	\item L'abstraction est droite-associative, i.e., $\lambda x y z.M := (\lambda x.(\lambda y.(\lambda z.M)))$.
+	\item L'abstraction s'applique à tous ce qu'elle arrive à ``toucher'', i.e., $\lambda x. M N K := \lambda x.(MNK)$.
+\end{itemize}
+\textbf{Variables libres et liées.}
+Considerons un terme $M[x]$. On dit que variable $x$ est \emph{libre} dans $M$.
+Par contre, dans l'abstraction $\lambda x.M[x]$, variable $x$ devient liée par un $\lambda$.
+\begin{example}
+	Dans le terme ci-dessous, les variables $x$ et $y$ sont liées, $z$ et $w$ sont libres.
+	$$(\lambda y. (\lambda x. xz)y)w$$
+\end{example}
+%Si on rénomme les variables liées, on obtient le terme ne change pas. On dit que tels termes sont $\alpha$-équivalents.
+
+\subsubsection*{What is $\lambda$?\footnote{based on Selinger's lecture notes}}
+En mathématique la notion d'une fonction est liée avec une application, i.e., règle qui transform paramètre dans un résultat.
+Au contraire, $\lambda$-calcul est une théorie des ``fonctions comme formules''. La différence est ce que une formule formelle n'est pas obligatoirement se traduit en règle bien précise.
+Commençons par un exemple.
+En arithmétique on peut écrire : 
+$$\text{Soit $f$ est une fonction $x \to x^2$. Considerons $A = f(5)$.}$$
+En langage de lambda, on peut écrire simplement: $$(\lambda x.x^2) (5).$$
+L'expression $\lambda x.x^2$ signifie une fonction qui mappe $x$ à $x^2$.
+Puis ce terme est succédé par une \emph{application} de cette fonction au nombre 5.
+L'un des avantage de cette notation est simplicité dans la construction des fonctions de l'ordre supérieur : si $f: X \to X$ est une fonction, alors la composition $f \circ f$ peut s'écrire comme $\lambda x.f(f(x))$.
+Ceci n'est pas simple, mais l'opération qui mappe $f$ à $f \circ f$ s'écrit méchaniquement de manière suivante :
+$$\lambda f. \lambda x.f(f(x)).$$
+(On peut le comparer avec $g: (X \to X) \to (X \to X)$ où $g(f) = f \circ f$ pour tout $f: X \to X$.)
+Le vrai avantage est visible si on considère un terme $f$ suivant: $\lambda x.x$.
+Rien inattendu, c'est une fonction d'identité.
+Mais que vaut $f(f)$?
+Par définition, si on pose $x = f$,
+$$f(f) = (\lambda x.x)(f) = f.$$
+Remarquons que $f(f)$ n'a jamais du sens dans mathématique classique car la fonction ne peut pas être inclue dans sa propre domaine de définition.
+
+\textbf{todo: $\lambda$ sans type est simplement typé}
+
+\subsubsection*{Combinateurs}
+Le cas spécial de $\lambda$-termes sans type sont les termes qui n'ont pas des variables libres. Ils s'appellent \emph{combinateurs}.
+Voici les examples des combinateurs classiques :
+\begin{itemize}
+	\item $\mathbf{I} = \lambda x. x$ -- combinateur d'identité
+	\item $\mathbf{K} = \lambda x y. x$ -- ``suppresseur''
+	\item $\mathbf{S} = \lambda fgx. fx(gx)$ -- ``distributeur''
+\end{itemize}
+En fait, tout les combinateurs peuvent être exprimés en termes de ces trois -- on dit qu'ils forment la base chez les combinateurs.
+Cependant, cette base n'est pas minimal, car $\mathbf{I} = \mathbf{SKK}$.
+\textbf{Théorème} Tout les combinateurs peuvent être exprimés en termes de $\mathbf{K}$ et $\mathbf{S}$.
+
+Mais $\cI$ est très utile pour simplifier les calculs car sans lui les formules sont trop longues. Pour cette raison, on parle plutôt du système $\mathbf{S, K, I}$.
+Autres exemples des combinateurs avec leurs représentations en base $\cS, \cK$ et $\cS, \cK, \cI$ (todo!) :
+\begin{itemize}
+	\item $\bm{\omega} = \lambda x. xx = \cS \mathbf{I} \mathbf{I}$ (verify!)
+	\item $\mathbf{\Omega} = \bm{\omega} \bm{\omega} = (\lambda x. xx) \lambda x. xx$
+	\item $\mathbf{C}
+		= \lambda fxy. fyx
+		= \cS
+			\left(
+				\left(\cS(\cK\cS)\cK\right)
+				\left(\cS(\cK\cS)\cK\right)
+				(\cK\cK)
+			\right)$
+	\item $\mathbf{B} = \lambda fgx. f(gx) = \cS(\cK\cS)\cK$
+	\item $\mathbf{W} = \lambda xy. xyy = \cS \cS \left(\cK (\cS \cK \cK)\right)$
+\end{itemize}
+
+%Chaque combinateur peut être appliqué aux autre tèrmes, par exemple :
+%\begin{itemize}
+%	\item $I \mathpzc{x} = \mathpzc{x}$
+%	\item $\omega \mathpzc{x} = \mathpzc{x}\mathpzc{x}$
+%	\item $K \mathpzc{xy} = \mathpzc{x}$
+%	\item $S \mathpzc{fgx} = f\mathpzc{x} (\mathpzc{gx})$
+%\end{itemize}
+%Les formules ci-dessus peuvent s'en servir tant que la définition des combinateurs.
+%Le calcul est effectué en remplaçant les arguments formels par ses valeurs, e.g.,
+%$$\omega I = I I = I$$.
+%Notons, que les certains combinateurs peuvent être exprimé en termes des autres. (\textbf{todo})
+%Si on choisit une base, e.g., $S$, $K$ (et $I$ tant que un élement neutre), on peut obtenir un système de calcul qui est équivalent au $\lambda$-calcul.
+
+Notons qu'on peut penser de logique combinatoire comme du $\lambda$-calcul sans symbol $\lambda$ -- les deux systèmes sont équivalent, la difference n'est que dans le brique de base :
+\begin{itemize}
+	\item Dans $\lambda$-calcul, nous utilisons l'application et l'abstraction des fonctions aux variables.
+	\item Dans logique combinatoire on part des fonctions d'ordre supérieur, i.e., les fonctions qui ne contient pas de variables libres.
+\end{itemize}
+Les constructions logiques dans le monde combinatoire seront probablement (ou pas) presentés en autres articles.
+Dans le futur, nous ne considerons que $\lambda$-calcul.
+
+
+\subsubsection*{Prise en main\footnote{Basé sur l'article russe \url{https://habr.com/ru/post/215991/}}}
+Dans $lambda$-calcul sans type nous n'avons qu'un seul primitif - des fonctions.
+Dons, si on veut l'utiliser pour la programmation, c'est à nous de réaliser même les objets les plus élementaires, tels que les nombres ou les constantes booléennes.
+\begin{eqnarray*}
+tru &:= \lambda t.\lambda f.t \quad \text{est une fonction qui renvoie son premier argument,} \\
+fls &:= \lambda t.\lambda f.t \quad \text{est une fonction qui renvoie son deuxième argument.}
+\end{eqnarray*}
+Les termes $tru$ et $fls$ vont jouer le rôle de \textbf{vrai} et \textbf{faux}.
+Cependant, pour l'instant ils ne sont que des formules formelles qui manquent du context.
+Comme ce contexte, définissons la fonction $if$
+$$if := \lambda b.\lambda x.\lambda y.b x y$$
+Ici, $b$ est une condition de branchement, $x$ et branche \textbf{then} et $y$ corresponds à \textbf{else}.
+Donc, pour ``montrer'' que $tru$ et $fls$ corréspondent au constantes logiques, nous avons besoin de prouver le suivant:
+\begin{eqnarray*}
+	if \; tru \; t \; e &= t, \\
+	if \; fls \; t \; e &= e
+\end{eqnarray*}
+%\begin{remark}
+Pour les formules formelles ``prouver'' signifie ``partir d'une expression à gauche, appliquer les certains règles afin d'obtenir une expression à droit''.
+%\end{remark}
+Donc c'est le moment de parles de ces règles.
+Pour $\lambda$-calcul il y en a deux :
+\begin{enumerate}
+	\item \textbf{$\alpha$-equivalence}. Informellement\footnote{la définition formelle peut être trouvée dans n'importe quel livre, mais sa complexité dépasse largement les objectifs du blog.}, on dit que deux termes sont équivalent s'il coïncident à renommage des variables abstraites près. Par exemple, $\lambda x.f(x) \equiv_\alpha \lambda y.f(y)$.
+	Par une variable abstraite on comprend une variable qui est présente à gauche et à droit du point, e.g., $x$ et $y$ eux-mêmes ne sont pas $\lambda$-equivalents car il ne sont pas abstraites.
+	\item \textbf{$\beta$-reduction}.
+\end{enumerate}
+Notons que dans $\lambda$-calcul, il n'y a rien sauf application, abstraction et $\beta$-equivalence.
+\begin{proof}[Preuve ($if \; fls \; t \; e = e$)]
+	\begin{eqnarray*}
+		if \; fls \; t \; e
+		= \underline{(\lambda b. \; \lambda x. \; \lambda y. \; b \; x \; y) \; fls} \; t \; e
+			& \qquad \text{ par définition de $if$}\\ 
+		= \underline{(\lambda x. \; \lambda y. \; fls \; x \; y) \; t} \; e
+			& \qquad \text{ par $\beta$-reduction de $\lambda b$}\\
+		= \underline{(\lambda y. \; fls \; t \; y)} \; e
+			& \qquad \text{ par $\beta$-reduction de $\lambda x$}\\
+		= fls \; t \; e
+			& \qquad \text{ par $\beta$-reduction de $\lambda y$}\\
+		= \underline{(\lambda t. \; \lambda f. \; f) \; t} \; e
+			& \qquad \text{ par définition de $fls$}\\
+		= \underline{(\lambda f. \; f)} \; e
+			& \qquad \text{ par $\beta$-reduction de $\lambda t$}\\
+		= e
+			& \qquad \text{ par $\beta$-reduction de $\lambda f$}
+	\end{eqnarray*}
+\end{proof}
+Un lecteur courieux peut vérifier par lui-même que $if \; tru \; t \; e = e$.
+De plus, un vrai passioné peut essayer de trouver les bonnes expressions pour conjunctions (``and''), disjonction (``or'') ainsi que negation (``not'').
+
+\textbf{spoiler.} 
+\begin{itemize}
+	\item $and = \lambda x. \; \lambda y. \; x \; y \; fls$
+	\item $or = \lambda x. \lambda y. \; x \; tru \; y$
+	\item $not = \lambda x. \; x \; fls \; tru$
+\end{itemize}
+
+\subsection*{Pourquoi langage de programmation?}
+\textbf{TODO. Recursion à l'aide de combinators}
+
+Comment peut-on montrer que langages de programmation \textbf{X} et \textbf{Y} sont équivalent ?
+Il faut montrer deux proposition : (i) un programme quelconque écrit en \textbf{X} peut être réecrit en \textbf{Y} et (ii) un programme quelconque écrit en \textbf{Y} peut être réecrit en \textbf{X}.
+Helas, prouver ces deux réductions entre \textbf{citation?} $\lambda$-calcul et le machine de Turing est assez technique et demande quelques disaines de pages ércites.
+Donc nous nous limiterons à la démonstration de deux méchanismes :
+\begin{itemize}
+	\item Pour le \emph{branchement}, nous avons montre ci-dessus que terme $\mathbf{if}$ joue le rôle de même operateur dans la programmation.
+	\item Ci-dessous nous montrerons que la \emph{récursion} est aussi possible en $\lambda$-calcul. Ce méchanisme va jouer le rôle des boucles qui n'existe pas dans ce système.
+\end{itemize}
+Informellement, on comprends très bien que ces deux méchanismes sont suffisantes pour écrire n'importe quel programme.\footnote{La vrai dificulté est dans la formalisation de cette dernière proposition, ainsi que dans le propre construction pour la récurtion arbtitraire qui est fait à l'aide des combinateurs.}
+De plus, la construction de recursion n'est pas simple du tout.
+
+\textbf{Ingrédients.} Supposons que nous sommes beaucoup avancés dans le sujet et réussis à construire les fonctions suivantes (rappellons que par défaut il n'y a pas ni nombres ni opérations arithmétiques à $\lambda$-calcul.
+\begin{itemize}
+	\item $\mathbf{1}$, juste nombre 1, mais il faut le construire à l'aide de application et abstraction;
+	\item $\mathbf{isZero}$, si argument de cette fonction est égal au 0, elle renvoie $tru$, sinon -- $fls$;
+	\item $\mathbf{mult}$ renvoie un produit de ces deux arguments.
+	\item $\mathbf{pred}$ prend à l'entrée un nombre naturel et calcul son prédesesseur (souvez-vous des axiomes de Peano, si vous avez déjà lu la partie 1). Pourtant, cette fonction est le plus complexe : le construiction à été inventé par Kleene pendend l'extraction de son dent de sagesse. Aujourd'hui, l'anesthésie n'est pas pareil\ldots
+\end{itemize}
+\textbf{1ère approche.}
+Tout ces ingrédients nous permets d'introduir un factoriel assez naturellement~:
+$$\mathbf{fact} = \lambda x. \; \mathbf{if} \; (\mathbf{isZero} \; x) \; \mathbf{1} \; (\mathbf{fact} \; (\mathbf{pred} \; x))$$
+Rien de miracle, si $x$ est égal à 0, on renvoie 1, sinon -- le produit de $x$ et factoriel de $x-1$.
+Si on remplace $\mathbf{fact}$ par son définition, on obtient une série infinie des réductions. We have a problem\ldots
+
+\textbf{Calcul ``lazy''}. J'espère que vous protestiez contre cela, en argumentant que pour calculer $\mathbf{fact\;0}$, nous n'avons pas besoin de substitutions infinies car nous savons déjà que le troisième argument de $\mathbf{if}$ sera ignoré.
+Tout a fait, mais les règles de jeu "Informatique théorique" nous impose d'utiliser que les opérations bien précis : si on prétend que $\lambda$-calcul est un langage de programmation, alors on doit être capable de proposer un algorithme qui l'execute et donc aucun ambiguïté n'est pas toléré.
+Dans notre cas on a ``oublié'' de fixer l'ordre de calcul.
+Considerons un terme suivant~:
+$$(\lambda x.x) \; ((\lambda x.x) \; (\lambda z. \; (\lambda x.x) z))$$
+Pour simplicité on peut le réécrire~:
+$$\id \; (\id \; (\lambda z. \; \id \; z))$$
+Ce terme-là contient 3 redexes. Nous n'avons plusieurs choix de l'ordre des réductions :
+\begin{itemize}
+	\item \textbf{$\beta$-reduction complète.}
+		Le redex est choisi au hazard à chaque étape. Il est facile de voir que si l'expression initiale est finie, le résultat ne dépends pas de l'ordre de calcul (rappelons qu'il n y a pas de notion d'état, donc les effets de bord sont impossibles).
+		Voici une des réductions possibles d'une expression ci-dessus :
+		\begin{align*}
+			& \id \; (\id \; (\lambda z. \; \underline{\id \; z})) \\
+			= & \; \id \; \underline{(\id \; (\lambda z. \; z))} \\
+			= & \; \underline{\id \; (\lambda z. \; z)} \\
+			= & \; \lambda z. \; z
+		\end{align*}
+	\item \textbf{L'ordre normal.}
+		À chaque étape on choisi un redex le plus gauche (i.e., le plus externe) :
+		\begin{align*}
+			& \underline{\id \; (\id \; (\lambda z. \; \id \; z))} \\
+			= & \; \underline{\id \; (\lambda z. \; \id \; z)} \\
+			= & \; \underline{\lambda z. \; \id \; z} \\
+			= & \; \lambda z. \; z
+		\end{align*}		
+	\item \textbf{L'appel par nom.}
+		% todo: put it after the itemize, because there's an additional rule
+		L'ordre de calcul est identique à l'ordre normal. En plus, on interdit les reductions à l'intérieur de l'abstraction. Dans notre example on s'arrête sur l'étape avant dernier :
+		\begin{align*}
+			& \underline{\id \; (\id \; (\lambda z. \; \id \; z))} \\
+			= & \; \underline{\id \; (\lambda z. \; \id \; z)} \\
+			= & \; \lambda z. \; \id \; z
+		\end{align*}
+		Une version optimisée de cette strategie est utilisé par Haskell par défaut.
+		C'est le calcul ``lazy''.
+	\item \textbf{L'appel par valeur.}
+		On commence par un redex les plus gauche (externe), dans la partie droite duquel il y a une valeur -- un terme clos qui ne peut plus être réduit :
+		\begin{align*}
+			& \id \; \underline{(\id \; (\lambda z. \; \id \; z))} \\
+			= & \; \underline{\id (\lambda z. \; \id \; z)} \\
+			= & \; \lambda z. \; \id \; z
+		\end{align*}
+		Cette strategie est utilisée dans la plupart des langages de programmation : pour executer une fonction, on calcule d'abord tous ces arguments.
+\end{itemize}
+Remarquons que les tout les strategies sauf calcul lazy formellement interdit la récursion.
+Le méchanisme de ``lazyness'' est fait exactement pour éviter les calculs non-nécessaires.
+En réalité, cette mechanisme est utilisé dans la plupart des langages, mais pas dans l'execution de fonction. Dans le code suivant : \verb|if a and b: ...|, si \verb|a| est déjà fausse, il est probable que \verb|b| ne sera jamais calculé, ce que nous oblige de porter plus d'attention sur les effets de bords possible.
+
+\textbf{Y-combinator -- Est-ce qu'on a vraiment besoin de cette partie~?}
+
+\subsection*{Résumé}
+Si vous pensez que $\lambda$-calcul est simple et les règles décrites sont évidents, je vais vous déranger : essayer de calculer ce terme-là.
+\textbf{todo}
+Cependant ce n'est que $\lambda$-répresentation de nombre 2 (vous vous probablement souvenez qu'il n'y a pas de nombres en $\lambda$-calcul).
+Cette réduction a été fait par Kleene, pendant son visite au dentiste (pourtant, les analgésiques modernes sont moins efficace en mathématique).
+Vu le nombre des efforts que nous avons besoin pour les calculs les plus primitifs, $\lambda$-calcul sans type reste une construction purement théorique, qui répresente un modèle de calcul aussi puissant que la machine de Turing.
+En enrichissant ce modèle par des constantes et système de types, on s'approche relativement vite au langages fonctionnels existants comme Haskell.
+Cependant, on perd le simplicité de la construction.
+
+Maintenant, je vous conseil de relire la partie 1 pour voir le contexte dans lequel ce système a été introduit aux années 30s.
+Si vous n'avez vraiment rien compris, comment on fait les calculs avec $\lambda$, \href{http://worrydream.com/AlligatorEggs/}{ce site} va surement aider d'avoir l'idée ce que s'est passé.
