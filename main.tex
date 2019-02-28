@@ -7,6 +7,7 @@
 \usepackage{eufrak}
 \usepackage{mathrsfs}
 \usepackage{listings}
+\usepackage{fancyvrb}
 %\pagestyle{empty}
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 \newcommand{\lft}{\leftarrow}
@@ -15,10 +16,19 @@
 \newcommand{\cS}{\mathbf{S}}
 \newcommand{\cI}{\mathbf{I}}
 \newcommand{\id}{\mathbf{id}}
+\newcommand{\lx}{\lambda x}
+\newcommand{\ly}{\lambda y}
+\newcommand{\lf}{\lambda f}
+\newcommand{\bequiv}{\equiv_\beta}
 %\newtheorem{problem}{Problème}
 \newtheorem*{problem}{Problème}
 \newtheorem*{remark}{Remarque}
 \newtheorem*{example}{Example}
+\newtheorem*{definition}{Définition}
+\newtheorem*{theorem}{Théorème}
+
+\VerbatimFootnotes
+
 \begin{document}
 	
 \section*{Introduction}
@@ -30,11 +40,8 @@ A l'opposé, l'objectif de la deuxième partie était de donner au lecteur le go
 
 De fait, les deux parties de ce document sont indépendantes. Cependant, il est conseillé de commencer par un passage ``diagonale'' sur la partie 2, puis une lecture complète de la partie 1 et enfin la relecture de la partie 2 pendant lequelle on pourra faire attention au sens global derrière la forêt de détails techniques nécessaire pour introduire un système formel tel que le $\lambda$-calcul.
 	
-\section*{Partie 1. Histoire du $\lambda$-calcul}
 \include{part1}
 
-\newpage
-\section*{Partie 2. Les formalités}
 \include{part2}
 
 \end{document}

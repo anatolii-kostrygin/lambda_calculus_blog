@@ -1,13 +1,16 @@
-\subsubsection*{Introduction informelle dans la programmation fonctionnelle}
+\section*{Partie 2. Les formalités}
+
+\subsection*{Impérative contre fonctionnelle}
 Le concepte de langage de programmation le plus elémentaire connu par tout le monde est un machine de Turing.
-Sa ruban contenant les instructions et les datas se traduit facilement dans la programmation impérative -- un paradigme implémenté par ``OVER9000'' des langages populaires.
+Sa ruban contenant les instructions et les datas se traduit facilement dans la programmation impérative -- un paradigme implémenté par ``over 9000'' des langages populaires.
 Dans ce paradigme, le proces du calcul est décrit en termes des instructions qui changent l'état de ``calculateur''.
-Les caractéristiques de programmes impératifs sont :
+Les caractéristiques des programmes impératifs sont :
 \begin{itemize}
 	\item L'état se change par des instruction de l'affectation (\verb|v = E|).
-	\item Les instruction sont executé consécutivement (\verb|C1; C2; C3|).
-	\item Il y a un méchanisme de branchement (\verb|if|, \verb|switch|).
-	\item Il y a un méchanisme de boucles (\verb|while|, \verb|for|).
+	\item Les instructions sont exécutées consécutivement (\verb|C1; C2; C3|).
+	\item Il y a un mécanisme de branchement (\verb|if|, \verb|switch|).
+	\item Il y a un mécanisme de boucle (\verb|while|, \verb|for|).
+	\footnote{Il est suffisant d'avoir une instruction du saut inconditionnel (\verb|goto|). N'importe quelle boucle est équivalent à une combinaison de \verb|if| et \verb|goto|. Mais, comme sa utilisation est considéré comme une grosse bêtise de developpeur afin de ne pas enflammer la guerre sainte, restons sur un mécanisme de boucle.}
 \end{itemize}
 Exemple (le calcul d'un factoriel impératif):
 \begin{lstlisting}[language=Python]
@@ -15,9 +18,13 @@ Exemple (le calcul d'un factoriel impératif):
   for i = 1..n:
       res = res * i;
 \end{lstlisting}
-C'est un programme le plus compliqué dans cet article.
-Cependant, on peut voir clairement que l'execution est imperative car il est composé de instructions consecutives qui translatent le calculateur de l'état initial à son état final.
+On voit clairement que ce programme est imperative car il est composé de instructions consecutives qui translatent le calculateur de l'état initial à son état final.
 Une partie de l'état final (variable \verb|res|) est interprété comme un résultat du calcul.
+
+C'est un programme le plus compliqué de cet article.
+Pourriez-vous de proposer un machine de Turing qui calcul un factoriel ?
+Cela semble technique, mais possible (\href{https://math.stackexchange.com/questions/1153376/construct-a-turing-machine-for-factorialunary}{stackexchange}, \href{https://youtu.be/h77-wb44Uvg}{vidéo sur youtube}).
+Si vous l'avez jamais fait à la main -- essayez, c'est amusant~!\footnote{et permet de mieux comprendre le concept impératif\ldots}
 
 En parallèle de l'approche programme comme l'instruction, il existe une paradigme fonctionnel qui présente un programme comme une fonction.
 Par example, le factoriel est une expression qui depende de l'entrée \verb|n|.
@@ -40,42 +47,123 @@ En fait, les langages modernes sont multi-paradigmes -- ils prennes les meilleur
 Par contre, langage machine et donc Assembler restent les langages pures impératifs.
 De plus, rajoutons qu'en programmation fonctionnelle, toutes les fonctions sont \emph{pures}, i.e., ne dependent que des ces paramètres.
 
-Dans la suite de cet article, nous construisont $\lambda$-calcul qui joue le rôle de ``machine de Turing'' pour la programmation fonctionnelle.
+
+Dans la suite, nous définirons un autre langage primitif -- $\lambda$-calcul qui induit la programmation fonctionnelle de même façon que la machine de Turing induit la programmation impérative.
+Nous fixons comme objéctif de réécrire une fonction qui calcul un factoriel d'un nombre entier.
+Pour cela nous passerons par tout les étapes nécessaire~:
+\begin{itemize}
+	\item grammaire du langage (application et abstraction)~;
+	\item règle d'execution ($\alpha$-equivalence et $\beta$-réduction)~;
+	\item codage des nombres (nombres de Church) et des booléens~;
+	\item récurtion à la place de boucles.
+\end{itemize}
+
 \begin{remark}
-	La construction complète sont téchnique et même la définition de $\lambda$-calcul dépasse largement la taille de cet article. Nous essayons plutôt de donner une idée comment les primitives de la programmation impérative peuvent être exprimés en termes de $\lambda$-calcul. Ainsi, on ne donnera pas l'example plus sophistiqué que le calcul d'un factoriel.
+	$\quad$
+	\begin{enumerate}
+		\item
+			La construction complète est téchnique et longue, donc nous allons sauter les certains détails sans pitié. Notre objectif est de donner une idée comment les primitives de la programmation impérative peuvent être exprimés en termes de $\lambda$-calcul. Dans tout les cas n'utilisez pas cette article comme la seule source si un examen sur $\lambda$-calcul vous suive. Au moins vous êtes avertis.
+		\item
+			Si vous avez un examen dans une semaine, les sources suivantes sont pas mals~: \textbf{todo}.
+		\item
+			Si vous avez un examen dans demain et vous ne comprenez rien, lisez au moins ça~: \href{http://worrydream.com/AlligatorEggs/}{Alligator Eggs!}
+	\end{enumerate}
 \end{remark}
 
-\subsubsection*{Deux operations\footnote{based on Moskvin's presentations}}
-Dans $\lambda$-calcul nous n'avons que deux moyen pour construire les expressions : \emph{application} et \emph{abstraction}.
+\subsection*{Qu'est ce que $\lambda$ ?}
+\begin{definition}
+	$\lambda$-terme ou $\lambda$-expression est une expression qui satisfait la grammaire suivante~:
+	\begin{enumerate}
+		\item $\Lambda \to V$
+		\item $\Lambda \to \Lambda \; \Lambda$
+		\item $\Lambda \to \lambda V. \Lambda$
+	\end{enumerate}
+	où $V$ est un ensemble des chaîne sur l'alphabet fixe $\Sigma \setminus \{``\lambda", \; ``.", \; ``\;"\}$.
+\end{definition}
+La première règle définie des idéntifiants -- variables et fonctions.
+La deuxième est \emph{application} d'une terme à l'autre.
+La troixième définie une \emph{abstraction}.
+Si tous ce qu'il est écrit ci-dessous était claire, vous pouvez passer directement au \nameref{beta-reduction}.
+Sinon, rajoutons du sens au cet abracadabra.
 
-\textbf{1. Application.} La notion \verb|f x| signifie que \verb|f| est appliqué à \verb|x|. Du point de vue de codeur on peut dire qu'un algorithme \verb|f| est appliqué à l'entrée \verb|x|. Cependant nous construisons un \emph{système formel} ou il n'y a pas de différence entre les algorithmes et les données, donc l'auto-application est aussi autorisée : \verb|f f|.
+%Dans $\lambda$-calcul nous n'avons que deux moyen pour construire les expressions : \emph{application} et {abstraction}.
 
-\textbf{2. Abstraction.} Soit $M \equiv M[x]$ est une expression qui (probablement) contient $x$. Dans ce cas, la notion $\lambda x.M$ signifie une fonction $x \to M[x]$ qui mappe $x$ à $M[x]$.
+\textbf{1. Idéntifiants.} Initialement, nous considérons comme identifiant n'importe quel chaîne qui ne contient trois caractères spéciaux : ``$\lambda$'', ``$.$'' et ``~'' (espace).
+Ainsi, $x$, $f$, $42$, $hello$ et $x+5$ sont les idéntifiants.
+
+\textbf{2. Application.} La notion $f \; x$ signifie qu'un terme $f$ est appliqué à la terme $x$. Du point de vue de codeur on peut dire qu'un algorithme $f$ est appliqué à l'entrée $x$. Mais, comme nous construisons un \emph{système formel}, on est autorisé beaucoup plus, par example un auto-application~: $f \; f$.
+
+\textbf{3. Abstraction.} Soit $\mathbf{M}$ est un $\lambda$-terme qui contient $x$ à l'intérieur (on écrit $\mathbf{M} \equiv \mathbf{M}[x]$). Dans ce cas, la notion $\lambda x.M$ signifie une fonction $x \to \mathbf{M}[x]$ qui mappe $x$ à $\mathbf{M}[x]$.
+\begin{remark}
+Important ! Le $\mathbf{M}$ ou $\mathbf{M}[x]$ est un pseudonyme pour un $\lambda$-terme. Dans la suite, nous remplacerons souvent les certains termes par leurs ``pseudonymes'' pour simplifier les expressions. Tout ces pseudonymes sont écrit en graisse.
+\end{remark}
+Une autre moyen de voir l'abstraction est une construction d'une fonction anonyme : imaginons une fonction $f(x) := \mathbf{M}[x]$. Dans la notation du $\lambda$-calcul, $f(x)$ corrésponds à $\lambda x.\mathbf{M}[x]}$. L'avantage de telle écriture est ce qu'on voit clairement que la fonction depend de $x$ mais il n'y a pas d'ambiguïté avec fonction et ça valeur en $x$. Finalement, si on veut valeur $f(x=a)$, on écrit $$\lambda x. \mathbf{M}[x] \; a$$
+Cela justifie l'application : $\lambda x. \mathbf{M}[x]$ s'applique à $a$.
+Dans la suite nous omettrons souvent $[x]$ et écrirons simplement $\lambda x. \mathbf{M} \; a$.
 Ainsi, $\lambda$-abstraction est un moyen de créer une fonction anonyme en partant d'une expression $M$.
-\begin{example}
-	Considerons $\lambda$-expression : $(\lambda x.2x + 8)17$.
-	Le calcul est une serie de reductions d'une paire abstraction--application :
-	$$(\lambda x.2 \cdot x + 8)17 =(x:=17) 2 \cdot 17 + 8 = 42.$$
-\end{example}
-Cette réduction s'appele $\beta$-réduction.
-Si les expressions sont liées par la $\beta$-réduction, on dit qu'elles sont $\beta$-équivalentes.
-Le règle formel de $\beta$-équivalence est suivant :
-$$(\lambda x.M)N =_\beta M[x:=N]$$
 
-Dans $\lambda$-calcul sans type il n'y a rien à part de l'application, l'abstraction et $\beta$-réduction.
-En plus, pour omettre les parenthèses, nous avons les accords suivants :
+Les trois règles ci-dessus sont les \textbf{seules} opérations autorisées pour construire les expressions $\lambda$-calcul.
+On repète parce qu'il est important que notre univers de $\lambda$-calcul ne sait rien sauf construire des phrases avec des ces trois règles : il n'y a pas ni nombres ni opérations arithmétique -- rien.
+Par example, l'idéntifiant $x+5$ n'a pas de sence ``calculer la somme'', c'est juste une chaîne des caractères, un mot, un objet atomique de la théorie.
+Ainsi, on ne peut pas ``calculer'' le ``résultat'' d'abstraction $f \; x$ -- ce n'est qu'une construction formelle.
+
+\subsubsection*{$\beta$-reduction} \label{beta-reduction}
+
+\begin{definition}
+La $\beta$-équivalence est définie de manière suivante~:
+	$$(\lambda x.\mathbf{M}) \; \mathbf{N} \bequiv \mathbf{M}[x:=\mathbf{N}]$$
+\end{definition}
+S'il est claire, bienvenu au \nameref{variables-libres-et-liees}.
+Sinon, voici une traduction de la langue Klingon.
+
+Soit dans la formule ci-dessus, $\mathbf{M} = f \; x \; z \; x$
+\footnote{
+	Ne pensez pas de $f$ comme de la fonction qui prends deux paramètre $x$ et $z$. On rappelle que c'est une formule formelle et $f$, $x$ ainsi que $z$ sont trois $\lambda$-termes qui ont les mêmes ``droits''.
+}.
+Dans ce cas-là, on peut ``calculer'' l'application en remplaçant tout les occurences de l'$x$ dans $\mathbf{M}$ par $a$ et enlevant $\lambda$ :
+$$\lambda x. \mathbf{M} \; a = (\lambda x. f \; x \; z \; x) \; a \bequiv f \; a \; z \; a$$
+
+Qu'est-ce que signifie ``calculer'' pour un $\lambda$-terme ?
+On dit que termes $(\lambda x. f \; x \; z \; x) \; a$ et $f \; a \; z \; a$ sont \emph{$\beta$-équivalents} (pour cela on utilise un symbole ``$\bequiv$'').
+L'opération qui enlève $\lambda$ un remplaçant un terme par son $\beta$-équivalent, s'appele un \emph{$\beta$-réduction}.
+Cela veut dire que ``calculer'' signifie ``appliquer les $\beta$-réductions pour rendre un $\lambda$-terme initial le plus simple possible.
+
+Remarquons aussi que nous avons besoin de paranthèses car nous ne savons pas jusqu'à quel terme s'applique abstraction.
+Pour minimiser le nombre de paranthèses en suite, nous fixons les accords suivants sur les priorités entre les opérations~:
 \begin{itemize}
 	\item L'application est gauche-associative, i.e., $F X Y Z := (((F X) Y) Z)$.
 	\item L'abstraction est droite-associative, i.e., $\lambda x y z.M := (\lambda x.(\lambda y.(\lambda z.M)))$.
 	\item L'abstraction s'applique à tous ce qu'elle arrive à ``toucher'', i.e., $\lambda x. M N K := \lambda x.(MNK)$.
 \end{itemize}
-\textbf{Variables libres et liées.}
-Considerons un terme $M[x]$. On dit que variable $x$ est \emph{libre} dans $M$.
-Par contre, dans l'abstraction $\lambda x.M[x]$, variable $x$ devient liée par un $\lambda$.
+
+\subsubsection*{Variables libres et liées.} \label{variables-libres-et-liees}
+
+% This is a bad example, because it contradicts with the idea of hte formal functions
+%\begin{example}
+%	Considerons $\lambda$-expression : $(\lambda x.2x + 8)17$.
+%	Le calcul est une serie de réductions d'une paire abstraction--application :
+%	$$(\lambda x.2 \cdot x + 8)17 =(x:=17) 2 \cdot 17 + 8 = 42.$$
+%\end{example}
+
+
+Considerons un terme $\mathbf{M}[x]$ qui contient un idéntifiant (i.e., variable) $x$.
+On dit que, dans le terme $\lambda x.M[x]$, la variable $x$ est \emph{liée} par un $\lambda$-abstraction.
+Si une variable n'est pas liée, on dit qu'elle est \emph{libre}.
+La définition concrète est un peut détaillé (essayez de le construire par vous-même) mais la notion est assez simple et intuitive -- vérifier quand même un example ci-dessous.
 \begin{example}
 	Dans le terme ci-dessous, les variables $x$ et $y$ sont liées, $z$ et $w$ sont libres.
-	$$(\lambda y. (\lambda x. xz)y)w$$
+	$$(\lambda y. (\lambda x. x \; z) \; y) \; w$$
 \end{example}
+Considerons deux termes $\mathbf{fx} := \lambda x. f \; x$ et $\mathbf{fy} := \lambda y. f \; y$.
+Si on applique chaque de deux termes à un terme quelconque $a$, on obtient le même résultat~:
+\begin{align*}
+	\mathbf{fx} \; a &= (\lambda x. f \; x) \; a \bequiv f \; a \\
+	\mathbf{fy} \; a &= (\lambda y. f \; y) \; a \bequiv f \; a
+\end{align*}
+Cela veut dire que les deux termes qui différent seulment par les variables liées actionnent de même façon.
+Ce termes-là s'appellent $\lambda$-équivalents.
+
+C'est un deuxième et dernier rule des calcules.
 %Si on rénomme les variables liées, on obtient le terme ne change pas. On dit que tels termes sont $\alpha$-équivalents.
 
 \subsubsection*{What is $\lambda$?\footnote{based on Selinger's lecture notes}}
@@ -176,7 +264,7 @@ Pour $\lambda$-calcul il y en a deux :
 \begin{enumerate}
 	\item \textbf{$\alpha$-equivalence}. Informellement\footnote{la définition formelle peut être trouvée dans n'importe quel livre, mais sa complexité dépasse largement les objectifs du blog.}, on dit que deux termes sont équivalent s'il coïncident à renommage des variables abstraites près. Par exemple, $\lambda x.f(x) \equiv_\alpha \lambda y.f(y)$.
 	Par une variable abstraite on comprend une variable qui est présente à gauche et à droit du point, e.g., $x$ et $y$ eux-mêmes ne sont pas $\lambda$-equivalents car il ne sont pas abstraites.
-	\item \textbf{$\beta$-reduction}.
+	\item \textbf{$\beta$-réduction}.
 \end{enumerate}
 Notons que dans $\lambda$-calcul, il n'y a rien sauf application, abstraction et $\beta$-equivalence.
 \begin{proof}[Preuve ($if \; fls \; t \; e = e$)]
@@ -185,17 +273,17 @@ Notons que dans $\lambda$-calcul, il n'y a rien sauf application, abstraction et
 		= \underline{(\lambda b. \; \lambda x. \; \lambda y. \; b \; x \; y) \; fls} \; t \; e
 			& \qquad \text{ par définition de $if$}\\ 
 		= \underline{(\lambda x. \; \lambda y. \; fls \; x \; y) \; t} \; e
-			& \qquad \text{ par $\beta$-reduction de $\lambda b$}\\
+			& \qquad \text{ par $\beta$-réduction de $\lambda b$}\\
 		= \underline{(\lambda y. \; fls \; t \; y)} \; e
-			& \qquad \text{ par $\beta$-reduction de $\lambda x$}\\
+			& \qquad \text{ par $\beta$-réduction de $\lambda x$}\\
 		= fls \; t \; e
-			& \qquad \text{ par $\beta$-reduction de $\lambda y$}\\
+			& \qquad \text{ par $\beta$-réduction de $\lambda y$}\\
 		= \underline{(\lambda t. \; \lambda f. \; f) \; t} \; e
 			& \qquad \text{ par définition de $fls$}\\
 		= \underline{(\lambda f. \; f)} \; e
-			& \qquad \text{ par $\beta$-reduction de $\lambda t$}\\
+			& \qquad \text{ par $\beta$-réduction de $\lambda t$}\\
 		= e
-			& \qquad \text{ par $\beta$-reduction de $\lambda f$}
+			& \qquad \text{ par $\beta$-réduction de $\lambda f$}
 	\end{eqnarray*}
 \end{proof}
 Un lecteur courieux peut vérifier par lui-même que $if \; tru \; t \; e = e$.
@@ -244,7 +332,7 @@ Pour simplicité on peut le réécrire~:
 $$\id \; (\id \; (\lambda z. \; \id \; z))$$
 Ce terme-là contient 3 redexes. Nous n'avons plusieurs choix de l'ordre des réductions :
 \begin{itemize}
-	\item \textbf{$\beta$-reduction complète.}
+	\item \textbf{$\beta$-réduction complète.}
 		Le redex est choisi au hazard à chaque étape. Il est facile de voir que si l'expression initiale est finie, le résultat ne dépends pas de l'ordre de calcul (rappelons qu'il n y a pas de notion d'état, donc les effets de bord sont impossibles).
 		Voici une des réductions possibles d'une expression ci-dessus :
 		\begin{align*}
@@ -263,7 +351,7 @@ Ce terme-là contient 3 redexes. Nous n'avons plusieurs choix de l'ordre des ré
 		\end{align*}		
 	\item \textbf{L'appel par nom.}
 		% todo: put it after the itemize, because there's an additional rule
-		L'ordre de calcul est identique à l'ordre normal. En plus, on interdit les reductions à l'intérieur de l'abstraction. Dans notre example on s'arrête sur l'étape avant dernier :
+		L'ordre de calcul est identique à l'ordre normal. En plus, on interdit les réductions à l'intérieur de l'abstraction. Dans notre example on s'arrête sur l'étape avant dernier :
 		\begin{align*}
 			& \underline{\id \; (\id \; (\lambda z. \; \id \; z))} \\
 			= & \; \underline{\id \; (\lambda z. \; \id \; z)} \\
