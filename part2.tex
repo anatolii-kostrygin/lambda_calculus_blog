@@ -97,7 +97,7 @@ Ainsi, $x$, $f$, $42$, $hello$ et $x+5$ sont les idéntifiants.
 \begin{remark}
 Important ! Le $\mathbf{M}$ ou $\mathbf{M}[x]$ est un pseudonyme pour un $\lambda$-terme. Dans la suite, nous remplacerons souvent les certains termes par leurs ``pseudonymes'' pour simplifier les expressions. Tout ces pseudonymes sont écrit en graisse.
 \end{remark}
-Une autre moyen de voir l'abstraction est une construction d'une fonction anonyme : imaginons une fonction $f(x) := \mathbf{M}[x]$. Dans la notation du $\lambda$-calcul, $f(x)$ corrésponds à $\lambda x.\mathbf{M}[x]}$. L'avantage de telle écriture est ce qu'on voit clairement que la fonction depend de $x$ mais il n'y a pas d'ambiguïté avec fonction et ça valeur en $x$. Finalement, si on veut valeur $f(x=a)$, on écrit $$\lambda x. \mathbf{M}[x] \; a$$
+Une autre moyen de voir l'abstraction est une construction d'une fonction anonyme : imaginons une fonction $f(x) := \mathbf{M}[x]$. Dans la notation du $\lambda$-calcul, $f(x)$ corrésponds à $\lambda x.\mathbf{M}[x]$. L'avantage de telle écriture est ce qu'on voit clairement que la fonction depend de $x$ mais il n'y a pas d'ambiguïté avec fonction et ça valeur en $x$. Finalement, si on veut valeur $f(x=a)$, on écrit $$\lambda x. \mathbf{M}[x] \; a$$
 Cela justifie l'application : $\lambda x. \mathbf{M}[x]$ s'applique à $a$.
 Dans la suite nous omettrons souvent $[x]$ et écrirons simplement $\lambda x. \mathbf{M} \; a$.
 Ainsi, $\lambda$-abstraction est un moyen de créer une fonction anonyme en partant d'une expression $M$.
@@ -131,12 +131,13 @@ Cela veut dire que ``calculer'' signifie ``appliquer les $\beta$-réductions pou
 Remarquons aussi que nous avons besoin de paranthèses car nous ne savons pas jusqu'à quel terme s'applique abstraction.
 Pour minimiser le nombre de paranthèses en suite, nous fixons les accords suivants sur les priorités entre les opérations~:
 \begin{itemize}
-	\item L'application est gauche-associative, i.e., $F X Y Z := (((F X) Y) Z)$.
-	\item L'abstraction est droite-associative, i.e., $\lambda x y z.M := (\lambda x.(\lambda y.(\lambda z.M)))$.
-	\item L'abstraction s'applique à tous ce qu'elle arrive à ``toucher'', i.e., $\lambda x. M N K := \lambda x.(MNK)$.
+	\item L'application est gauche-associative, i.e.,
+	$\mathbf{F \; X \; Y \; Z := (((F \; X) \; Y) \; Z)}$.
+	\item L'abstraction est droite-associative, i.e., $\lambda x y z. \mathbf{M} := (\lambda x.(\lambda y.(\lambda z. \mathbf{M})))$.
+	\item L'abstraction s'applique à tous ce qu'elle arrive à ``toucher'', i.e., $$\lambda x. \mathbf{M \; N \; K} := \lambda x.(\mathbf{M \; N \; K})$$
 \end{itemize}
 
-\subsubsection*{Variables libres et liées.} \label{variables-libres-et-liees}
+\subsubsection*{$\alpha$-équivalence~:~variables libres et liées} \label{variables-libres-et-liees}
 
 % This is a bad example, because it contradicts with the idea of hte formal functions
 %\begin{example}
@@ -161,12 +162,16 @@ Si on applique chaque de deux termes à un terme quelconque $a$, on obtient le m
 	\mathbf{fy} \; a &= (\lambda y. f \; y) \; a \bequiv f \; a
 \end{align*}
 Cela veut dire que les deux termes qui différent seulment par les variables liées actionnent de même façon.
-Ce termes-là s'appellent $\lambda$-équivalents.
+Ce termes-là s'appellent \emph{$\alpha$-équivalents}~:
+$$\lambda x. \mathbf{M}[x] \equiv_\alpha \lambda x. \mathbf{M}[y \leftarrow x]$$
 
+On pose que les terme $\alpha$-équivalents sont égaux.
 C'est un deuxième et dernier rule des calcules.
 %Si on rénomme les variables liées, on obtient le terme ne change pas. On dit que tels termes sont $\alpha$-équivalents.
 
-\subsubsection*{What is $\lambda$?\footnote{based on Selinger's lecture notes}}
+\subsubsection*{Un peu du sens}
+\textbf{todo: rewrite this!}
+
 En mathématique la notion d'une fonction est liée avec une application, i.e., règle qui transform paramètre dans un résultat.
 Au contraire, $\lambda$-calcul est une théorie des ``fonctions comme formules''. La différence est ce que une formule formelle n'est pas obligatoirement se traduit en règle bien précise.
 Commençons par un exemple.
@@ -186,25 +191,78 @@ Par définition, si on pose $x = f$,
 $$f(f) = (\lambda x.x)(f) = f.$$
 Remarquons que $f(f)$ n'a jamais du sens dans mathématique classique car la fonction ne peut pas être inclue dans sa propre domaine de définition.
 
-\textbf{todo: $\lambda$ sans type est simplement typé}
+\subsubsection*{Prise en main : booléens et branchement\footnote{Basé sur l'article russe \url{https://habr.com/ru/post/215991/}}}
+Dans $lambda$-calcul sans type nous n'avons qu'un seul primitif - des fonctions.
+Dons, si on veut l'utiliser pour la programmation, c'est à nous de réaliser même les objets les plus élementaires, tels que les nombres ou les constantes booléennes.
+Començons par les dernières.
+Les termes $\tru$ et $\fls$ ci-dessous jouent le rôle de ``vrai'' et ``faux'' conformément.
+\begin{eqnarray*}
+\tru &:= \lambda t.\lambda f.t \quad \text{est une fonction qui renvoie son premier argument,} \\
+\fls &:= \lambda t.\lambda f.t \quad \text{est une fonction qui renvoie son deuxième argument.}
+\end{eqnarray*}
+Pour l'instant ces termes ne sont que des formules formelles qui manquent du context.
+Notre contexte sera le terme de branchement $\lif$~:
+$$\lif := \lambda b.\lambda x.\lambda y.b \; x \; y$$
+Ici, $b$ est une condition de branchement, $x$ est une ``branche then'' et $y$ corresponds à ``else''.
+Donc, pour justifier que $\tru$ et $\fls$ corréspondent au constantes logiques, nous avons besoin de demontrer deux égalités~:
+\begin{eqnarray*}
+	& \lif \; \tru \; t \; e = t, \\
+	& \lif \; \fls \; t \; e = e
+\end{eqnarray*}
+Faisons donc notre premier calcul en $\lambda$, sans avoir oublié que calcul est une serie d'applications de règles décrites ci-dessus ($\alpha$-équivalence et $\beta$-réduction) jusqu'à l'obtention d'un terme le plus simple possible sur lequel on n'arrive pas à appliquer aucune de deux règles.
+\begin{proof}[Preuve ($\lif \; \fls \; t \; e = e$)]
+	Dans la serie de réductions ci-dessus nous soulignons une partie expression à laquelle on applique le règle de calcul.
+	\begin{eqnarray*}
+		\lif \; \fls \; t \; e
+		= \underline{(\lambda b. \; \lambda x. \; \lambda y. \; b \; x \; y) \; \fls} \; t \; e
+			& \qquad \text{ par définition de $\lif$}\\ 
+		= \underline{(\lambda x. \; \lambda y. \; \fls \; x \; y) \; t} \; e
+			& \qquad \text{ par $\beta$-réduction de $\lambda b$}\\
+		= \underline{(\lambda y. \; \fls \; t \; y)} \; e
+			& \qquad \text{ par $\beta$-réduction de $\lambda x$}\\
+		= \fls \; t \; e
+			& \qquad \text{ par $\beta$-réduction de $\lambda y$}\\
+		= \underline{(\lambda t. \; \lambda f. \; f) \; t} \; e
+			& \qquad \text{ par définition de $\fls$}\\
+		= \underline{(\lambda f. \; f)} \; e
+			& \qquad \text{ par $\beta$-réduction de $\lambda t$}\\
+		= e
+			& \qquad \text{ par $\beta$-réduction de $\lambda f$}
+	\end{eqnarray*}
+\end{proof}
+Un lecteur curieux peut vérifier par lui-même que $\lif \; \tru \; t \; e = e$.
+De plus, un vrai passioné peut essayer de trouver les bonnes expressions pour conjunctions ($\mathbf{and}$), disjonction ($\mathbf{or}$) ainsi que negation ($\mathbf{not}$).
+
+\textbf{spoiler.} 
+\begin{itemize}
+	\item $\mathbf{and} = \lambda x. \; \lambda y. \; x \; y \; \fls$
+	\item $\mathbf{or} = \lambda x. \lambda y. \; x \; \tru \; y$
+	\item $\mathbf{not} = \lambda x. \; x \; \fls \; \tru$
+\end{itemize}
+
+Avec ces opérations supplémentaires, on peut prouver des formules plus longues (ne le faites pas à la maison -- le calcul est bien plus long).
+$$\lif \; ((\mathbf{not} \; \fls) \; \mathbf{or} \; (\fls \; \mathbf{and} \; \tru)) \; t \; e = t$$
 
 \subsubsection*{Combinateurs}
 Le cas spécial de $\lambda$-termes sans type sont les termes qui n'ont pas des variables libres. Ils s'appellent \emph{combinateurs}.
 Voici les examples des combinateurs classiques :
 \begin{itemize}
-	\item $\mathbf{I} = \lambda x. x$ -- combinateur d'identité
-	\item $\mathbf{K} = \lambda x y. x$ -- ``suppresseur''
-	\item $\mathbf{S} = \lambda fgx. fx(gx)$ -- ``distributeur''
+	\item $\mathbf{I} = \lambda x. x$ -- combinateur d'identité. Une fois appliqué à un terme quelconque, il renvoie le même terme.
+	\item $\mathbf{K} = \lambda x y. x$ -- ``suppresseur''. Une fois appliqué à deux termes, il ne renvoie que le premier argument.
+	\item $\mathbf{S} = \lambda fgx. f \; x \; (g \; x)$ -- ``distributeur'' -- il distribue son troisième argument au son premier et deuxième.
 \end{itemize}
 En fait, tout les combinateurs peuvent être exprimés en termes de ces trois -- on dit qu'ils forment la base chez les combinateurs.
 Cependant, cette base n'est pas minimal, car $\mathbf{I} = \mathbf{SKK}$.
-\textbf{Théorème} Tout les combinateurs peuvent être exprimés en termes de $\mathbf{K}$ et $\mathbf{S}$.
+
+\begin{theorem}
+Tout les combinateurs peuvent être exprimés en termes de $\mathbf{K}$~et~$\mathbf{S}$.
+\end{theorem}
 
 Mais $\cI$ est très utile pour simplifier les calculs car sans lui les formules sont trop longues. Pour cette raison, on parle plutôt du système $\mathbf{S, K, I}$.
-Autres exemples des combinateurs avec leurs représentations en base $\cS, \cK$ et $\cS, \cK, \cI$ (todo!) :
+Autres exemples des combinateurs avec leurs représentations en base $\cS, \cK$ ou $\cS, \cK, \cI$ :
 \begin{itemize}
-	\item $\bm{\omega} = \lambda x. xx = \cS \mathbf{I} \mathbf{I}$ (verify!)
-	\item $\mathbf{\Omega} = \bm{\omega} \bm{\omega} = (\lambda x. xx) \lambda x. xx$
+	\item $\bm{\omega} = \lambda x. xx = \cS \cI \cI$
+	\item $\mathbf{\Omega} = \bm{\omega} \bm{\omega} = (\lambda x. xx) \lambda x. xx = \cS \cI \cI (\cS \cI \cI)$
 	\item $\mathbf{C}
 		= \lambda fxy. fyx
 		= \cS
@@ -235,69 +293,12 @@ Notons qu'on peut penser de logique combinatoire comme du $\lambda$-calcul sans 
 	\item Dans $\lambda$-calcul, nous utilisons l'application et l'abstraction des fonctions aux variables.
 	\item Dans logique combinatoire on part des fonctions d'ordre supérieur, i.e., les fonctions qui ne contient pas de variables libres.
 \end{itemize}
-Les constructions logiques dans le monde combinatoire seront probablement (ou pas) presentés en autres articles.
+Les constructions logiques dans le monde combinatoire seront probablement (ou pas) presentées en autres articles.
 Dans le futur, nous ne considerons que $\lambda$-calcul.
 
-
-\subsubsection*{Prise en main\footnote{Basé sur l'article russe \url{https://habr.com/ru/post/215991/}}}
-Dans $lambda$-calcul sans type nous n'avons qu'un seul primitif - des fonctions.
-Dons, si on veut l'utiliser pour la programmation, c'est à nous de réaliser même les objets les plus élementaires, tels que les nombres ou les constantes booléennes.
-\begin{eqnarray*}
-tru &:= \lambda t.\lambda f.t \quad \text{est une fonction qui renvoie son premier argument,} \\
-fls &:= \lambda t.\lambda f.t \quad \text{est une fonction qui renvoie son deuxième argument.}
-\end{eqnarray*}
-Les termes $tru$ et $fls$ vont jouer le rôle de \textbf{vrai} et \textbf{faux}.
-Cependant, pour l'instant ils ne sont que des formules formelles qui manquent du context.
-Comme ce contexte, définissons la fonction $if$
-$$if := \lambda b.\lambda x.\lambda y.b x y$$
-Ici, $b$ est une condition de branchement, $x$ et branche \textbf{then} et $y$ corresponds à \textbf{else}.
-Donc, pour ``montrer'' que $tru$ et $fls$ corréspondent au constantes logiques, nous avons besoin de prouver le suivant:
-\begin{eqnarray*}
-	if \; tru \; t \; e &= t, \\
-	if \; fls \; t \; e &= e
-\end{eqnarray*}
-%\begin{remark}
-Pour les formules formelles ``prouver'' signifie ``partir d'une expression à gauche, appliquer les certains règles afin d'obtenir une expression à droit''.
-%\end{remark}
-Donc c'est le moment de parles de ces règles.
-Pour $\lambda$-calcul il y en a deux :
-\begin{enumerate}
-	\item \textbf{$\alpha$-equivalence}. Informellement\footnote{la définition formelle peut être trouvée dans n'importe quel livre, mais sa complexité dépasse largement les objectifs du blog.}, on dit que deux termes sont équivalent s'il coïncident à renommage des variables abstraites près. Par exemple, $\lambda x.f(x) \equiv_\alpha \lambda y.f(y)$.
-	Par une variable abstraite on comprend une variable qui est présente à gauche et à droit du point, e.g., $x$ et $y$ eux-mêmes ne sont pas $\lambda$-equivalents car il ne sont pas abstraites.
-	\item \textbf{$\beta$-réduction}.
-\end{enumerate}
-Notons que dans $\lambda$-calcul, il n'y a rien sauf application, abstraction et $\beta$-equivalence.
-\begin{proof}[Preuve ($if \; fls \; t \; e = e$)]
-	\begin{eqnarray*}
-		if \; fls \; t \; e
-		= \underline{(\lambda b. \; \lambda x. \; \lambda y. \; b \; x \; y) \; fls} \; t \; e
-			& \qquad \text{ par définition de $if$}\\ 
-		= \underline{(\lambda x. \; \lambda y. \; fls \; x \; y) \; t} \; e
-			& \qquad \text{ par $\beta$-réduction de $\lambda b$}\\
-		= \underline{(\lambda y. \; fls \; t \; y)} \; e
-			& \qquad \text{ par $\beta$-réduction de $\lambda x$}\\
-		= fls \; t \; e
-			& \qquad \text{ par $\beta$-réduction de $\lambda y$}\\
-		= \underline{(\lambda t. \; \lambda f. \; f) \; t} \; e
-			& \qquad \text{ par définition de $fls$}\\
-		= \underline{(\lambda f. \; f)} \; e
-			& \qquad \text{ par $\beta$-réduction de $\lambda t$}\\
-		= e
-			& \qquad \text{ par $\beta$-réduction de $\lambda f$}
-	\end{eqnarray*}
-\end{proof}
-Un lecteur courieux peut vérifier par lui-même que $if \; tru \; t \; e = e$.
-De plus, un vrai passioné peut essayer de trouver les bonnes expressions pour conjunctions (``and''), disjonction (``or'') ainsi que negation (``not'').
-
-\textbf{spoiler.} 
-\begin{itemize}
-	\item $and = \lambda x. \; \lambda y. \; x \; y \; fls$
-	\item $or = \lambda x. \lambda y. \; x \; tru \; y$
-	\item $not = \lambda x. \; x \; fls \; tru$
-\end{itemize}
+\subsection*{Nombres de Church}
 
 \subsection*{Pourquoi langage de programmation?}
-\textbf{TODO. Recursion à l'aide de combinators}
 
 Comment peut-on montrer que langages de programmation \textbf{X} et \textbf{Y} sont équivalent ?
 Il faut montrer deux proposition : (i) un programme quelconque écrit en \textbf{X} peut être réecrit en \textbf{Y} et (ii) un programme quelconque écrit en \textbf{Y} peut être réecrit en \textbf{X}.
@@ -310,20 +311,22 @@ Donc nous nous limiterons à la démonstration de deux méchanismes :
 Informellement, on comprends très bien que ces deux méchanismes sont suffisantes pour écrire n'importe quel programme.\footnote{La vrai dificulté est dans la formalisation de cette dernière proposition, ainsi que dans le propre construction pour la récurtion arbtitraire qui est fait à l'aide des combinateurs.}
 De plus, la construction de recursion n'est pas simple du tout.
 
-\textbf{Ingrédients.} Supposons que nous sommes beaucoup avancés dans le sujet et réussis à construire les fonctions suivantes (rappellons que par défaut il n'y a pas ni nombres ni opérations arithmétiques à $\lambda$-calcul.
+\subsubsection*{Calcul du factoriel. Ingrédients}
+Supposons que nous sommes beaucoup avancés dans le sujet et réussis à construire les fonctions suivantes (rappellons que par défaut il n'y a pas ni nombres ni opérations arithmétiques à $\lambda$-calcul).
 \begin{itemize}
 	\item $\mathbf{1}$, juste nombre 1, mais il faut le construire à l'aide de application et abstraction;
 	\item $\mathbf{isZero}$, si argument de cette fonction est égal au 0, elle renvoie $tru$, sinon -- $fls$;
 	\item $\mathbf{mult}$ renvoie un produit de ces deux arguments.
 	\item $\mathbf{pred}$ prend à l'entrée un nombre naturel et calcul son prédesesseur (souvez-vous des axiomes de Peano, si vous avez déjà lu la partie 1). Pourtant, cette fonction est le plus complexe : le construiction à été inventé par Kleene pendend l'extraction de son dent de sagesse. Aujourd'hui, l'anesthésie n'est pas pareil\ldots
 \end{itemize}
-\textbf{1ère approche.}
+\subsubsection*{Calcul du factoriel. 1ère approche}
 Tout ces ingrédients nous permets d'introduir un factoriel assez naturellement~:
 $$\mathbf{fact} = \lambda x. \; \mathbf{if} \; (\mathbf{isZero} \; x) \; \mathbf{1} \; (\mathbf{fact} \; (\mathbf{pred} \; x))$$
 Rien de miracle, si $x$ est égal à 0, on renvoie 1, sinon -- le produit de $x$ et factoriel de $x-1$.
 Si on remplace $\mathbf{fact}$ par son définition, on obtient une série infinie des réductions. We have a problem\ldots
 
-\textbf{Calcul ``lazy''}. J'espère que vous protestiez contre cela, en argumentant que pour calculer $\mathbf{fact\;0}$, nous n'avons pas besoin de substitutions infinies car nous savons déjà que le troisième argument de $\mathbf{if}$ sera ignoré.
+\subsubsection*{Calcul ``lazy''}
+J'espère que vous protestiez contre cela, en argumentant que pour calculer $\mathbf{fact\;0}$, nous n'avons pas besoin de substitutions infinies car nous savons déjà que le troisième argument de $\mathbf{if}$ sera ignoré.
 Tout a fait, mais les règles de jeu "Informatique théorique" nous impose d'utiliser que les opérations bien précis : si on prétend que $\lambda$-calcul est un langage de programmation, alors on doit être capable de proposer un algorithme qui l'execute et donc aucun ambiguïté n'est pas toléré.
 Dans notre cas on a ``oublié'' de fixer l'ordre de calcul.
 Considerons un terme suivant~:
@@ -372,7 +375,41 @@ Remarquons que les tout les strategies sauf calcul lazy formellement interdit la
 Le méchanisme de ``lazyness'' est fait exactement pour éviter les calculs non-nécessaires.
 En réalité, cette mechanisme est utilisé dans la plupart des langages, mais pas dans l'execution de fonction. Dans le code suivant : \verb|if a and b: ...|, si \verb|a| est déjà fausse, il est probable que \verb|b| ne sera jamais calculé, ce que nous oblige de porter plus d'attention sur les effets de bords possible.
 
-\textbf{Y-combinator -- Est-ce qu'on a vraiment besoin de cette partie~?}
+\subsubsection*{Combinator de point fixe} (attention, beaucoup de lettres cursives\ldots)
+\begin{definition}
+	\emph{Un point fixe} de $\lambda$-fonction $f$ est une fonction $x$ tel que $$f \; x \equiv_\beta x$$
+\end{definition}
+\begin{theorem}
+	En $\lambda$-calcul (ainsi qu'en logique combinatoire), pour chaque terme $x$ il existe au moins un terme $p$ tel que $xp$ = $p$.
+	De plus, il existe un combinateur $\mathbf{Y}$ tel que $\mathbf{Y} x = x \mathbf{Y} x$.
+\end{theorem}
+\begin{proof}[Preuve]
+	Pour prouver ce théorème, construisons un tel combinateur :
+	$$Y = \lambda f. \; \underline{(\lambda x. \; f(x \; x)} (\lambda x. \; f(x \; x)$$
+	Appliquons la reduction à l'expression soulignée :
+	$$Y = \lambda f. \; f ((\lambda x. \; f(x \; x) (\lambda x. \; f(x \; x))$$
+	On en déduit que $Y \; f = f \; Y \; f$.
+	Donc $Y \; f$ est un point fixe de $f$.
+	$Y$ s'appelle un \emph{combinateur du point fixe}.
+	En cette formle-là il a été introduit par Haskell Curry
+	\footnote{
+		Un combinateur d'un point fixe n'est pas unique (en réalité, il y a un nombre infini de tels).
+		Par example, celui a été proposé par Alan Turing : $$\Theta = (\lx.\ly.(y(xxy)))(\lx.\ly.(y(xxy)))$$
+	}
+	(on reppel que combinateur est un terme dont tout les variables sont liées par $\lambda$-abstraction).
+\end{proof}
+
+\subsubsection*{Calcul du factoriel. Y à l'aide !}
+L'un de rôle du combinateur de point fixe est de se faire priver de la récursion en $\lambda$-calcul -- celui-si nous permettra de calculer le factoriel sans un truc avec calcul ``lazy''.
+Considerons une fonction :
+$$\mathbf{fact'} = \lf. \; \lx. \; \mathbf{if} (\mathbf{isZero} \; x) \mathbf{1} (\mathbf{mult} \; x (f (\mathbf{pred} \; x)))$$
+Cette fonction est très ressemblant à $\mathbf{fact}$. La seule différence est ce que $\mathbf{fact'}$ au lieu d'appliquer lui même sur $\mathbf{pred} \; x$, applique $f$ qui est son paramètre.
+Donc, si on pose $f := \mathbf{fact}$, notre fonction calcule le factoirel.
+Autrement dit, $\mathbf{fact'} \; \mathbf{fact} = \mathbf{fact}$, i.e., $\mathbf{fact}$ est un point fixe de $\mathbf{fact'}$.
+Donc $$\mathbf{fact} = \mathbf{Y} \mathbf{fact'}$$
+Cette fonction n'est pas récursive et elle calcul le factoriel du $x$\footnote{
+	En revanche le calcul devient le-e-e-ente : pour calculer 5! il faut fait 66066 $\beta$-reductions ! Evidemment, j'ai jamais vérifier á la main, je trouver ce nombre dans mes notes du cours et je ne garantie pas que mon prof a fait les calculs lui-même\ldots
+}
 
 \subsection*{Résumé}
 Si vous pensez que $\lambda$-calcul est simple et les règles décrites sont évidents, je vais vous déranger : essayer de calculer ce terme-là.
