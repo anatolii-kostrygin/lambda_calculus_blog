@@ -170,26 +170,41 @@ C'est un deuxième et dernier rule des calcules.
 %Si on rénomme les variables liées, on obtient le terme ne change pas. On dit que tels termes sont $\alpha$-équivalents.
 
 \subsubsection*{Un peu du sens}
-\textbf{todo: rewrite this!}
+Dans cette section nous essayons faire des amis entre la définition formelle de $\lambda$-calcul et des lambda-fonctions\footnote{pour ne pas confondre, on utilise symbol $\lambda$ uniquement pour $\lambda$-calcul de Church} qu'on peut trouver dans la plupart de langages de programmation. Ce qu'il faut retenir est ce que ces deux notions sont très différentes : les intuitions prises de l'une notion servent le plus grand obstacle pour compréhension de la deuxième.
 
-En mathématique la notion d'une fonction est liée avec une application, i.e., règle qui transform paramètre dans un résultat.
-Au contraire, $\lambda$-calcul est une théorie des ``fonctions comme formules''. La différence est ce que une formule formelle n'est pas obligatoirement se traduit en règle bien précise.
-Commençons par un exemple.
-En arithmétique on peut écrire : 
-$$\text{Soit $f$ est une fonction $x \to x^2$. Considerons $A = f(5)$.}$$
-En langage de lambda, on peut écrire simplement: $$(\lambda x.x^2) (5).$$
-L'expression $\lambda x.x^2$ signifie une fonction qui mappe $x$ à $x^2$.
-Puis ce terme est succédé par une \emph{application} de cette fonction au nombre 5.
-L'un des avantage de cette notation est simplicité dans la construction des fonctions de l'ordre supérieur : si $f: X \to X$ est une fonction, alors la composition $f \circ f$ peut s'écrire comme $\lambda x.f(f(x))$.
-Ceci n'est pas simple, mais l'opération qui mappe $f$ à $f \circ f$ s'écrit méchaniquement de manière suivante :
-$$\lambda f. \lambda x.f(f(x)).$$
-(On peut le comparer avec $g: (X \to X) \to (X \to X)$ où $g(f) = f \circ f$ pour tout $f: X \to X$.)
-Le vrai avantage est visible si on considère un terme $f$ suivant: $\lambda x.x$.
-Rien inattendu, c'est une fonction d'identité.
-Mais que vaut $f(f)$?
-Par définition, si on pose $x = f$,
-$$f(f) = (\lambda x.x)(f) = f.$$
-Remarquons que $f(f)$ n'a jamais du sens dans mathématique classique car la fonction ne peut pas être inclue dans sa propre domaine de définition.
+\textbf{En programmation}, souvent on a besoin de passer une fonction comme un paramètre : clé pour un tri ou maximum, une operation à appliquer au tout les éléments d'une collection, etc.
+Dans ce cas, si la fonction est simple et/ou n'est pas réutilisée, on n'a pas d'envie à elle donner un nom et on passe par un lambda.
+En autres mots, les deux phrases sont synonimiques et la version avec une lambda-fontion est bien plus courte~:
+\begin{itemize}
+	\item Soit $f$ est une fonction $x \to x^2$. Considerons $A = f(5)$.
+	\item $A := (\lambda x.x^2) (5)$.
+\end{itemize}
+
+\textbf{En théorie de $\lambda$-calcul}, notre intérêt est différent.
+On ``oublie'' qu'une fonction $f$ est une règle qui mappe $x$ à $f(x)$.
+Au lieu de cela, on considère une fonction uniquement comme une formules formelle -- i.e., une phrase construite en respectant la certaine grammaire (celle que nous venons de décrire ci-dessous).
+Une formule formelle ne doit pas forcement être calculable, par exemple
+\begin{itemize}
+	\item $1 + 2 + 3$ est une correcte formule formelle. On peut la calculer et obtenir 6.
+	\item $a * b * c$ est une correcte formule formelle. Si dans grammaire de cette formule $a, b, c$ corrésponds au $1, 2, 3$ et $*$ corrésponds à une somme, on peut la calculer et obtenir aussi 6.
+	\item $1 + 2 + 3 + 4 + 5 + \ldots$ est aussi une correcte formule formelle. Évidement, elle ne peut pas être calculée dans le sens commun. Cépendant si on change \href{https://en.wikipedia.org/wiki/Ramanujan_summation}{règles du ``jeu''}, on peut obtenir 1/12\ldots
+\end{itemize}
+Tout les $\lambda$-termes sont aussi les formules formelles : si pendant le calcul on tombe sur une forme $x \; y \; z$, ou $x$, $y$ et $z$ sont les identifiants simples\footnote{on se refère sur le premier point de la définition de $\lambda$-terme, les identifiants sont les chaînes de caractères qui ne contiennent ni ``$\lambda$'', ni ``.'', ni espace}, il faut pas essayer de les donner du sens : ils ne sont ni variables, ni fonctions, ils n'ont pas d'arité non plus -- ils sont juste les briques à partir desquelles on construit l'expression.
+
+\textbf{Que peut se passer, si on essaie d'interpreter nos briques?}
+Soint $\mathbf{f} := \lambda x.x$.
+Clairement, c'est une fonction d'identité car elle mappe $x$ à $x$.
+Dans $\lambda$-calcul, on peut l'appliquer à n'importe quel terme y compris $\mathbf{f}$:
+$$\mathbf{f} \; \mathbf{f} = \lambda x.x \; \mathbf{f} = \mathbf{f}$$
+Autrement dit, nous avons prouvé que $f(f) = f$.
+Mais cela n'a aucun sens car en mathématiques la fonction ne peut pas être inclue dans sa propre domaine de définition !
+Le morale est ce que \emph{l'application de $\lambda$-termes reste une operation formelle, il est dangéreux l'intérpreter comme l'application d'une fonction classique à son argument}, malgré la seduction de tel approche.
+La différence est ce que une formule formelle n'est pas obligatoirement se traduit en règle bien précise.
+
+%L'un des avantage de cette notation est simplicité dans la construction des fonctions de l'ordre supérieur : si $f: X \to X$ est une fonction, alors la composition $f \circ f$ peut s'écrire comme $\lambda x.f(f(x))$.
+%Ceci n'est pas simple, mais l'opération qui mappe $f$ à $f \circ f$ s'écrit méchaniquement de manière suivante :
+%$$\lambda f. \lambda x.f(f(x)).$$
+%(On peut le comparer avec $g: (X \to X) \to (X \to X)$ où $g(f) = f \circ f$ pour tout $f: X \to X$.)
 
 \subsubsection*{Prise en main : booléens et branchement\footnote{Basé sur l'article russe \url{https://habr.com/ru/post/215991/}}}
 Dans $lambda$-calcul sans type nous n'avons qu'un seul primitif - des fonctions.
