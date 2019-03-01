@@ -267,14 +267,14 @@ Voici les examples des combinateurs classiques :
 	\item $\mathbf{S} = \lambda fgx. f \; x \; (g \; x)$ -- ``distributeur'' -- il distribue son troisième argument au son premier et deuxième.
 \end{itemize}
 En fait, tout les combinateurs peuvent être exprimés en termes de ces trois -- on dit qu'ils forment la base chez les combinateurs.
-Cependant, cette base n'est pas minimal, car $\mathbf{I} = \mathbf{SKK}$.
+Cependant, cette base n'est pas minimal, car $\cI = \cS \cK \cK$\footnote{dans les formulles combinatoire qui ne contient pas de ``$\lambda$'', on peut omettre l'espace de l'application entre les combinateurs $\cS$, $\cK$ et $\cI$ -- cela ne crée pas d'ambiguïté}.
 
 \begin{theorem}
 Tout les combinateurs peuvent être exprimés en termes de $\mathbf{K}$~et~$\mathbf{S}$.
 \end{theorem}
 
 Mais $\cI$ est très utile pour simplifier les calculs car sans lui les formules sont trop longues. Pour cette raison, on parle plutôt du système $\mathbf{S, K, I}$.
-Autres exemples des combinateurs avec leurs représentations en base $\cS, \cK$ ou $\cS, \cK, \cI$ :
+Autres exemples des combinateurs avec leurs représentations en base $\cS, \cK$ ou $\cS, \cK, \cI$~:
 \begin{itemize}
 	\item $\bm{\omega} = \lambda x. xx = \cS \cI \cI$
 	\item $\mathbf{\Omega} = \bm{\omega} \bm{\omega} = (\lambda x. xx) \lambda x. xx = \cS \cI \cI (\cS \cI \cI)$
@@ -290,19 +290,6 @@ Autres exemples des combinateurs avec leurs représentations en base $\cS, \cK$ 
 	\item $\mathbf{W} = \lambda xy. xyy = \cS \cS \left(\cK (\cS \cK \cK)\right)$
 \end{itemize}
 
-%Chaque combinateur peut être appliqué aux autre tèrmes, par exemple :
-%\begin{itemize}
-%	\item $I \mathpzc{x} = \mathpzc{x}$
-%	\item $\omega \mathpzc{x} = \mathpzc{x}\mathpzc{x}$
-%	\item $K \mathpzc{xy} = \mathpzc{x}$
-%	\item $S \mathpzc{fgx} = f\mathpzc{x} (\mathpzc{gx})$
-%\end{itemize}
-%Les formules ci-dessus peuvent s'en servir tant que la définition des combinateurs.
-%Le calcul est effectué en remplaçant les arguments formels par ses valeurs, e.g.,
-%$$\omega I = I I = I$$.
-%Notons, que les certains combinateurs peuvent être exprimé en termes des autres. (\textbf{todo})
-%Si on choisit une base, e.g., $S$, $K$ (et $I$ tant que un élement neutre), on peut obtenir un système de calcul qui est équivalent au $\lambda$-calcul.
-
 Notons qu'on peut penser de logique combinatoire comme du $\lambda$-calcul sans symbol $\lambda$ -- les deux systèmes sont équivalent, la difference n'est que dans le brique de base :
 \begin{itemize}
 	\item Dans $\lambda$-calcul, nous utilisons l'application et l'abstraction des fonctions aux variables.
@@ -312,6 +299,99 @@ Les constructions logiques dans le monde combinatoire seront probablement (ou pa
 Dans le futur, nous ne considerons que $\lambda$-calcul.
 
 \subsection*{Nombres de Church}
+
+Dans l'article précedant nous avons parlé des axiomes de Péano qui permet de construire nombres naturels.
+Maintenant on veut les ``traduire'' en langage de $\lambda$-calcul.
+Si vous ne les souvenez pas, alors on parte d'une idée qu'un nombre naturel est soit zéro\footnote{je suis d'accord, zéro n'est pas naturel mais on en a besoin pour compter quand même}, soit un nombre naturel plus un.
+\begin{definition}
+	\begin{align*}
+		& \mathbf{\bar{0}} := \lambda s. \lambda z. z \\
+		& \mathbf{\bar{1}} := \lambda s. \lambda z. s \; z \\
+		& \mathbf{\bar{2}} := \lambda s. \lambda z. s \; (s \; z) \\
+		& \mathbf{\bar{3}} := \lambda s. \lambda z. s \; (s \; (s \; z)) \\
+		& \ldots
+	\end{align*}
+\end{definition}
+Si on se met sur le chemin glissant de l'interpretation, on peut penser d'un nombre de Church comme d'une fonction de deux arguments dont le premier est une fonction et deuxième est une valeur initiale.
+Le nombre $n$ applique la fonction $n$ fois à la valeur initiale et retourne le résultat.
+Dans ce sens résultat ``d'application'' d'un nombre de Church à $(+1)$ et 0 est son ``valeur numerique''.
+Par exemple, $\mathbf{3} \; (+1) \; 0 \equiv 3$.\footnote{On prefère d'utiliser le symbole d'équivalence ($\equiv$) au lieu d'égalité pour souligner qu'ici on parle de l'interpretation qui ne fait pas une partie de $\lambda$-calcul}
+
+\subsubsection*{Successeur}
+Définissons un terme $\suc$ qui ``calcule'' le successeur d'un nombre de Church arbitraire.
+Combien des arguments\footnote{Par argument on comprénd des variables liées par abstraction : une fois le terme est appliqué à un autre terme, les variables liées du premier sont remplacé par le ``contenu'' du deuxième.} devrait avoir ce terme~?
+Son premier argument doit être un nombre à augmenter.
+Mais un nombre en $\lambda$-calcul est aussi une fonction de deux arguments.
+Donc $\suc$ doit prendre trois arguments -- un ``nombre'' $n$ à augmenter, une fonction à appliquer $n+1$ fois et sa valeur initiale $z$~:
+$$\suc = \lambda n. \lambda s. \lambda z. \; s \; (n \; s \; z)$$
+\textbf{Exercice.} Montrer que $\suc \; \mathbf{\overline{n}} = \mathbf{\overline{n+1}}$.
+\begin{proof}[Solution]
+	Utilisons la définition de $\suc$ et appliquons la $\beta$-réduction de $\lambda n$~:
+	\[
+		\suc \; \mathbf{\overline{n}}
+		= (\lambda n. \lambda s. \lambda z. \; s \; (n \; s \; z)) \mathbf{\overline{n}}
+		= \lambda s. \lambda z. \; s \; (\mathbf{\overline{n}} \; s \; z)
+%		= (\lambda n. \lambda s. \lambda z. \; s \; (n \; s \; z))
+%			\lambda s. \lambda z. \underbrace{s \; (s \; \ldots (s}_{n\text{ fois}} \; z) \ldots )
+	\]
+	Puis, par la définition de $n$\textsuperscript{ème} nombre de Church on a
+	\[
+		\ldots = \lambda s. \lambda z. \; s \; ([\lambda s'. \lambda z'. \underbrace{s' \; (s' \; \ldots (s'}_{n\text{ fois}} \; z') \ldots )] \; s \; z)
+	\]
+	Remarqu'ons que pour évité l'ambuiguïté, on a remplacé $s$ et $z$ par $s'$ et $z'$ dans la définition de $\mathbf{\overline{n}}$ car ces variables sont liées par abstraction -- $\alpha$-équivalence nous autorise à le faire.
+	Puis, si on applique la $\beta$-réduction aux $\lambda s'$ et $\lambda z'$, on obtient
+	\[
+		\ldots 
+		= \lambda s. \lambda z. \; s \; (\underbrace{s \; (s \; \ldots (s}_{n\text{ fois}} \; z) \ldots )
+		= \lambda s. \lambda z. \; (\underbrace{s \; (s \; \ldots (s}_{n+1\text{ fois}} \; z) \ldots)
+		= \mathbf{\overline{n+1}}
+	\]
+\end{proof}
+
+\subsubsection*{Addition, multiplication et puissance}
+L'addition de deux nombre ressemble l'addition de 1.
+La seule ``petite'' différence est ce qu'il faut appliquer ``(+1)'' $m$ fois, si le deuxième argument est $m$\textsuperscript{ème} nombre de Church~:
+$$\mathbf{plus} = \lambda n. \lambda m. \lambda s. \lambda z. \; n \; s \; (m \; s \; z)$$
+Effectivement, on peut l'interpreter comme suivant~:
+$$(\mathbf{plus} \; \bar{3} \; \bar{3}) \; (+1) \; 0 \equiv 6$$
+
+La multiplication de duex nombre ressemble l'addition.
+La seule différence est ce qu'au lieu de l'addition de 1, il faut additionner deuxième nombre~:
+$$\mathbf{mult} = \lambda n. \lambda m. \lambda s. \lambda z. \; n \; (m \; s) \; z$$
+
+\textbf{Exercice.} Essayez de déviner que fait la fonction suivante~:
+$$\mathbf{power} = \lambda n. \lambda m. \lambda s. \lambda z. \; n \; m \; s \; z$$
+
+\subsubsection*{Paire}
+Les termes ci-dessous ``implémentent'' une structure de paire : $\mathbf{pair}$ prends deux nombres et les emballe dans une paire. Si on applique $\mathbf{fst}$ ou $\mathbf{snd}$ à une paire on reçoit le premier ou le deuxième élement réspectivement, car ces deux fonctions remplacent $t$ de $\mathbf{pair}$ par $\tru$ ou $\fls$ réspectivement.
+\begin{itemize}
+	\item $\mathbf{pair} := \lambda a. \lambda b. \lambda t. \; t \; a \; b$
+	\item $\mathbf{fst} := \lambda p. \; p \; \tru$
+	\item $\mathbf{snd} := \lambda p. \; p \; \fls$
+\end{itemize}
+
+\subsubsection*{Soustraction}
+
+D'abord, rappelons nous qu'en $\lambda$-calcul nous n'avons pas des nombres négatifs.
+Donc ``$n - m$'' est défini si et seulement si $n \ge m$.
+Si c'est le cas, alors on a envie de faire de même façon que l'addition -- soustraire $m$ de $n$ est équivalent à soustraire $m$ fois 1 de $n$~:
+$$\textbf{minus} := \lambda n. \lambda m. \; m \; \pred \; n$$
+
+Le vrai problème est une fonction $\pred$ -- il est compliqué d'aller à l'arrière sur l'axe de nombres si tout nos fonctions ne nous permettent qu'aller en avant~!
+Le focus pour calculer $n-1$ est de partir à nouveau de zéro, mais au lieu de faire $n$ pas, il faut faire $n-1$.
+Il n'est pas claire, comment peut-on s'arrêter sur $n-1$.
+Pour cela il nous faut une paire.
+En ayant une paire $<i - 1, i - 2>$, on va construire une paire $<i, i-1>$.
+Donc, après $n$ étapes, on aura $<n, n-1>$.
+\[
+	\pred := \lambda n. \lambda s. \lambda z. \;
+		\mathbf{snd} \; (n \; (\lambda p. \; \mathbf{pair} \;
+			(s \; (\mathbf{fst} \; p)) \;
+			(\mathbf{fst} \; p)) \;
+		(\mathbf{pair} \; z \; z))
+\]
+Si, en regardant sur cette formule vous ne comprenez pas, comment il s'applique, ne vous inquétez pas : moi non plus.
+La soustraction a été inventé par Kleene pendant l'extraction de son dent de sagesse. Aujourd'hui, l'anesthésie n'est pas pareil\ldots
 
 \subsection*{Pourquoi langage de programmation?}
 
@@ -326,15 +406,16 @@ Donc nous nous limiterons à la démonstration de deux méchanismes :
 Informellement, on comprends très bien que ces deux méchanismes sont suffisantes pour écrire n'importe quel programme.\footnote{La vrai dificulté est dans la formalisation de cette dernière proposition, ainsi que dans le propre construction pour la récurtion arbtitraire qui est fait à l'aide des combinateurs.}
 De plus, la construction de recursion n'est pas simple du tout.
 
-\subsubsection*{Calcul du factoriel. Ingrédients}
-Supposons que nous sommes beaucoup avancés dans le sujet et réussis à construire les fonctions suivantes (rappellons que par défaut il n'y a pas ni nombres ni opérations arithmétiques à $\lambda$-calcul).
-\begin{itemize}
-	\item $\mathbf{1}$, juste nombre 1, mais il faut le construire à l'aide de application et abstraction;
-	\item $\mathbf{isZero}$, si argument de cette fonction est égal au 0, elle renvoie $tru$, sinon -- $fls$;
-	\item $\mathbf{mult}$ renvoie un produit de ces deux arguments.
-	\item $\mathbf{pred}$ prend à l'entrée un nombre naturel et calcul son prédesesseur (souvez-vous des axiomes de Peano, si vous avez déjà lu la partie 1). Pourtant, cette fonction est le plus complexe : le construiction à été inventé par Kleene pendend l'extraction de son dent de sagesse. Aujourd'hui, l'anesthésie n'est pas pareil\ldots
-\end{itemize}
 \subsubsection*{Calcul du factoriel. 1ère approche}
+Listons d'abord les ingrédients, que nous aurons besoin pour calculer un factoriel~:
+\begin{itemize}
+	\item $\mathbf{1}$, juste nombre 1;
+	\item $\mathbf{mult}$ pour calculer un produit;
+	\item $\mathbf{pred}$ -- rien à dire une fonction magique;
+	\item $\mathbf{isZero}$ -- on a besoin de tester si l'argument est égale à $\mathbf{0}$ pour déterminer la terminaisont de l'induction. Dans ce cas, $\mathbf{isZero}$ renvoie $\tru$, sinon -- $\fls$.
+	Nous n'avons pas construit cette fonction, c'est un \textbf{exercice}, qui est assez simple si on connait le résultat : \textbf{spoiler?} $$\mathbf{isZero} := \lambda n. n \; (\lambda c. \; \fls) \; \tru$$
+\end{itemize}
+\subsubsection*{}
 Tout ces ingrédients nous permets d'introduir un factoriel assez naturellement~:
 $$\mathbf{fact} = \lambda x. \; \mathbf{if} \; (\mathbf{isZero} \; x) \; \mathbf{1} \; (\mathbf{fact} \; (\mathbf{pred} \; x))$$
 Rien de miracle, si $x$ est égal à 0, on renvoie 1, sinon -- le produit de $x$ et factoriel de $x-1$.
@@ -390,7 +471,7 @@ Remarquons que les tout les strategies sauf calcul lazy formellement interdit la
 Le méchanisme de ``lazyness'' est fait exactement pour éviter les calculs non-nécessaires.
 En réalité, cette mechanisme est utilisé dans la plupart des langages, mais pas dans l'execution de fonction. Dans le code suivant : \verb|if a and b: ...|, si \verb|a| est déjà fausse, il est probable que \verb|b| ne sera jamais calculé, ce que nous oblige de porter plus d'attention sur les effets de bords possible.
 
-\subsubsection*{Combinator de point fixe} (attention, beaucoup de lettres cursives\ldots)
+\subsubsection*{Combinator de point fixe}
 \begin{definition}
 	\emph{Un point fixe} de $\lambda$-fonction $f$ est une fonction $x$ tel que $$f \; x \equiv_\beta x$$
 \end{definition}
