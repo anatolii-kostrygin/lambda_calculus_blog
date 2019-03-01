@@ -393,7 +393,7 @@ Donc, après $n$ étapes, on aura $<n, n-1>$.
 Si, en regardant sur cette formule vous ne comprenez pas, comment il s'applique, ne vous inquétez pas : moi non plus.
 La soustraction a été inventé par Kleene pendant l'extraction de son dent de sagesse. Aujourd'hui, l'anesthésie n'est pas pareil\ldots
 
-\subsection*{Pourquoi langage de programmation?}
+\subsection*{Est-il un langage de programmation~?}
 
 Comment peut-on montrer que langages de programmation \textbf{X} et \textbf{Y} sont équivalent ?
 Il faut montrer deux proposition : (i) un programme quelconque écrit en \textbf{X} peut être réecrit en \textbf{Y} et (ii) un programme quelconque écrit en \textbf{Y} peut être réecrit en \textbf{X}.
@@ -508,13 +508,17 @@ Cette fonction n'est pas récursive et elle calcul le factoriel du $x$\footnote{
 }
 
 \subsection*{Résumé}
-Si vous pensez que $\lambda$-calcul est simple et les règles décrites sont évidents, je vais vous déranger : essayer de calculer ce terme-là.
-\textbf{todo}
-Cependant ce n'est que $\lambda$-répresentation de nombre 2 (vous vous probablement souvenez qu'il n'y a pas de nombres en $\lambda$-calcul).
-Cette réduction a été fait par Kleene, pendant son visite au dentiste (pourtant, les analgésiques modernes sont moins efficace en mathématique).
-Vu le nombre des efforts que nous avons besoin pour les calculs les plus primitifs, $\lambda$-calcul sans type reste une construction purement théorique, qui répresente un modèle de calcul aussi puissant que la machine de Turing.
-En enrichissant ce modèle par des constantes et système de types, on s'approche relativement vite au langages fonctionnels existants comme Haskell.
-Cependant, on perd le simplicité de la construction.
 
-Maintenant, je vous conseil de relire la partie 1 pour voir le contexte dans lequel ce système a été introduit aux années 30s.
-Si vous n'avez vraiment rien compris, comment on fait les calculs avec $\lambda$, \href{http://worrydream.com/AlligatorEggs/}{ce site} va surement aider d'avoir l'idée ce que s'est passé.
+Voici une brève introduction en $\lambda$-calcul.
+Déjà à partir des primitifs que nous avons décrit, on peut essayer de ``programmer'' un émulateur de machine de Turing.
+On peut constater que les construitions semblent d'être longues et lourdes, mais, si on revient sur le début, la machine de Turing qui calcule un factoriel n'est pas plus simple.
+
+Malheureusement, le système de $\lambda$-calcul sans type que l'on vient de construire subit des paradoxes comme un paradoxe de Kleene-Rosser (voir partie 1).
+Pour les corriger, Church a introduit $\lambda$-calcul simplement typé qui est plus compliqué qu'un système que nous avons discuté, car avec l'arrivé des types, les termes ne sont plus compatibles avec tout le monde.
+Les bonnes sources pour cela sont les vrais livres mathématiques out les notes des cours corréspondants -- il me semble presque impossible d'adapter le contenu pour un article (même aussi long).
+
+Pourqoi a-t-on besoin de savoir tout cela ? Plutôt pour ``l'ouverture d'ésprit''. Pour la même raison qu'on manipule avec la machine de Turing. Pour quelques heures de gymnastique de cerveau finalement. Et de plus, si on arrive à comprendre les manipulations d'arithmétique de Church - on s'approche à comprendre les autres manipulations fonctionnelles et les principes de langages comme Haskell.
+Quand même, les langage fonctionnel sont typés, donc je vous conseille vivement de jeter au moins un oeil sur la théorie des type aussi.
+
+Finalement, on a remarqué que $\lambda$-calcul est lente.
+Il est vrai. Mais dans les langages fonctionnels sont bien optimisés grâce au calcul ``lazy'' et \href{https://fr.wikipedia.org/wiki/Filtrage_par_motif}{filtrage par motif} et ne sont pas plus lentes que les langages impératifs (il faut jamais oublié que les vraies optimisations se passent dans la couche supplémentaire entre la chaise et l'écran\ldots). Merci au tous curieux qui a réussi à se tenir intéressé jusqu'au bout !

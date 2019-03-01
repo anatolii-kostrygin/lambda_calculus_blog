@@ -12,8 +12,8 @@
 *  Impact et applications
 
 ## Partie 2. Lambda, combinatuers et langages de programmation.
-*  What is lambda ?
-*  Combinateurs
-*  Prise en main. Les booléens.
+*  Impérative contre fonctionnelle.
+*  Qu'est ce que lambda ?
+*  Nombres de Church
 *  Est-il un langage de programmation ?
 
