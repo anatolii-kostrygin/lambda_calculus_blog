@@ -340,7 +340,7 @@ $$\suc = \lambda n. \lambda s. \lambda z. \; s \; (n \; s \; z)$$
 	\[
 		\ldots = \lambda s. \lambda z. \; s \; ([\lambda s'. \lambda z'. \underbrace{s' \; (s' \; \ldots (s'}_{n\text{ fois}} \; z') \ldots )] \; s \; z)
 	\]
-	Remarqu'ons que pour évité l'ambuiguïté, on a remplacé $s$ et $z$ par $s'$ et $z'$ dans la définition de $\mathbf{\overline{n}}$ car ces variables sont liées par abstraction -- $\alpha$-équivalence nous autorise à le faire.
+	Remarquons que pour évité l'ambuiguïté, on a remplacé $s$ et $z$ par $s'$ et $z'$ dans la définition de $\mathbf{\overline{n}}$ car ces variables sont liées par abstraction -- $\alpha$-équivalence nous autorise à le faire.
 	Puis, si on applique la $\beta$-réduction aux $\lambda s'$ et $\lambda z'$, on obtient
 	\[
 		\ldots 
@@ -431,11 +431,11 @@ Considerons un terme suivant~:
 $$(\lambda x.x) \; ((\lambda x.x) \; (\lambda z. \; (\lambda x.x) z))$$
 Pour simplicité on peut le réécrire~:
 $$\id \; (\id \; (\lambda z. \; \id \; z))$$
-Ce terme-là contient 3 redexes. Nous n'avons plusieurs choix de l'ordre des réductions :
+Ce terme-là contient 3 redexes. Nous n'avons plusieurs choix de l'ordre des réductions~:
 \begin{itemize}
 	\item \textbf{$\beta$-réduction complète.}
-		Le redex est choisi au hazard à chaque étape. Il est facile de voir que si l'expression initiale est finie, le résultat ne dépends pas de l'ordre de calcul (rappelons qu'il n y a pas de notion d'état, donc les effets de bord sont impossibles).
-		Voici une des réductions possibles d'une expression ci-dessus :
+		Le redex est choisi au hazard à chaque étape. Il est facile de voir que si l'expression initiale est finie, le résultat ne dépends pas de l'ordre de calcul (rappelons qu'il n'y a pas de notion d'état, donc les effets de bord sont impossibles).
+		Voici une des réductions possibles d'une expression de dessous :
 		\begin{align*}
 			& \id \; (\id \; (\lambda z. \; \underline{\id \; z})) \\
 			= & \; \id \; \underline{(\id \; (\lambda z. \; z))} \\
